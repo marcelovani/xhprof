@@ -250,7 +250,6 @@ function xhprof_get_children_table($raw_data) {
 function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
                                     $func, $critical_path, $right=null,
                                     $left=null) {
-
   $max_width = 5;
   $max_height = 3.5;
   $max_fontsize = 35;
@@ -584,10 +583,13 @@ function xhprof_render_3d($xhprof_runs_impl, $run_id, $type, $threshold,
 
   $script = xhprof_generate_dot_script($raw_data, $threshold, $source, $description, $func, $critical_path);
 
-  // Transform to json object.
-  $script = preg_replace('/^\s*digraph call_graph\s*{/', '{', $script);
-  $script = preg_replace('/\[/', ':["', $script);
-  $script = preg_replace('/\]\;/', '""],', $script);
+  // Prepare graphlib-dot object.
+  $script = preg_replace('/(.+)/', '\'$1\' +', $script);
+  $script = preg_replace('/\}\'\s*\+/', "}'", $script);
+
+//  $script = preg_replace('/^\s*digraph call_graph\s*{/', '{', $script);
+  /*$script = preg_replace('/\[/', ':["', $script);
+  $script = preg_replace('/\]\;/', '""],', $script);*/
 
 /*  echo "<pre style='
         height: 300px;
@@ -598,6 +600,5 @@ function xhprof_render_3d($xhprof_runs_impl, $run_id, $type, $threshold,
   print_r($script);
   echo "</pre>";*/
 
-  require_once XHPROF_LIB_ROOT . '/templates/3d.php';
-
+ return $script;
 }
