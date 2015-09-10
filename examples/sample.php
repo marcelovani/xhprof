@@ -1,4 +1,7 @@
 <?php
+if (!defined('XHPROF_LIB_ROOT')) {
+  define('XHPROF_LIB_ROOT', dirname(dirname(__FILE__)) . '/xhprof_lib');
+}
 
 function bar($x) {
   if ($x > 0) {
