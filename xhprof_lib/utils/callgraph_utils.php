@@ -96,7 +96,7 @@ function xhprof_generate_mime_header($type, $length) {
 function xhprof_generate_image_by_dot($dot_script, $type) {
   // get config => yep really dirty - but unobstrusive
   global $_xhprof;
-  
+
   $errorFile    = $_xhprof['dot_errfile'];
   $tmpDirectory = $_xhprof['dot_tempdir'];
   $dotBinary    = $_xhprof['dot_binary'];
@@ -566,4 +566,29 @@ function xhprof_render_image($xhprof_runs_impl, $run_id, $type, $threshold,
 
   xhprof_generate_mime_header($type, strlen($content));
   echo $content;
+}
+
+function xhprof_render_3d($xhprof_runs_impl, $run_id, $type, $threshold,
+                             $func, $source, $critical_path) {
+
+  if (!$run_id)
+    return;
+
+  list($raw_data, $a) = $xhprof_runs_impl->get_run($run_id, $source, $description);
+  if (!$raw_data) {
+    xhprof_error("Raw data is empty");
+    return "";
+  }
+
+  $script = xhprof_generate_dot_script($raw_data, $threshold, $source,
+    $description, $func, $critical_path);
+
+  echo "<pre style='
+        height: 300px;
+        overflow-y: scroll;
+        width: 98%;
+        border: 1px solid #000;
+        padding: 1em;'>";
+  print_r($script);
+  echo "</pre>";
 }
