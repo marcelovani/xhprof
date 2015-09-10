@@ -89,10 +89,12 @@ if (!array_key_exists($type, $xhprof_legal_image_types)) {
 $xhprof_runs_impl = new XHProfRuns_Default();
 
 if (!empty($run)) {
-  xhprof_render_3d($xhprof_runs_impl, $run, $type,
+  $script = xhprof_render_3d($xhprof_runs_impl, $run, $type,
                       $threshold, $func, $source, $critical);
 } else {
   echo __LINE__ . 'Not implemented';
 }
+
+require_once XHPROF_LIB_ROOT . '/templates/3d.php';
 
 ?>
