@@ -1,154 +1,159 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<title>three.js css3d stereo - periodic table</title>
-		<style>
-			html, body {
-				height: 100%;
-			}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Graphosaurus</title>
+  <style>
+    #frame {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 0;
+    }
 
-			body {
-				background-color: #000000;
-				margin: 0;
-				font-family: Helvetica, sans-serif;;
-				overflow: hidden;
-			}
+    #label {
+      position: absolute;
+      top: 15;
+      left: 15;
+      z-index: 1;
+      color: white;
+      font-family: sans-serif;
+    }
 
-			a {
-				color: #ffffff;
-			}
+    #title {
+      position: absolute;
+      top: 15;
+      right: 15;
+      z-index: 1;
+      color: white;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
 
-			.element {
-				width: 120px;
-				height: 160px;
-				box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
-				border: 1px solid rgba(127,255,255,0.25);
-				text-align: center;
-				cursor: default;
-			}
+<div id="frame"></div>
 
-			.element:hover {
-				box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
-				border: 1px solid rgba(127,255,255,0.75);
-			}
-
-				.element .number {
-					position: absolute;
-					top: 20px;
-					right: 20px;
-					font-size: 12px;
-					color: rgba(127,255,255,0.75);
-				}
-
-				.element .symbol {
-					position: absolute;
-					top: 40px;
-					left: 0px;
-					right: 0px;
-					font-size: 60px;
-					font-weight: bold;
-					color: rgba(255,255,255,0.75);
-					text-shadow: 0 0 10px rgba(0,255,255,0.95);
-				}
-
-				.element .details {
-					position: absolute;
-					bottom: 15px;
-					left: 0px;
-					right: 0px;
-					font-size: 12px;
-					color: rgba(127,255,255,0.75);
-				}
-            #messages {
-                background: white;
-                color: green;
-            }
-		</style>
-	</head>
-	<body>
-<!--<script src="js/jquery-1.11.1.js"></script>
-<script src="js/three.min.js"></script>
-<script src="js/tween.min.js"></script>
-<script src="js/TrackballControls.js"></script>
-<script src="js/CSS3DStereoRenderer.js"></script>
-<script src="js/socket.io-1.2.0.js"></script>-->
-
-<!--<script src="http://threejs.org/build/three.min.js"></script>
-<script src="http://threejs.org/examples/js/libs/tween.min.js"></script>
-<script src="http://threejs.org/examples/js/controls/TrackballControls.js"></script>
-<script src="http://threejs.org/examples/js/renderers/CSS3DStereoRenderer.js"></script>
-<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>-->
+<div id="label"></div>
+<div id="title">Eve Online Universe</div>
 
 <script src="./third-party/jquery/jquery-1.7.1.min.js"></script>
-<script src="./third-party/CanvasGraphLib-master/lib/mootools/mootools-1.2.1-core-nc.js" type="text/javascript" charset="utf-8"></script>
-<!-- <script src="./third-party/CanvasGraphLib-master/lib/mootools/mootools-1.2.1-core-yc.js" type="text/javascript" charset="utf-8"></script> -->
-<script src="./third-party/CanvasGraphLib-master/src/tree/CanvasTree.js" type="text/javascript" charset="utf-8"></script>
-<script src="./third-party/CanvasGraphLib-master/src/tree/CanvasBoundsTree.js" type="text/javascript" charset="utf-8"></script>
-<script src="./third-party/CanvasGraphLib-master/src/tree/CanvasMouseEventTree.js" type="text/javascript" charset="utf-8"></script>
-<script src="./third-party/CanvasGraphLib-master/src/components.js" type="text/javascript" charset="utf-8"></script>
-<script src="./third-party/CanvasGraphLib-master/src/layout/LayoutEngine.js" type="text/javascript" charset="utf-8"></script>
-<script src="./third-party/CanvasGraphLib-master/src/layout/force/ForceLayoutEngine.js" type="text/javascript" charset="utf-8"></script>
-<script src="./third-party/CanvasGraphLib-master/src/layout/force/SpringForceComponent.js" type="text/javascript" charset="utf-8"></script>
-<script src="./third-party/CanvasGraphLib-master/src/layout/force/FADEForceComponent.js" type="text/javascript" charset="utf-8"></script>
-<script src="./third-party/CanvasGraphLib-master/src/layout/force/FrictionForceComponent.js" type="text/javascript" charset="utf-8"></script>
-<script src="./third-party/CanvasGraphLib-master/src/engine.js" type="text/javascript" charset="utf-8"></script>
+<!--<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>-->
+
+<!--<script src="./third-party/d3/d3.min.js"></script>-->
 <script src="./third-party/graphosaurus/dist/graphosaurus.js"></script>
-<script src="./third-party/graphlib-dot/dist/graphlib-dot.min.js"></script>
-<script src="./third-party/dagre/dist/dagre.min.js"></script>
+<script src="./third-party/graphlib-dot/dist/graphlib-dot.js"></script>
+<!--<script src="./third-party/dagre-d3/dist/dagre-d3.js"></script>-->
 
-<!--<script src="http://drupal-7-32.local:8083/StereoCam/three.min.js"></script>
-<script src="http://drupal-7-32.local:8083/StereoCam/tween.min.js"></script>
-<script src="http://drupal-7-32.local:8083/StereoCam/TrackballControls.js"></script>
-<script src="http://drupal-7-32.local:8083/StereoCam/CSS3DStereoRenderer.js"></script>
-<script src="http://drupal-7-32.local:8083/StereoCam/socket.io-1.2.0.js"></script>
-<script src="http://drupal-7-32.local:8083/StereoCam/jquery-1.11.1.js"></script>-->
+<script id="js">
+  <?php
+    global $script;
+    print 'var g = graphlibDot.read(' . PHP_EOL . $script . PHP_EOL . ');';
+  ?>
 
-    <ul id="messages"></ul>
+  window.onload = function () {
+    window.eve = {"nodes": [
+      [30000001, 0.858, "Tanoo", -0.8851, 0.4237, -0.4451],
+      [30000002, 0.752, "Lashesih", -1.033, 0.4171, -0.2986],
+      [30000003, 0.846, "Akpivem", -0.9117, 0.4394, -0.5648],
+      [30000004, 0.817, "Jark", -0.9368, 0.506, -0.284],
+      [30000005, 0.814, "Sasta", -0.9478, 0.4313, -0.319],
+      [30000006, 0.864, "Zaid", -0.8479, 0.4231, -0.5707],
+      [30000007, 0.907, "Yuzier", -0.9037, 0.5345, -0.4904],
+      [30000008, 0.882, "Nirbhi", -0.7158, 0.4733, -0.4526],
+      [30000009, 0.578, "Sooma", -0.8409, 0.6921, -0.7523]
+    ], "edges": [
+      [30000001, 30000003],
+      [30000001, 30000005],
+      [30000001, 30000007],
+      [30000002, 30000005],
+      [30000003, 30000001],
+      [30000003, 30000007],
+      [30000003, 30000009],
+      [30000009, 30000008],
+      [30000002, 30000004],
+      [30000002, 30000006],
+      [30000009, 30000007],
+      [30000009, 30000004],
+      [30000006, 30000003],
+      [30000005, 30000007]
+    ]};
 
-		<div id="container"></div>
+    console.log(g.nodes());
+    console.log(g.edges());
 
-		<script>
-      <?php
-        global $script;
-        //print 'var dot_script = graphlibDot.parse(' . $script . ');';
-      ?>
-
-      window.onload = function () {
-
-        var g = graphlibDot.readMany(
-          'digraph {\n' +
-          'N0[shape=box , label="bar\nInc: 0.179 ms (66.1%)\nExcl: 0.048 ms (17.7%)\n5 total calls", width=3.3, height=2.3, fontsize=33, style=filled, fillcolor=yellow];' +
-          'N1[shape=box , label="strlen\nInc: 0.023 ms (8.5%)\nExcl: 0.023 ms (8.5%)\n5 total calls", width=1.6, height=1.1, fontsize=28];' +
-          'N2[shape=box , label="bar@1\nInc: 0.131 ms (48.3%)\nExcl: 0.029 ms (10.7%)\n4 total calls", width=2.0, height=1.4, fontsize=30, style=filled, fillcolor=yellow];' +
-          'N3[shape=box , label="bar@2\nInc: 0.102 ms (37.6%)\nExcl: 0.024 ms (8.9%)\n3 total calls", width=1.6, height=1.2, fontsize=29, style=filled, fillcolor=yellow];' +
-          'N4[shape=box , label="bar@3\nInc: 0.078 ms (28.8%)\nExcl: 0.073 ms (26.9%)\n2 total calls", width=5.0, height=3.5, fontsize=35, style=filled, fillcolor=red];' +
-          'N5[shape=box , label="bar@4\nInc: 0.005 ms (1.8%)\nExcl: 0.005 ms (1.8%)\n1 total calls", width=0.3, height=0.2, fontsize=14, style=filled, fillcolor=yellow];' +
-          'N6[shape=box , label="foo\nInc: 0.252 ms (93.0%)\nExcl: 0.050 ms (18.5%)\n1 total calls", width=3.4, height=2.4, fontsize=33, style=filled, fillcolor=red];' +
-          'N7[shape=box , label="xhprof_disable\nInc: 0.004 ms (1.5%)\nExcl: 0.004 ms (1.5%)\n1 total calls", width=0.3, height=0.2, fontsize=12];' +
-          'N8[shape=octagon , label="Total: 0.271 ms\nXHProf Run (Namespace=xhprof)\nExcl: 0.015 ms (5.5%)\n1 total calls", width=1.0, height=0.7, fontsize=25];' +
-          'N6 -> N0[arrowsize=2, style="setlinewidth(10)", label="5 calls", headlabel="100.0%", taillabel="88.6%" ];' +
-          'N6 -> N1[arrowsize=1, style="setlinewidth(1)", label="5 calls", headlabel="100.0%", taillabel="11.4%" ];' +
-          'N0 -> N2[arrowsize=2, style="setlinewidth(10)", label="4 calls", headlabel="100.0%", taillabel="100.0%" ];' +
-          'N2 -> N3[arrowsize=2, style="setlinewidth(10)", label="3 calls", headlabel="100.0%", taillabel="100.0%" ];' +
-          'N3 -> N4[arrowsize=2, style="setlinewidth(10)", label="2 calls", headlabel="100.0%", taillabel="100.0%" ];' +
-          'N4 -> N5[arrowsize=2, style="setlinewidth(10)", label="1 call", headlabel="100.0%", taillabel="100.0%" ];' +
-          'N8 -> N6[arrowsize=2, style="setlinewidth(10)", label="1 call", headlabel="100.0%", taillabel="98.4%" ];' +
-          'N8 -> N7[arrowsize=1, style="setlinewidth(1)", label="1 call", headlabel="100.0%", taillabel="1.6%" ];' +
-      '}'
-      )
-        console.log(g);
-
-        //var g = graphlibDot.parse(dot_script);
-        var g = graphlibDot.read(
-          'digraph {\n' +
-            '    a -> b;\n' +
-            '    }'
-        )
-        console.log(g);
+    graph = G.graph({
+      //nodeImage: "../_common/disc.png",
+      nodeImageTransparent: true,
+      antialias: true,
+      bgColor: "darkgray",
+      edgeWidth: 2.0,
+      nodeSize: 25,
+      hover: function (node) {
+        $("#label").text("Solar system: " + node.name);
       }
+    });
 
-    </script>
-	</body>
+    var x = 0;
+    var y = 0;
+    var z = 0;
+    jQuery.each(g.nodes(), function( i, val ) {
+      //var node = val;
+      var yellow = 'yellow';
+      console.log(g.node(val).style);
+      var temp = eval ("var style = {" + g.node(val).style + "};");
+      console.log(style);
+      console.log(style.fill);
+      //var color = g.node(val).style.replace(/fill:\s/, '');
+      var node = G.node([x, y, z], {
+        id: val,
+        color: style.fill
+      });
+
+      node.name = node.label;
+      node.addTo(graph);
+
+      x = x + 100 + Math.ceil(Math.random() * 10000);
+      y = y + 200 + Math.ceil(Math.random() * 10000);
+
+      console.log(x, y);
+    });
+
+    jQuery.each(g.edges(), function( i, val ) {
+      var edge = val;
+      //console.log(edge);
+      G.edge([edge.v, edge.w], {
+        color: 0x0000aa
+      }).addTo(graph);
+    });
+
+    /*
+    for (var i = 0; i < g.nodes().length; i++) {
+      var node = g.nodes[i];
+      console.log(node); return;
+      var nodeId = node[0];
+      var coords = node.slice(3, 6);
+
+      var node = G.node(coords, {
+        id: nodeId,
+        color: 'red'
+      });
+      node.name = node[2];
+      node.addTo(graph);
+    }
+return;
+    for (var i = 0; i < eve.edges.length; i++) {
+      G.edge(eve.edges[i], {
+        color: 0x0000aa
+      }).addTo(graph);
+    }*/
+
+    graph.renderIn('frame');
+  }
+</script>
+</body>
 </html>
