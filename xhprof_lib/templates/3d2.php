@@ -39,7 +39,6 @@
 <div id="frame"></div>
 
 <div id="label"></div>
-<div id="title">Eve Online Universe</div>
 
 <script src="./third-party/jquery/jquery-1.7.1.min.js"></script>
 <!--<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>-->
@@ -83,9 +82,6 @@
       [30000005, 30000007]
     ]};
 
-    console.log(g.nodes());
-    console.log(g.edges());
-
     graph = G.graph({
       //nodeImage: "../_common/disc.png",
       nodeImageTransparent: true,
@@ -94,7 +90,7 @@
       edgeWidth: 2.0,
       nodeSize: 25,
       hover: function (node) {
-        $("#label").text("Solar system: " + node.name);
+        $("#label").text("Function: " + node.name);
       }
     });
 
@@ -102,25 +98,28 @@
     var y = 0;
     var z = 0;
     jQuery.each(g.nodes(), function( i, val ) {
-      //var node = val;
-      var yellow = 'yellow';
-      console.log(g.node(val).style);
-      var temp = eval ("var style = {" + g.node(val).style + "};");
-      console.log(style);
-      console.log(style.fill);
-      //var color = g.node(val).style.replace(/fill:\s/, '');
+      var color = 'white';
+
+      var node_style = g.node(val).style;
+      var node_label = g.node(val).label;
+      if (typeof node_style == 'string') {
+        node_style = node_style.replace(/\w+/g, '"$&"');
+        var json = "{" + node_style + "}";
+        var style = jQuery.parseJSON(json);
+        color = style.fill;
+      }
+
       var node = G.node([x, y, z], {
         id: val,
-        color: style.fill
+        color: color
       });
 
-      node.name = node.label;
+      node.name = node_label;
       node.addTo(graph);
 
       x = x + 100 + Math.ceil(Math.random() * 10000);
       y = y + 200 + Math.ceil(Math.random() * 10000);
 
-      console.log(x, y);
     });
 
     jQuery.each(g.edges(), function( i, val ) {
@@ -130,27 +129,6 @@
         color: 0x0000aa
       }).addTo(graph);
     });
-
-    /*
-    for (var i = 0; i < g.nodes().length; i++) {
-      var node = g.nodes[i];
-      console.log(node); return;
-      var nodeId = node[0];
-      var coords = node.slice(3, 6);
-
-      var node = G.node(coords, {
-        id: nodeId,
-        color: 'red'
-      });
-      node.name = node[2];
-      node.addTo(graph);
-    }
-return;
-    for (var i = 0; i < eve.edges.length; i++) {
-      G.edge(eve.edges[i], {
-        color: 0x0000aa
-      }).addTo(graph);
-    }*/
 
     graph.renderIn('frame');
   }
