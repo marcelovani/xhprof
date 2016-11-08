@@ -567,3 +567,39 @@ function xhprof_render_image($xhprof_runs_impl, $run_id, $type, $threshold,
   xhprof_generate_mime_header($type, strlen($content));
   echo $content;
 }
+
+function xhprof_render_3d($xhprof_runs_impl, $run_id, $type, $threshold,
+                             $func, $source, $critical_path) {
+
+  if (!$run_id)
+    return;
+
+  list($raw_data, $a) = $xhprof_runs_impl->get_run($run_id, $source, $description);
+  if (!$raw_data) {
+    xhprof_error("Raw data is empty");
+    return "";
+  }
+
+  global $script;
+
+  $script = xhprof_generate_dot_script($raw_data, $threshold, $source, $description, $func, $critical_path);
+
+  // Prepare graphlib-dot object.
+  $script = preg_replace('/(.+)/', '\'$1\' +', $script);
+  $script = preg_replace('/\}\'\s*\+/', "}'", $script);
+
+//  $script = preg_replace('/^\s*digraph call_graph\s*{/', '{', $script);
+  /*$script = preg_replace('/\[/', ':["', $script);
+  $script = preg_replace('/\]\;/', '""],', $script);*/
+
+/*  echo "<pre style='
+        height: 300px;
+        overflow-y: scroll;
+        width: 98%;
+        border: 1px solid #000;
+        padding: 1em;'>";
+  print_r($script);
+  echo "</pre>";*/
+
+ return $script;
+}
