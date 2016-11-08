@@ -4,6 +4,7 @@ $_xhprof = array();
 // Change these:
 $_xhprof['dbtype'] = 'mysql'; // Only relevant for PDO
 $_xhprof['dbhost'] = 'localhost';
+$_xhprof['dbport'] = '3306'; // Used by Mysqli
 $_xhprof['dbuser'] = 'root';
 $_xhprof['dbpass'] = 'password';
 $_xhprof['dbname'] = 'xhprof';
