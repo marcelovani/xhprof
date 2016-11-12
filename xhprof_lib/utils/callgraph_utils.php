@@ -250,7 +250,6 @@ function xhprof_get_children_table($raw_data) {
 function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
                                     $func, $critical_path, $right=null,
                                     $left=null) {
-
   $max_width = 5;
   $max_height = 3.5;
   $max_fontsize = 35;

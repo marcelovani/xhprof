@@ -4,24 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<title>dot d3 viewer</title>
-		<style>
-      svg {
-        overflow: hidden;
-      }
-      .node rect {
-        stroke: #333;
-        stroke-width: 2px;
-        fill: #fff;
-      }
-      .edgeLabel rect {
-        fill: #fff;
-      }
-      .edgePath {
-        stroke: #333;
-        stroke-width: 2px;
-        fill: none;
-      }
-		</style>
+    <link rel="stylesheet" href="./themes/css/2d.css">
 	</head>
 
   <?php

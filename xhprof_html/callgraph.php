@@ -65,6 +65,8 @@ $params = array( // run id param
   'run2' => array(XHPROF_STRING_PARAM, '')
 );
 
+echo '<span class="params">';
+
 // pull values of these params, and create named globals for each param
 xhprof_param_init($params);
 
@@ -72,6 +74,7 @@ xhprof_param_init($params);
 if ($threshold < 0 || $threshold > 1) {
   $threshold = $params['threshold'][1];
 }
+echo '<span>Threshold</span>';
 
 // if invalid value specified for type, use the default
 if (!array_key_exists($type, $xhprof_legal_image_types)) {
@@ -85,7 +88,7 @@ if (!empty($run)) {
     $script = xhprof_render_dot($xhprof_runs_impl, $run, $type,
       $threshold, $func, $source, $critical);
 
-    echo '<a href="' . $_xhprof['url'] . '/?run=' . $run . '">Back</a>';
+    echo '<span><a href="' . $_xhprof['url'] . '/?run=' . $run . '">Back</a><span>';
     require_once 'themes/' . $_GET['template'] . '.php';
   }
   else {
@@ -100,4 +103,4 @@ else {
     $type, $threshold, $source);
 }
 
-
+echo '</span>';

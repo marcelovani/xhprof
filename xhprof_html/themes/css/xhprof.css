@@ -69,6 +69,10 @@ ul.xhprof_actions li a:hover {
   background:#3B5998 none repeat scroll 0 0;
   color:#FFFFFF;
 }
+span.parameters span {
+  float: left;
+}
+
                                            /*   Styling for New Pages   */
 
 .dash-header {width:100%;height:100px;background:#e8edff;border: 2px solid #b9c9fe;margin-right:auto;margin-left:auto;}
