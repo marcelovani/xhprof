@@ -144,8 +144,7 @@
                     color: '#4572A7',
                     type: 'line',
                     yAxis: 1,
-                    data: [<?php echo $cpuJS;?>],
-                                 
+                    data: [<?php echo $cpuJS;?>]
                 },{
                     name: 'Wall Time',
                     type: 'line',
@@ -157,7 +156,7 @@
                     name: 'Peak Memory Usage',
                     color: '#89A54E',
                     type: 'line',
-                    data: [<?php echo $pmuJS;?>,]        
+                    data: [<?php echo $pmuJS;?>]
                 }]
               });            
             

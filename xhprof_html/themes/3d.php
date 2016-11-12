@@ -122,14 +122,14 @@
           'N8 -> N6[arrowsize=2, style="setlinewidth(10)", label="1 call", headlabel="100.0%", taillabel="98.4%" ];' +
           'N8 -> N7[arrowsize=1, style="setlinewidth(1)", label="1 call", headlabel="100.0%", taillabel="1.6%" ];' +
       '}'
-      )
+      );
 
         //var g = graphlibDot.parse(dot_script);
         var g = graphlibDot.parse(
           'digraph {\n' +
             '    a -> b;\n' +
             '    }'
-        )
+        );
         console.log(g);
       }
 
