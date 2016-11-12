@@ -14,3 +14,7 @@ svg {
   stroke-width: 2px;
   fill: none;
 }
+span.params span {
+  float: right;
+  padding: 4px;
+}
