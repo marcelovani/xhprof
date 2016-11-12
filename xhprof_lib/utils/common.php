@@ -125,3 +125,68 @@ function getFilter($filterName)
     }
     return $serverFilter;
 }
+
+/**
+ * Helper to return a button
+ *
+ * @param $title
+ * @param $increment
+ * @param float $default
+ * @return string
+ */
+function get_threshold_button($title, $increment, $default = 0.1)  {
+  $parsed_qs = parse_qs();
+  if (isset($parsed_qs['threshold'])) {
+    $current = (float) $parsed_qs['threshold'];
+  }
+  else {
+    $current = $default;
+  }
+  $parsed_qs['threshold'] = $current + $increment;
+  $button = '<span><a class="button" href="' . build_url($parsed_qs) . '">' . $parsed_qs['threshold'] . '</a></span>';
+
+  return $button;
+}
+
+/**
+ * Helper to parse the query string.
+ *
+ * @return array
+ */
+function parse_qs() {
+  $parsed_url = parse_url($_SERVER['REQUEST_URI']);
+  $qs = $parsed_url['query'];
+
+  // Convert query string to array.
+  $parsed_qs = [];
+  foreach (explode('&', $qs) as $param) {
+    $kv = explode('=', $param);
+    $parsed_qs[$kv[0]] = $kv[1];
+  }
+
+  return $parsed_qs;
+}
+
+/**
+ * Helper to get the current path.
+ * @return mixed
+ */
+function get_current_path() {
+  $parsed_url = parse_url($_SERVER['REQUEST_URI']);
+  return $parsed_url['path'];
+}
+
+/**
+ * Helper to rebuild url
+ *
+ * @param $parsed_url
+ * @param $parsed_qs
+ * @return string
+ */
+function build_url($parsed_qs) {
+  $qs = '';
+  foreach ($parsed_qs as $k => $v) {
+    $qs .= sprintf('%s=%s&', $k, $v);
+  }
+  return get_current_path() . '?' . trim($qs, '&');
+}

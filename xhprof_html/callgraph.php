@@ -41,6 +41,7 @@ if (!defined('XHPROF_LIB_ROOT')) {
 }
 
 include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
+include(XHPROF_LIB_ROOT . "/utils/common.php");
 
 ini_set('max_execution_time', 100);
 
@@ -65,7 +66,9 @@ $params = array( // run id param
   'run2' => array(XHPROF_STRING_PARAM, '')
 );
 
-echo '<span class="params">';
+echo '<div class="params">';
+
+echo '<span><input type="checkbox" name="internal" value="1" checked="checked">Include native php</span>';
 
 // pull values of these params, and create named globals for each param
 xhprof_param_init($params);
@@ -75,81 +78,20 @@ if ($threshold < 0 || $threshold > 1) {
   $threshold = $params['threshold'][1];
 }
 
-echo '<span>Threshold</span>';
-echo '<span>' . get_threshold_button('++', 0.5, $threshold) . '</span>';
-echo '<span>' . get_threshold_button('+', 0.1, $threshold) . '</span>';
-echo '<span>' . get_threshold_button('-', -0.1, $threshold) . '</span>';
-echo '<span>' . get_threshold_button('--', -0.5, $threshold) . '</span>';
-
-/**
- * Helper to return a button
- *
- * @param $title
- * @param $increment
- * @param float $default
- * @return string
- */
-function get_threshold_button($title, $increment, $default = 0.1)  {
-  $parsed_qs = parse_qs();
-  if (isset($parsed_qs['threshold'])) {
-    $current = (float) $parsed_qs['threshold'];
-  }
-  else {
-    $current = $default;
-  }
-  $parsed_qs['threshold'] = $current + $increment;
-  $button = '<span><a href="' . build_url($parsed_qs) . '">' . $parsed_qs['threshold'] . '</a></span>';
-
-  return $button;
-}
-
-/**
- * Helper to parse the query string.
- *
- * @return array
- */
-function parse_qs() {
-  $parsed_url = parse_url($_SERVER['REQUEST_URI']);
-  $qs = $parsed_url['query'];
-
-  // Convert query string to array.
-  $parsed_qs = [];
-  foreach (explode('&', $qs) as $param) {
-    $kv = explode('=', $param);
-    $parsed_qs[$kv[0]] = $kv[1];
-  }
-
-  return $parsed_qs;
-}
-
-/**
- * Helper to get the current path.
- * @return mixed
- */
-function get_current_path() {
-  $parsed_url = parse_url($_SERVER['REQUEST_URI']);
-  return $parsed_url['path'];
-}
-
-/**
- * Helper to rebuild url
- *
- * @param $parsed_url
- * @param $parsed_qs
- * @return string
- */
-function build_url($parsed_qs) {
-  $qs = '';
-  foreach ($parsed_qs as $k => $v) {
-    $qs .= sprintf('%s=%s&', $k, $v);
-  }
-  return get_current_path() . '?' . trim($qs, '&');
-}
+echo '<span>Threshold';
+echo get_threshold_button('++', 0.5, $threshold);
+echo get_threshold_button('+', 0.1, $threshold);
+echo get_threshold_button('-', -0.1, $threshold);
+echo get_threshold_button('--', -0.5, $threshold);
+echo '</span>';
 
 // if invalid value specified for type, use the default
 if (!array_key_exists($type, $xhprof_legal_image_types)) {
   $type = $params['type'][1]; // default image type.
 }
+
+echo '<span><a class="button" href="' . $_xhprof['url'] . '/?run=' . $run . '">Back</a></span>';
+echo '</div>';
 
 $xhprof_runs_impl = new XHProfRuns_Default();
 
@@ -158,7 +100,6 @@ if (!empty($run)) {
     $script = xhprof_render_dot($xhprof_runs_impl, $run, $type,
       $threshold, $func, $source, $critical);
 
-    echo '<span><a href="' . $_xhprof['url'] . '/?run=' . $run . '">Back</a></span>';
     require_once 'themes/' . $_GET['template'] . '.php';
   }
   else {
@@ -173,4 +114,3 @@ else {
     $type, $threshold, $source);
 }
 
-echo '</span>';

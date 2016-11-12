@@ -1,5 +1,6 @@
 svg {
   overflow: hidden;
+  margin-top: 10px;
 }
 .node rect {
   stroke: #333;
@@ -14,7 +15,9 @@ svg {
   stroke-width: 2px;
   fill: none;
 }
-span.params span {
+div.params span {
   float: right;
+}
+div.params {
   padding: 4px;
 }
