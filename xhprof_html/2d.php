@@ -107,4 +107,5 @@ else {
   //$template = '/2d';
 }
 
-require_once XHPROF_LIB_ROOT . '/templates/' . $template . '.php';
+echo '<a href="' . $_xhprof['url'] . '/?run=' . $run . '">Back</a>';
+require_once XHPROF_LIB_ROOT . '/../themes/' . $template . '.php';
