@@ -35,7 +35,10 @@
 
 		<script>
       <?php
-        global $script;
+        //global $script;
+        // Prepare graphlib-dot object.
+        $script = preg_replace('/(.+)/', '\'$1\' +', $script);
+        $script = preg_replace('/\}\'\s*\+/', "}'", $script);
         print 'var g = graphlibDot.parse(' . PHP_EOL . $script . PHP_EOL . ')';
       ?>
 

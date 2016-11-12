@@ -580,26 +580,9 @@ function xhprof_render_3d($xhprof_runs_impl, $run_id, $type, $threshold,
     return "";
   }
 
-  global $script;
+  //global $script;
 
   $script = xhprof_generate_dot_script($raw_data, $threshold, $source, $description, $func, $critical_path);
-
-  // Prepare graphlib-dot object.
-  $script = preg_replace('/(.+)/', '\'$1\' +', $script);
-  $script = preg_replace('/\}\'\s*\+/', "}'", $script);
-
-//  $script = preg_replace('/^\s*digraph call_graph\s*{/', '{', $script);
-  /*$script = preg_replace('/\[/', ':["', $script);
-  $script = preg_replace('/\]\;/', '""],', $script);*/
-
-/*  echo "<pre style='
-        height: 300px;
-        overflow-y: scroll;
-        width: 98%;
-        border: 1px solid #000;
-        padding: 1em;'>";
-  print_r($script);
-  echo "</pre>";*/
 
  return $script;
 }

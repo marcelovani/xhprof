@@ -95,7 +95,16 @@ if (!empty($run)) {
   echo __LINE__ . 'Not implemented';
 }
 
-require_once XHPROF_LIB_ROOT . '/templates/2d.php';
+if (isset($_GET['template'])) {
+  $template = $_GET['template'];
+}
+else {
+  //$template = 'demo-dot-process';
+  //$template = 'demo-dot-softmaint';
+  //$template = 'demo-dot-json';
+  //$template = '/raw';
+  //$template = '/dot';
+  //$template = '/2d';
+}
 
-
-?>
+require_once XHPROF_LIB_ROOT . '/templates/' . $template . '.php';
