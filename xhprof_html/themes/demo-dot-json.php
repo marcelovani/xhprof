@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <meta charset='utf-8'>
-<link rel='stylesheet/less' type='text/css' href='./graphyte/less/main.less'>
+<link rel='stylesheet/less' type='text/css' href='./themes/graphyte/less/main.less'>
 <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css">-->
 
 <script>
@@ -11,7 +11,7 @@
   };
 </script>
 
-<script src='./graphyte/js/config.js'></script>
+<script src='./themes/graphyte/js/config.js'></script>
 <script src='./node_modules/graphlib-dot/dist/graphlib-dot.js'></script>
 <script src='./node_modules/less/dist/less.min.js'></script>
 <script src='./node_modules/requirejs/require.js'></script>
@@ -108,7 +108,7 @@
       update();
     }, delay);
 
-    d3.json('graphyte/demo_data/demo-dot-json.json', function(error, data) {
+    d3.json('themes/graphyte/demo_data/demo-dot-json.json', function(error, data) {
       var nodes = data.nodes.map(function(node) {
         node.style = {
           fill: color(node.group)

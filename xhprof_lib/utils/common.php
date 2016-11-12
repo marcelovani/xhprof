@@ -95,7 +95,7 @@ function showChart($rs, $flip = false)
   
    
     ob_start();
-      require ("../themes/templates/chart.phtml");
+      require ("themes/templates/chart.tpl.php");
       $stuff = ob_get_contents();
     ob_end_clean();
    return array($stuff, "<div id=\"container\" style=\"width: 1000px; height: 500px; margin: 0 auto\"></div>");

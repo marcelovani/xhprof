@@ -108,4 +108,4 @@ else {
 }
 
 echo '<a href="' . $_xhprof['url'] . '/?run=' . $run . '">Back</a>';
-require_once XHPROF_LIB_ROOT . '/../themes/' . $template . '.php';
+require_once 'themes/' . $template . '.php';
