@@ -10,7 +10,7 @@
       }
       .node rect {
         stroke: #333;
-        stroke-width: 1.5px;
+        stroke-width: 2px;
         fill: #fff;
       }
       .edgeLabel rect {
@@ -18,13 +18,17 @@
       }
       .edgePath {
         stroke: #333;
-        stroke-width: 1.5px;
+        stroke-width: 2px;
         fill: none;
       }
 		</style>
 	</head>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+  <?php
+  //@todo use node_modules
+  //@todo put whole thing inside a box like demo-dagre
+  ?>
+  <script src="./node_modules/d3/d3.min.js"></script>
   <script src="http://cpettitt.github.io/project/graphlib-dot/v0.4.10/graphlib-dot.min.js"></script>
   <script src="http://cpettitt.github.io/project/dagre-d3/v0.1.5/dagre-d3.min.js"></script>
 

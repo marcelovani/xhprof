@@ -10,6 +10,7 @@ function foo() {
   for ($idx = 0; $idx < 5; $idx++) {
     bar($idx);
     $x = strlen("abc");
+    return $x;
   }
 }
 

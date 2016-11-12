@@ -5,10 +5,10 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<title>XHGui: Hierarchical Profiler Report</title>
 
-<link href='css/xhprof.css' rel='stylesheet'  type='text/css'></link>
+<link href='css/xhprof.css' rel='stylesheet'  type='text/css' />
 <link href="css/tablesorter.pager.css" rel="stylesheet" type="text/css" />             
-<link href='third-party/jquery/jquery.tooltip.css'  rel='stylesheet' type='text/css'></link>
-<link href='third-party/jquery/jquery.autocomplete.css'  rel='stylesheet' type='text/css'></link>
+<link href='third-party/jquery/jquery.tooltip.css'  rel='stylesheet' type='text/css' />
+<link href='third-party/jquery/jquery.autocomplete.css'  rel='stylesheet' type='text/css' />
 <script src='third-party/jquery/jquery-1.7.1.min.js' type="text/javascript"></script>    
 <script src='third-party/jquery/jquery.tooltip.js' type="text/javascript"></script>
 <script src='third-party/jquery/jquery.autocomplete.js' type="text/javascript"></script>
