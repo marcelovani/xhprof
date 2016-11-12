@@ -568,7 +568,7 @@ function xhprof_render_image($xhprof_runs_impl, $run_id, $type, $threshold,
   echo $content;
 }
 
-function xhprof_render_3d($xhprof_runs_impl, $run_id, $type, $threshold,
+function xhprof_render_dot($xhprof_runs_impl, $run_id, $type, $threshold,
                              $func, $source, $critical_path) {
 
   if (!$run_id)

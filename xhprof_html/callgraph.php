@@ -89,11 +89,22 @@ if (!array_key_exists($type, $xhprof_legal_image_types)) {
 $xhprof_runs_impl = new XHProfRuns_Default();
 
 if (!empty($run)) {
-  // single run call graph image generation
-  xhprof_render_image($xhprof_runs_impl, $run, $type,
+  if (isset($_GET['template'])) {
+    $script = xhprof_render_dot($xhprof_runs_impl, $run, $type,
+      $threshold, $func, $source, $critical);
+
+    echo '<a href="' . $_xhprof['url'] . '/?run=' . $run . '">Back</a>';
+    require_once 'themes/' . $_GET['template'] . '.php';
+  }
+  else {
+    // single run call graph image generation
+    xhprof_render_image($xhprof_runs_impl, $run, $type,
                       $threshold, $func, $source, $critical);
+  }
 } else {
   // diff report call graph image generation
   xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2,
                            $type, $threshold, $source);
 }
+
+
