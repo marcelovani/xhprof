@@ -17,10 +17,10 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -200;
+      z-index: 0;
     }
 
-    #header, .params {
+    #header {
       flex: 0 0 auto;
       -webkit-flex: 0 0 auto;
     }
@@ -64,11 +64,9 @@
       border-right: 1px solid #ccc;
     }
 
-    #header, .params {
+    #header {
       border-bottom: 1px solid #ccc;
-      padding: 8px;
       text-align: center;
-      height: 35px;
     }
 
     #header, .params b {
@@ -138,18 +136,17 @@
     </style>
   </head>
   <body>
-    
+
     <div id="app">
       <div id="header">
       </div>
       <div id="panes">
         <div id="editor"># http://www.graphviz.org/content/cluster
-
-          <?php echo $script; ?>
-
-</div>
+<?php echo $script; ?>
+        </div>
         <div id="graph">
           <div id="options">
+            <span><a class="button" href="' . $_xhprof['url'] . '/?run=' . $run . '">Back</a></span>
             <label id="engine">
               Engine:
               <select>
@@ -161,7 +158,7 @@
                 <option>twopi</option>
               </select>
             </label>
-            
+
             <label id="format">
               Format:
               <select>
@@ -172,11 +169,23 @@
                 <option>ps</option>
               </select>
             </label>
-            
+
             <label id="raw">
               <input type="checkbox"> Show raw output
             </label>
+
+            <?php echo get_show_internal_button('Show internal functions', 1); ?>
+            <span>Threshold
+            <?php
+              echo get_threshold_button('++', 0.1, $threshold);
+              echo get_threshold_button('+', 0.01, $threshold);
+              echo get_threshold_button('-', -0.01, $threshold);
+              echo get_threshold_button('--', -0.1, $threshold);
+            ?>
+            </span>
+
           </div>
+
           <div id="output">
             <div id="error"></div>
           </div>
@@ -186,6 +195,7 @@
     
     <script src="./themes/viz.js/js/ace/ace.js"></script>
     <script src="./node_modules/viz.js/viz.js"></script>
+    <script src="./node_modules/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>
     <script>
     
     var editor = ace.edit("editor");
@@ -283,6 +293,14 @@
         text.appendChild(document.createTextNode(result));
         graph.appendChild(text);
       }
+
+      window.svgZoom = svgPanZoom( '#output svg', {
+        zoomEnabled: true,
+        controlIconsEnabled: true,
+        fit: true,
+        center: true,
+        // viewportSelector: document.getElementById('demo-tiger').querySelector('#g4') // this option will make library to misbehave. Viewport should have no transform attribute
+      } );
     }
 
     editor.on("change", function() {

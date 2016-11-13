@@ -66,12 +66,6 @@ $params = array( // run id param
   'run2' => array(XHPROF_STRING_PARAM, '')
 );
 
-echo '<div class="params">';
-
-echo '<span>Options';
-echo get_show_internal_button('Show internal functions', 1);
-echo '</span>';
-
 // pull values of these params, and create named globals for each param
 xhprof_param_init($params);
 
@@ -80,20 +74,10 @@ if ($threshold < 0 || $threshold > 1) {
   $threshold = $params['threshold'][1];
 }
 
-echo '<span>Threshold';
-echo get_threshold_button('++', 0.1, $threshold);
-echo get_threshold_button('+', 0.01, $threshold);
-echo get_threshold_button('-', -0.01, $threshold);
-echo get_threshold_button('--', -0.1, $threshold);
-echo '</span>';
-
 // if invalid value specified for type, use the default
 if (!array_key_exists($type, $xhprof_legal_image_types)) {
   $type = $params['type'][1]; // default image type.
 }
-
-echo '<span><a class="button" href="' . $_xhprof['url'] . '/?run=' . $run . '">Back</a></span>';
-echo '</div>';
 
 $xhprof_runs_impl = new XHProfRuns_Default();
 
@@ -115,4 +99,3 @@ else {
   xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2,
     $type, $threshold, $source);
 }
-

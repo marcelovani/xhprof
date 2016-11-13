@@ -69,10 +69,6 @@ ul.xhprof_actions li a:hover {
   background:#3B5998 none repeat scroll 0 0;
   color:#FFFFFF;
 }
-div.params span {
-  float: left;
-  margin: 2px;
-}
 .button {
   background: #3498db;
   background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
@@ -88,6 +84,7 @@ div.params span {
   font-size: 18px;
   padding: 7px 15px 7px 15px;
   text-decoration: none;
+  line-height: 37px;
 }
 
 .button:hover {
