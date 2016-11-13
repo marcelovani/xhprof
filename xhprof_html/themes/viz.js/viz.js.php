@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Viz.js</title>
+    <title>Xhprof <?php echo $run; ?></title>
     <link rel="stylesheet" href="./themes/css/xhprof.css">
     <link rel="stylesheet" href="./themes/css/2d.css">
     <style>
@@ -189,7 +189,7 @@
 
           <div id="output">
             <div id="error"></div>
-            <svg version="1.1" id="L6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            <svg version="1.1" id="L6" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                  viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
               <rect fill="none" stroke="#fff" stroke-width="4" x="25" y="25" width="50" height="50">
                 <animateTransform

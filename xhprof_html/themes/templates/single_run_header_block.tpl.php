@@ -31,6 +31,7 @@
       <a href="callgraph.php?template=raw&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Raw List</a>
       <a href="callgraph.php?template=viz.js&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">View Callback</a>
       <a href="callgraph.php?template=3d&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">3D Viewer</a>
+      <a href="callgraph.php?template=vr&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Stereo Viewer</a>
    </div>
     <div id="left-col">
      <div>

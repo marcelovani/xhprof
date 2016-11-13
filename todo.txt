@@ -3,4 +3,4 @@ Remove un-needed package.json and also node_modules
 Move config.php to root and update install instructions
 Replace on/off button with iphone style
 Replace threshold with slider
-add 3D view
+add 3D and VR view
