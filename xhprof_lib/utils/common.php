@@ -127,6 +127,23 @@ function getFilter($filterName)
 }
 
 /**
+ * Helper for home button.
+ *
+ * @return string
+ */
+function get_home_button()  {
+  $qs = '';
+  foreach (parse_qs() as $k => $v) {
+    $qs .= sprintf('%s=%s&', $k, $v);
+  }
+  $folder = explode('/', $_SERVER['REQUEST_URI']);
+  $url = '/' . $folder[1] . '?' . trim($qs, '&');
+  $button = '<span><a class="button" href="' . $url . '">Home</a></span>';
+
+  return $button;
+}
+
+/**
  * On/Off button to show/hide internal php functions.
  *
  * @param $title

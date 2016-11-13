@@ -28,9 +28,8 @@
 <div id="view-center-tables">
    <div id="run-id-wrapper">
       <h2 class="run-details">RunID: <?php echo $xhprof_runs_impl->run_details['id']; ?> against <?php echo $xhprof_runs_impl->run_details['server name'];?><?php echo htmlentities($xhprof_runs_impl->run_details['url'], ENT_QUOTES, 'UTF-8'); ?> </h2>
-      <a href="callgraph.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">View Callgraph</a>
-      <a href="callgraph.php?template=raw&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Raw Viewer</a>
-      <a href="callgraph.php?template=viz.js&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">2D Viewer</a>
+      <a href="callgraph.php?template=raw&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Raw List</a>
+      <a href="callgraph.php?template=viz.js&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">View Callback</a>
       <a href="callgraph.php?template=3d&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">3D Viewer</a>
    </div>
     <div id="left-col">
