@@ -127,6 +127,30 @@ function getFilter($filterName)
 }
 
 /**
+ * On/Off button to show/hide internal php functions.
+ *
+ * @param $title
+ * @return string
+ */
+function get_show_internal_button($title, $default = 0)  {
+  $parsed_qs = parse_qs();
+  if (!isset($parsed_qs['show_internal'])) {
+    $parsed_qs['show_internal'] = $default;
+  }
+  if ((int) $parsed_qs['show_internal'] == 0) {
+    $class = 'off';
+    $parsed_qs['show_internal'] = 1;
+  }
+  else {
+    $class = 'on';
+    $parsed_qs['show_internal'] = 0;
+  }
+  $button = '<span><a class="button ' . $class .'" href="' . build_url($parsed_qs) . '">' . $title . '</a></span>';
+
+  return $button;
+}
+
+/**
  * Helper to return a button
  *
  * @param $title
@@ -134,7 +158,7 @@ function getFilter($filterName)
  * @param float $default
  * @return string
  */
-function get_threshold_button($title, $increment, $default = 0.1)  {
+function get_threshold_button($title, $increment, $default = 0.01)  {
   $parsed_qs = parse_qs();
   if (isset($parsed_qs['threshold'])) {
     $current = (float) $parsed_qs['threshold'];
@@ -142,7 +166,14 @@ function get_threshold_button($title, $increment, $default = 0.1)  {
   else {
     $current = $default;
   }
-  $parsed_qs['threshold'] = $current + $increment;
+  $current = $current + $increment;
+  if ($current <= 0) {
+    $current = 0.01;
+  }
+  if ($current > 1) {
+    $current = 1;
+  }
+  $parsed_qs['threshold'] = $current;
   $button = '<span><a class="button" href="' . build_url($parsed_qs) . '">' . $parsed_qs['threshold'] . '</a></span>';
 
   return $button;
@@ -161,7 +192,9 @@ function parse_qs() {
   $parsed_qs = [];
   foreach (explode('&', $qs) as $param) {
     $kv = explode('=', $param);
-    $parsed_qs[$kv[0]] = $kv[1];
+    if (isset($kv[1])) {
+      $parsed_qs[$kv[0]] = $kv[1];
+    }
   }
 
   return $parsed_qs;

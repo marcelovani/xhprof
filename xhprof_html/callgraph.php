@@ -68,7 +68,9 @@ $params = array( // run id param
 
 echo '<div class="params">';
 
-echo '<span><input type="checkbox" name="internal" value="1" checked="checked">Include native php</span>';
+echo '<span>Options';
+echo get_show_internal_button('Show internal functions', 1);
+echo '</span>';
 
 // pull values of these params, and create named globals for each param
 xhprof_param_init($params);
@@ -79,10 +81,10 @@ if ($threshold < 0 || $threshold > 1) {
 }
 
 echo '<span>Threshold';
-echo get_threshold_button('++', 0.5, $threshold);
-echo get_threshold_button('+', 0.1, $threshold);
-echo get_threshold_button('-', -0.1, $threshold);
-echo get_threshold_button('--', -0.5, $threshold);
+echo get_threshold_button('++', 0.1, $threshold);
+echo get_threshold_button('+', 0.01, $threshold);
+echo get_threshold_button('-', -0.01, $threshold);
+echo get_threshold_button('--', -0.1, $threshold);
 echo '</span>';
 
 // if invalid value specified for type, use the default

@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Viz.js</title>
+    <link rel="stylesheet" href="./themes/css/xhprof.css">
+    <link rel="stylesheet" href="./themes/css/2d.css">
     <style>
 
     #app {
@@ -15,9 +17,10 @@
       left: 0;
       width: 100%;
       height: 100%;
+      z-index: -200;
     }
 
-    #header {
+    #header, .params {
       flex: 0 0 auto;
       -webkit-flex: 0 0 auto;
     }
@@ -32,6 +35,7 @@
     #editor {
       flex: 1 1 50%;
       -webkit-flex: 1 1 50%;
+      display: none;
     }
 
     #graph {
@@ -60,17 +64,17 @@
       border-right: 1px solid #ccc;
     }
 
-    #header {
-      background: #eee;
+    #header, .params {
       border-bottom: 1px solid #ccc;
       padding: 8px;
       text-align: center;
+      height: 35px;
     }
-    
-    #header b {
+
+    #header, .params b {
       font-size: 18px;
     }
-    
+
     #options {
       background: #eee;
       border-bottom: 1px solid #ccc;
@@ -137,38 +141,12 @@
     
     <div id="app">
       <div id="header">
-        <b>Viz.js</b> &mdash; <a href="http://www.graphviz.org">Graphviz</a> in your browser. Read more at <a href="https://github.com/mdaines/viz.js">the GitHub repository</a>.
       </div>
       <div id="panes">
         <div id="editor"># http://www.graphviz.org/content/cluster
 
-digraph G {
+          <?php echo $script; ?>
 
-	subgraph cluster_0 {
-		style=filled;
-		color=lightgrey;
-		node [style=filled,color=white];
-		a0 -> a1 -> a2 -> a3;
-		label = "process #1";
-	}
-
-	subgraph cluster_1 {
-		node [style=filled];
-		b0 -> b1 -> b2 -> b3;
-		label = "process #2";
-		color=blue
-	}
-	start -> a0;
-	start -> b0;
-	a1 -> b3;
-	b2 -> a3;
-	a3 -> a0;
-	a3 -> end;
-	b3 -> end;
-
-	start [shape=Mdiamond];
-	end [shape=Msquare];
-}
 </div>
         <div id="graph">
           <div id="options">
