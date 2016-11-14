@@ -78,10 +78,16 @@ ul.xhprof_actions li a:hover {
   -webkit-border-radius: 4;
   -moz-border-radius: 4;
   border-radius: 4px;
+  padding: 5px 8px 5px 8px;
+  line-height: 37px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+.button a {
   font-family: Arial;
   color: #ffffff;
-  font-size: 18px;
-  padding: 7px 15px 7px 15px;
+  font-size: 16px;
+  padding: 7px 5px 7px 5px;
   text-decoration: none;
   line-height: 37px;
 }
