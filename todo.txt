@@ -4,3 +4,5 @@ Move config.php to root and update install instructions
 Replace on/off button with iphone style
 Replace threshold with slider
 add 3D and VR view
+Use sqllite by default and ship it ready to use
+
