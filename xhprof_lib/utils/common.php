@@ -138,7 +138,7 @@ function get_home_button()  {
   }
   $folder = explode('/', $_SERVER['REQUEST_URI']);
   $url = '/' . $folder[1] . '?' . trim($qs, '&');
-  $button = '<span class="button"><a href="' . $url . '">Home</a></span>';
+  $button = '<span class="button"><a href="' . HOME . '">Home</a></span>';
 
   return $button;
 }
@@ -163,7 +163,7 @@ function get_show_internal_button($title, $default = 0)  {
     $parsed_qs['show_internal'] = 0;
   }
   $button = '<span class="button">
-  <input type="checkbox" ' . (($_GET['show_internal']) ? 'checked="checked"' : '') . '/>
+  <input type="checkbox" ' . (($parsed_qs['show_internal']) ? 'checked="checked"' : '') . '/>
   <a class="' . $class .'" href="' . build_url($parsed_qs) . '">' . $title . '</a>
   </span>';
 

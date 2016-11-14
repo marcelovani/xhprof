@@ -1,4 +1,7 @@
 <?php
+// The path for the home page.
+define('HOME', '/');
+
 $_xhprof = array();
 
 // Change these:
