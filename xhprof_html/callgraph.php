@@ -82,11 +82,11 @@ if (!array_key_exists($type, $xhprof_legal_image_types)) {
 $xhprof_runs_impl = new XHProfRuns_Default();
 
 if (!empty($run)) {
-  if (isset($_GET['template'])) {
+  if (isset($_GET['theme'])) {
     $script = xhprof_render_dot($xhprof_runs_impl, $run, $type,
       $threshold, $func, $source, $critical);
 
-    require_once 'themes/' . $_GET['template'] . '.php';
+    require_once 'themes/' . $_GET['theme'] . '.php';
   }
   else {
     // single run call graph image generation
