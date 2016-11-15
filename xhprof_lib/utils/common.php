@@ -162,8 +162,8 @@ function get_show_internal_button($title, $default = 0)  {
     $class = 'on';
     $parsed_qs['show_internal'] = 0;
   }
-  $button = '<span>
-  <input type="checkbox" ' . (($parsed_qs['show_internal']) ? 'checked="checked"' : '') . '/>
+  $button = '<span class="show_internal">
+  <input type="checkbox" ' . (($parsed_qs['show_internal'] == 0) ? 'checked="checked"' : '') . '/>
   <a href="' . build_url($parsed_qs) . '">' . $title . '</a>
   </span>';
 

@@ -175,7 +175,7 @@
             </label>
 
             <?php echo get_show_internal_button('Show internal functions', 1); ?>
-            <span>Threshold
+            <span class="threshold">Threshold
             <?php
               echo get_threshold_button('++', 0.1, $threshold);
               echo get_threshold_button('+', 0.01, $threshold);
@@ -358,7 +358,13 @@
     });
     
     updateGraph();
-    
+
+    jQuery( document ).ready( function () {
+      // Emulate click on link when clicking on checkbox.
+      jQuery('#options .show_internal' ).click( function () {
+        window.location = jQuery(this).find('a' ).attr('href');
+      });
+    });
     </script>
     
   </body>

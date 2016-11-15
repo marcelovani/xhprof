@@ -116,6 +116,11 @@ ul.xhprof_actions li a:hover {
 #output svg rect:nth-child(2) {
   fill: gray;
 }
+#options .threshold {
+  border: 1px solid lightgray;
+  display: inline-block;
+  padding: 0 3px;
+}
 
                                            /*   Styling for New Pages   */
 
