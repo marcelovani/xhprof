@@ -28,7 +28,7 @@
  *
  * @author Changhao Jiang (cjiang@facebook.com)
  */
-require_once("../xhprof_lib/config.php");
+require_once("../config.php");
 
 if (FALSE !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
   die("You do not have permission to view this page.");
@@ -82,20 +82,17 @@ if (!array_key_exists($type, $xhprof_legal_image_types)) {
 $xhprof_runs_impl = new XHProfRuns_Default();
 
 if (!empty($run)) {
-  if (isset($_GET['theme'])) {
-    $script = xhprof_render_dot($xhprof_runs_impl, $run, $type,
-      $threshold, $func, $source, $critical);
+  if (!isset($_GET['theme'])) {
+    $_GET['theme'] = 'viz.js';
+  }
+  $script = xhprof_render_dot($xhprof_runs_impl, $run, $type, $threshold, $func, $source, $critical);
 
-    require_once 'themes/' . $_GET['theme'] . '.php';
-  }
-  else {
-    // single run call graph image generation
-    xhprof_render_image($xhprof_runs_impl, $run, $type,
-      $threshold, $func, $source, $critical);
-  }
+  require_once 'themes/' . $_GET['theme'] . '.php';
+
+  // single run call graph image generation
+  // xhprof_render_image($xhprof_runs_impl, $run, $type, $threshold, $func, $source, $critical);
 }
 else {
   // diff report call graph image generation
-  xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2,
-    $type, $threshold, $source);
+  xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2, $type, $threshold, $source);
 }

@@ -109,6 +109,10 @@ ul.xhprof_actions li a:hover {
   text-decoration: none;
   color: black;
 }
+#options .button a {
+  text-decoration: none;
+  color: white;
+}
 #output svg rect:nth-child(1) {
   fill: darkorange;
   stroke: darkorange;

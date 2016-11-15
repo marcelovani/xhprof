@@ -5,7 +5,7 @@ if (PHP_SAPI == 'cli') {
   $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
 }
 
-include(dirname(__FILE__) . '/../xhprof_lib/config.php');
+include(dirname(__FILE__) . '/../config.php');
 
 //I'm Magic :)
 class visibilitator

@@ -23,7 +23,7 @@ print_r($xhprof_data);
 echo "</pre>";
 
 $XHPROF_ROOT = realpath(dirname(__FILE__) .'/..');
-include_once $XHPROF_ROOT . "/xhprof_lib/config.php";
+include_once $XHPROF_ROOT . "/config.php";
 include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
 include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
 if (!defined('XHPROF_LIB_ROOT')) {

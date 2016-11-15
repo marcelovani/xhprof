@@ -1,7 +1,3 @@
 .DS_Store
 node_modules
-#
-# Netbeans project files
-#
-/nbproject
-/xhprof_lib/config.php
+
