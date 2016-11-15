@@ -137,8 +137,8 @@ function get_home_button()  {
     $qs .= sprintf('%s=%s&', $k, $v);
   }
   $folder = explode('/', $_SERVER['REQUEST_URI']);
-  $url = '/' . $folder[1] . '?' . trim($qs, '&');
-  $button = '<span class="button"><a href="' . HOME . '">Home</a></span>';
+  $url = HOME . '?' . trim($qs, '&');
+  $button = '<span class="button"><a href="' . $url . '">Home</a></span>';
 
   return $button;
 }
