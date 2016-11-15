@@ -45,7 +45,6 @@
       -webkit-flex-direction: column;
       flex: 1 1 50%;
       -webkit-flex: 1 1 50%;
-      background: lightgray;
     }
     
     #options {
@@ -164,7 +163,7 @@
               Format:
               <select>
                 <option selected>svg</option>
-                <option>png-image-element</option>
+                <option>png</option>
                 <option>xdot</option>
                 <option>plain</option>
                 <option>ps</option>
@@ -220,6 +219,7 @@
     </div>
     
     <script src="./themes/viz.js/js/ace/ace.js"></script>
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/viz.js/viz.js"></script>
     <script src="./node_modules/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>
     <script>
@@ -278,7 +278,7 @@
       // Instead of asking for png-image-element directly, which we can't do in a worker,
       // ask for SVG and convert when updating the output.
       
-      if (params.options.format == "png-image-element") {
+      if (params.options.format == "png") {
         params.options.format = "svg";
       }
       
@@ -310,7 +310,7 @@
       if (document.querySelector("#format select").value == "svg" && !document.querySelector("#raw input").checked) {
         var svg = parser.parseFromString(result, "image/svg+xml");
         graph.appendChild(svg.documentElement);
-      } else if (document.querySelector("#format select").value == "png-image-element") {
+      } else if (document.querySelector("#format select").value == "png") {
         var image = Viz.svgXmlToPngImageElement(result);
         graph.appendChild(image);
       } else {
@@ -320,12 +320,16 @@
         graph.appendChild(text);
       }
 
-      window.svgZoom = svgPanZoom( '#output svg', {
-        zoomEnabled: true,
-        controlIconsEnabled: true,
-        fit: true,
-        center: true
-        // viewportSelector: document.getElementById('demo-tiger').querySelector('#g4') // this option will make library to misbehave. Viewport should have no transform attribute
+      jQuery( document ).ready( function () {
+        if (jQuery( '#output svg' ).length > 0) {
+          window.svgZoom = svgPanZoom( '#output svg', {
+            zoomEnabled: true,
+            controlIconsEnabled: true,
+            fit: true,
+            center: true
+            // viewportSelector: document.getElementById('demo-tiger').querySelector('#g4') // this option will make library to misbehave. Viewport should have no transform attribute
+          } );
+        }
       } );
     }
 

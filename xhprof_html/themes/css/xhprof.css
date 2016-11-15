@@ -101,11 +101,20 @@ ul.xhprof_actions li a:hover {
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
 }
-.button.on {
-  background: #008000;
+#options {
+  font-family:"Lucida Grande", Sans-Serif;
+  font-size:14px;
 }
-.button.off {
-  background: #ff0000;
+#options a {
+  text-decoration: none;
+  color: black;
+}
+#output svg rect:nth-child(1) {
+  fill: darkorange;
+  stroke: darkorange;
+}
+#output svg rect:nth-child(2) {
+  fill: gray;
 }
 
                                            /*   Styling for New Pages   */
