@@ -138,6 +138,7 @@
     <div id="app">
       <div id="header">
         <b>Viz.js</b> &mdash; <a href="http://www.graphviz.org">Graphviz</a> in your browser. Read more at <a href="https://github.com/mdaines/viz.js">the GitHub repository</a>.
+        <a href="http://www.graphviz.org/pdf/dotguide.pdf">Dot Guide PDF</a>
       </div>
       <div id="panes">
         <div id="editor"># http://www.graphviz.org/content/cluster

@@ -1,5 +1,4 @@
 Make sure we dont need 3d_Debuger and xhprof_html symlinks
-Remove un-needed package.json and also node_modules
 Replace on/off button with iphone style
 Replace threshold with slider
 add 3D and VR view
