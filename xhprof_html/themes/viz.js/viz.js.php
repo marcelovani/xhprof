@@ -167,6 +167,7 @@
                 <option>xdot</option>
                 <option>plain</option>
                 <option>ps</option>
+                <option>3D</option>
               </select>
             </label>
 
@@ -223,7 +224,7 @@
     <script src="./node_modules/viz.js/viz.js"></script>
     <script src="./node_modules/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>
     <script>
-    
+
     var editor = ace.edit("editor");
     editor.getSession().setMode("ace/mode/dot");
 
@@ -281,7 +282,10 @@
       if (params.options.format == "png") {
         params.options.format = "svg";
       }
-      
+      if (params.options.format == "3D") {
+        params.options.format = "plain";
+      }
+      console.log(params);
       worker.postMessage(params);
     }
     
@@ -306,7 +310,9 @@
       if (!result) {
         return;
       }
-      
+      if (document.querySelector("#format select").value == "3D") {
+
+      }
       if (document.querySelector("#format select").value == "svg" && !document.querySelector("#raw input").checked) {
         var svg = parser.parseFromString(result, "image/svg+xml");
         graph.appendChild(svg.documentElement);
