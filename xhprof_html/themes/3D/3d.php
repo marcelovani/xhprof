@@ -13,7 +13,6 @@
         <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
         <script src="../../node_modules/jquery-csv/src/jquery.csv.min.js"></script>
         <script src="../../node_modules/viz.js/viz.js"></script>
-<!--        <script src="http://cpettitt.github.io/project/graphlib-dot/v0.4.10/graphlib-dot.min.js"></script>-->
         <script src="themes/3D/js/three.min.js"></script>
         <script src="themes/3D/js/THREEx.WindowResize.js"></script>
         <script src="themes/3D/js/OrbitControls.js"></script>

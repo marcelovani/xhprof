@@ -230,9 +230,29 @@
 
     var parser = new DOMParser();
     var worker;
+    var worker3D;
     var result;
 
     function updateGraph() {
+      var params = {
+        src: editor.getSession().getDocument().getValue(),
+        options: {
+          engine: document.querySelector("#engine select").value,
+          format: document.querySelector("#format select").value
+        }
+      };
+
+      // Instead of asking for png-image-element directly, which we can't do in a worker,
+      // ask for SVG and convert when updating the output.
+      if (params.options.format == "png") {
+        params.options.format = "svg";
+      }
+      if (params.options.format == "3D") {
+        params.options.format = "plain";
+        params.options.callback = "3D";
+      }
+      //console.log(params);
+
       if (worker) {
         worker.terminate();
       }
@@ -247,8 +267,12 @@
         document.querySelector("#output").classList.remove("error");
         
         result = e.data;
-        
-        updateOutput();
+        if (params.options.callback == '3D') {
+          startWorker3D(params);
+        }
+        else {
+          updateOutput();
+        }
       }
 
       worker.onerror = function(e) {
@@ -267,26 +291,38 @@
         console.error(e);
         e.preventDefault();
       }
-      
-      var params = {
-        src: editor.getSession().getDocument().getValue(),
-        options: {
-          engine: document.querySelector("#engine select").value,
-          format: document.querySelector("#format select").value
-        }
-      };
-      
-      // Instead of asking for png-image-element directly, which we can't do in a worker,
-      // ask for SVG and convert when updating the output.
-      
-      if (params.options.format == "png") {
-        params.options.format = "svg";
-      }
-      if (params.options.format == "3D") {
-        params.options.format = "plain";
-      }
-      console.log(params);
+
       worker.postMessage(params);
+    }
+
+    function startWorker3D( params ) {
+      worker3D = new Worker("./themes/viz.js/worker-3d.js");
+
+      worker3D.onmessage = function ( e ) {
+        result = e.data;
+        console.log(result);
+return;
+        lesson1.init( result );
+        animate();
+      }
+
+      worker3D.onerror = function ( e ) {
+        var message = e.message === undefined ? "An error occurred while processing the graph input." : e.message;
+        alert( message );
+        console.error( e );
+        e.preventDefault();
+      }
+
+//      var params = {
+//        src: graph,
+//        options: {
+//          engine: 'dot',
+//          format: 'plain'
+//        }
+//      };
+
+      console.log('Start work 3d');
+      worker3D.postMessage( params );
     }
     
     function updateOutput() {
@@ -311,7 +347,7 @@
         return;
       }
       if (document.querySelector("#format select").value == "3D") {
-
+        
       }
       if (document.querySelector("#format select").value == "svg" && !document.querySelector("#raw input").checked) {
         var svg = parser.parseFromString(result, "image/svg+xml");

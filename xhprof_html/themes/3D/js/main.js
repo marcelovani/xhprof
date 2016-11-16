@@ -44,6 +44,7 @@ var lesson1 = {
 	stats: null,
 
 	init: function ( data ) { // Initialization
+		console.log('Init');
 		// create main scene
 		this.scene = new THREE.Scene();
 
@@ -62,8 +63,8 @@ var lesson1 = {
 		this.renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
 		this.renderer.setClearColor( 0xffffff );
 
-		this.renderer.shadowMapEnabled = true;
-		this.renderer.shadowMapSoft = true;
+//		this.renderer.shadowMapEnabled = true;
+//		this.renderer.shadowMapSoft = true;
 
 		// prepare container
 		this.container = document.createElement( 'div' );
@@ -105,17 +106,17 @@ var lesson1 = {
 		this.scene.add( particleLight );
 
 		// add simple ground
-		var groundGeometry = new THREE.PlaneGeometry( 1000, 1000, 1, 1 );
-		ground = new THREE.Mesh( groundGeometry, new THREE.MeshLambertMaterial( {
-			color: 0xfefefe
-		} ) );
-		ground.position.y = 0;
-		ground.rotation.x = -Math.PI / 2;
-		ground.receiveShadow = true;
-		this.scene.add( ground );
+//		var groundGeometry = new THREE.PlaneGeometry( 1000, 1000, 1, 1 );
+//		ground = new THREE.Mesh( groundGeometry, new THREE.MeshLambertMaterial( {
+//			color: 0xfefefe
+//		} ) );
+//		ground.position.y = 0;
+//		ground.rotation.x = -Math.PI / 2;
+//		ground.receiveShadow = true;
+//		this.scene.add( ground );
 
 		var objects = dotToObject(data);
-		console.log( objects );
+		//console.log( objects );
 		var container = this.scene;
 		jQuery.each( objects, function ( i, o ) {
 			container.add( o );
@@ -238,6 +239,7 @@ function getMaterial(color) {
 
 	return material;
 }
+
 // Parse Dot script and return objects.
 function dotToObject( data ) {
 	//console.log(data);
@@ -251,6 +253,7 @@ function dotToObject( data ) {
 		switch(c[0]) {
 			case "graph":
 				graph.scale = c[1];
+				graph.scale = 10; //@todo use dynamic value
 				graph.width = c[2];
 				graph.height = c[3];
 				break;
@@ -258,10 +261,10 @@ function dotToObject( data ) {
 			case "node":
 				var shape = 'box';
 				var name = c[1];
-				var x = c[2];
-				var y = c[3];
-				var width = c[4];
-				var height = c[5];
+				var x = c[2] * graph.scale;
+				var y = c[3] * graph.scale;
+				var width = c[4] * graph.scale;
+				var height = c[5] * graph.scale;
 				var label = c[6];
 				var style = c[7];
 				var shape = c[8];
@@ -294,8 +297,8 @@ function dotToObject( data ) {
 				// here
 
 				var label = c[l -5];
-				var x1 = c[l - 4];
-				var y1 = c[l - 3];
+				var x1 = c[l - 4] * graph.scale;
+				var y1 = c[l - 3] * graph.scale;
 				var style = c[l - 2];
 				var color = c[l - 1];
 				//console.log('found edge tail ' + tail + ' head ' + head + ' n ' + n + ' label ' + label + ' x1 ' + x1 + ' y1 ' + y1 + ' st ' + style + ' c ' + color);
@@ -305,11 +308,10 @@ function dotToObject( data ) {
 		}
 
 		var o = new THREE.Mesh( geometry, material );
-		graph.scale = 10; //@todo use dynamic value
 		o.position.x = x * graph.scale;
 		o.position.y = y * graph.scale;
 		o.position.z = z * graph.scale;
-		o.castShadow = o.receiveShadow = true;
+		//o.castShadow = o.receiveShadow = true;
 		objects.push(o);
 	});
 
@@ -329,9 +331,9 @@ function update() {
 	lesson1.stats.update();
 
 	// smoothly move the particleLight
-	var timer = Date.now() * 0.000025;
-	particleLight.position.x = Math.sin( timer * 5 ) * 300;
-	particleLight.position.z = Math.cos( timer * 5 ) * 300;
+	//var timer = Date.now() * 0.000025;
+	//particleLight.position.x = Math.sin( timer * 5 ) * 300;
+	//particleLight.position.z = Math.cos( timer * 5 ) * 300;
 }
 
 // Render the scene
@@ -347,6 +349,7 @@ function initializeLesson( graph ) {
 
 	worker.onmessage = function ( e ) {
 		result = e.data;
+		console.log(result);
 
 		lesson1.init( result );
 		animate();
