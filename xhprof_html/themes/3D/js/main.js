@@ -43,8 +43,7 @@ var lesson1 = {
 	clock: null,
 	stats: null,
 
-	init: function ( data ) { // Initialization
-		console.log('Init');
+	init: function ( graph ) { // Initialization
 		// create main scene
 		this.scene = new THREE.Scene();
 
@@ -115,7 +114,7 @@ var lesson1 = {
 //		ground.receiveShadow = true;
 //		this.scene.add( ground );
 
-		var objects = dotToObject(data);
+		var objects = dotToObject( graph );
 		//console.log( objects );
 		var container = this.scene;
 		jQuery.each( objects, function ( i, o ) {
@@ -241,12 +240,12 @@ function getMaterial(color) {
 }
 
 // Parse Dot script and return objects.
-function dotToObject( data ) {
-	//console.log(data);
+function dotToObject( graph ) {
+	//console.log(graph);
 
   var graph = {};
 	var objects = [];
-  var lines = (CSVToArray(data, ' '));
+  var lines = (CSVToArray(graph, ' '));
 	//console.log(lines);
 
 	jQuery.each( lines, function ( i, c ) {
@@ -348,10 +347,10 @@ function initializeLesson( graph ) {
 	worker = new Worker( "./themes/3D/js/worker.js" );
 
 	worker.onmessage = function ( e ) {
-		result = e.data;
+		graph = e.data;
 		console.log(result);
 
-		lesson1.init( result );
+		lesson1.init( graph );
 		animate();
 	}
 

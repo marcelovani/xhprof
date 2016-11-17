@@ -223,6 +223,11 @@
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/viz.js/viz.js"></script>
     <script src="./node_modules/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>
+    <script src="./themes/3D/js/three.min.js"></script>
+    <script src="./themes/3D/js/THREEx.WindowResize.js"></script>
+    <script src="./themes/3D/js/OrbitControls.js"></script>
+    <script src="./themes/3D/js/stats.min.js"></script>
+    <script src="./themes/3D/js/main.js"></script>
     <script>
 
     var editor = ace.edit("editor");
@@ -300,10 +305,7 @@
 
       worker3D.onmessage = function ( e ) {
         result = e.data;
-        console.log(result);
-return;
-        lesson1.init( result );
-        animate();
+        updateOutput();
       }
 
       worker3D.onerror = function ( e ) {
@@ -322,10 +324,13 @@ return;
 //      };
 
       console.log('Start work 3d');
+      params.options.innerWidth = window.innerWidth;
+      params.options.innerHeight = window.innerHeight;
       worker3D.postMessage( params );
     }
     
     function updateOutput() {
+      var format = document.querySelector("#format select").value;
       var graph = document.querySelector("#output");
 
       var svg = graph.querySelector("svg");
@@ -346,13 +351,26 @@ return;
       if (!result) {
         return;
       }
-      if (document.querySelector("#format select").value == "3D") {
-        
-      }
-      if (document.querySelector("#format select").value == "svg" && !document.querySelector("#raw input").checked) {
+      if (format == "3D") {
+        console.log(result);
+        lesson1.init( result );
+        animate();
+      } else if (format == "svg" && !document.querySelector("#raw input").checked) {
         var svg = parser.parseFromString(result, "image/svg+xml");
         graph.appendChild(svg.documentElement);
-      } else if (document.querySelector("#format select").value == "png") {
+
+        jQuery( document ).ready( function () {
+          if (jQuery( '#output svg' ).length > 0) {
+            window.svgZoom = svgPanZoom( '#output svg', {
+              zoomEnabled: true,
+              controlIconsEnabled: true,
+              fit: true,
+              center: true
+              // viewportSelector: document.getElementById('demo-tiger').querySelector('#g4') // this option will make library to misbehave. Viewport should have no transform attribute
+            } );
+          }
+        } );
+      } else if (format == "png") {
         var image = Viz.svgXmlToPngImageElement(result);
         graph.appendChild(image);
       } else {
@@ -361,18 +379,6 @@ return;
         text.appendChild(document.createTextNode(result));
         graph.appendChild(text);
       }
-
-      jQuery( document ).ready( function () {
-        if (jQuery( '#output svg' ).length > 0) {
-          window.svgZoom = svgPanZoom( '#output svg', {
-            zoomEnabled: true,
-            controlIconsEnabled: true,
-            fit: true,
-            center: true
-            // viewportSelector: document.getElementById('demo-tiger').querySelector('#g4') // this option will make library to misbehave. Viewport should have no transform attribute
-          } );
-        }
-      } );
     }
 
     editor.on("change", function() {
@@ -384,7 +390,7 @@ return;
     });
 
     document.querySelector("#format select").addEventListener("change", function() {
-      if (document.querySelector("#format select").value === "svg") {
+      if (format === "svg") {
         document.querySelector("#raw").classList.remove("disabled");
         document.querySelector("#raw input").disabled = false;
       } else {
