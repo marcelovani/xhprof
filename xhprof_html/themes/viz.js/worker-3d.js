@@ -8,7 +8,7 @@ importScripts("../../node_modules/viz.js/viz.js");
 //importScripts("../../themes/3D/js/main.js");
 
 onmessage = function(e) {
-  var graph = Viz(e.data.src, e.data.options);
+  var dotGraph = Viz(e.data.src, e.data.options);
 
 //	var data = {
 //		'innerWidth': e.data.options.innerWidth,
@@ -19,5 +19,5 @@ onmessage = function(e) {
 //	lesson1.init( data );
 //	animate();
 
-	postMessage(graph);
+	postMessage(dotGraph);
 }
