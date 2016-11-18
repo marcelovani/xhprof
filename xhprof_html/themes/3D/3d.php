@@ -13,10 +13,12 @@
         <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
         <script src="../../node_modules/jquery-csv/src/jquery.csv.min.js"></script>
         <script src="../../node_modules/viz.js/viz.js"></script>
+        <script src="../../node_modules/three/build/three.in.js"></script>
         <script src="themes/3D/js/three.min.js"></script>
         <script src="themes/3D/js/THREEx.WindowResize.js"></script>
         <script src="themes/3D/js/OrbitControls.js"></script>
         <script src="themes/3D/js/stats.min.js"></script>
+        <script src="themes/3D/js/utils.js"></script>
         <script src="themes/3D/js/main.js"></script>
         <output id="list"></output>
         <script>
