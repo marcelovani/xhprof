@@ -59,7 +59,7 @@ function init() {
 
   var light = new THREE.SpotLight( 0xffffff, 1.5 );
   light.position.set( 0, 500, 2000 );
-  light.castShadow = true;
+  light.castShadow = false;
 
   light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 200, 10000 ) );
   light.shadow.bias = - 0.00022;
@@ -68,8 +68,6 @@ function init() {
   light.shadow.mapSize.height = 2048;
 
   scene.add( light );
-
-  var geometry = new THREE.BoxGeometry( 40, 40, 40 );
 
   var dotGraph = {};
   <?php
@@ -109,20 +107,38 @@ function init() {
   }*/
   for ( var i = 0; i < count; i ++ ) {
     var object = objects[i];
-    var o = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color:getHexColor(object.color) } ) );
-    o.position.x = object.position.x;
-    o.position.y = object.position.y;
-    o.position.z = object.position.z;
-    //o.rotation.x = Math.random() * 2 * Math.PI;
-    //o.rotation.y = Math.random() * 2 * Math.PI;
-    //o.rotation.z = Math.random() * 2 * Math.PI;
-    o.scale.x = o.scale.x;
-    o.scale.y = o.scale.y;
-    o.scale.z = o.scale.z;
-    o.castShadow = true;
-    o.receiveShadow = true;
-    scene.add( o );
-    objects.push( o );
+
+    switch (object.shape) {
+      case 'line':
+        //@todo implement this
+        continue;
+        break;
+      case 'box':
+        var geometry = new THREE.BoxGeometry( 40, 40, 40 );
+        break;
+      case 'octagon':
+      default:
+    }
+
+    if (typeof(geometry) == 'object') {
+      var o = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color:getHexColor(object.color) } ) );
+      offsetX = 500;
+      offsetY = 1000;
+      offsetZ = 500;
+      o.position.x = object.position.x - offsetX;
+      o.position.y = object.position.y - offsetY;
+      o.position.z = object.position.z - offsetZ;
+      //o.rotation.x = Math.random() * 2 * Math.PI;
+      //o.rotation.y = Math.random() * 2 * Math.PI;
+      //o.rotation.z = Math.random() * 2 * Math.PI;
+      o.scale.x = o.scale.x;
+      o.scale.y = o.scale.y;
+      o.scale.z = o.scale.z;
+      o.castShadow = true;
+      o.receiveShadow = true;
+      scene.add( o );
+      objects.push( o );
+    }
   }
   renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setClearColor( 0xf0f0f0 );

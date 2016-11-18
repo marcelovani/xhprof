@@ -260,6 +260,7 @@ function dotToObject2( dotGraph ) {
 						break;
 				}
 
+				o.shape = shape;
 				o.color = fillcolor;
 				o.position = {
 					x: x,
@@ -274,7 +275,8 @@ function dotToObject2( dotGraph ) {
 
 				break;
 
-			case "XXXXedge":
+			case "edge":
+				var shape = 'line';
 				var l = c.length;
 				var tail = c[1];
 				var head = c[2];
@@ -293,6 +295,7 @@ function dotToObject2( dotGraph ) {
 				var color = c[l - 1];
 				//console.log('found edge tail ' + tail + ' head ' + head + ' n ' + n + ' label ' + label + ' x1 ' + x1 + ' y1 ' + y1 + ' st ' + style + ' c ' + color);
 
+				o.shape = shape;
 				o.color = color;
 				o.position = {
 					x: x1,
