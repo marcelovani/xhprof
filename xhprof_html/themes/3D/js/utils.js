@@ -274,7 +274,6 @@ function dotToObject2( dotGraph ) {
 				}
 
 				// Change the size depending on the color.
-				console.log(fillcolor);
 				switch ( fillcolor ) {
 					case 'yellow':
 						o.scale.x = o.scale.x * 2;

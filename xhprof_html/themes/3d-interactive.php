@@ -104,9 +104,9 @@ function init() {
     }
   };
   var dotPlain = Viz(params.src, params.options);
-  // Create objects.
-  var objects = dotToObject2( dotPlain );
-  var count = objects.length;
+  // Create dotObjects.
+  var dotObjects = dotToObject2( dotPlain );
+  var count = dotObjects.length;
 /*
   for ( var i = 0; i < 20; i ++ ) {
     var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
@@ -122,10 +122,10 @@ function init() {
     object.castShadow = true;
     object.receiveShadow = true;
     scene.add( object );
-    objects.push( object );
+    dotObjects.push( object );
   }*/
   for ( var i = 0; i < count; i ++ ) {
-    var object = objects[i];
+    var object = dotObjects[i];
 
     switch (object.shape) {
       case 'line':
@@ -192,7 +192,7 @@ function init() {
 
   window.addEventListener( 'resize', onWindowResize, false );
   object = {};
-  objects = {};
+  dotObjects = {};
   dotGraph = {};
   dotPlain = {};
   geometry = {};
@@ -248,7 +248,7 @@ function onDocumentMouseMove( event ) {
 
     }
 
-    container.style.cursor = 'pointer';
+    container.style.cursor = 'move';
 
   } else {
 
