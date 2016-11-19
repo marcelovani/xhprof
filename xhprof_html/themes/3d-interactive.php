@@ -151,9 +151,9 @@ function init() {
       //o.rotation.x = Math.random() * 2 * Math.PI;
       //o.rotation.y = Math.random() * 2 * Math.PI;
       //o.rotation.z = Math.random() * 2 * Math.PI;
-      o.scale.x = o.scale.x;
-      o.scale.y = o.scale.y;
-      o.scale.z = o.scale.z;
+      o.scale.x = object.scale.x;
+      o.scale.y = object.scale.y;
+      o.scale.z = object.scale.z;
       o.castShadow = true;
       o.receiveShadow = true;
       scene.add( o );

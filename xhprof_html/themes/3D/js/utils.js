@@ -233,7 +233,7 @@ function dotToObject2( dotGraph ) {
 		switch(c[0]) {
 			case "graph":
 				graph.scale = c[1];
-				graph.scale = 40; //@todo use dynamic value
+				graph.scale = 30; //@todo use dynamic value
 				graph.width = c[2];
 				graph.height = c[3];
 				break;
@@ -268,9 +268,25 @@ function dotToObject2( dotGraph ) {
 					z: z
 				};
 				o.scale = {
-					x: graph.scale,
-					y: graph.scale,
-					z: graph.scale
+					x: 1,
+					y: 1,
+					z: 1
+				}
+
+				// Change the size depending on the color.
+				console.log(fillcolor);
+				switch ( fillcolor ) {
+					case 'yellow':
+						o.scale.x = o.scale.x * 2;
+						o.scale.y = o.scale.y * 2;
+						o.scale.z = o.scale.z * 2;
+						break;
+					case 'red':
+						o.scale.x = o.scale.x * 4;
+						o.scale.y = o.scale.y * 4;
+						o.scale.z = o.scale.z * 4;
+						break;
+					default:
 				}
 
 				break;
