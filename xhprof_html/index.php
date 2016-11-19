@@ -3,8 +3,8 @@ if (!defined('XHPROF_LIB_ROOT')) {
   define('XHPROF_LIB_ROOT', dirname(dirname(__FILE__)) . '/xhprof_lib');
 }
 require_once("../config.php");
-include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
-include(XHPROF_LIB_ROOT . "/utils/common.php");
+require_once XHPROF_LIB_ROOT . '/display/xhprof.php';
+require(XHPROF_LIB_ROOT . "/utils/common.php");
 
 if (FALSE !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
   die("You do not have permission to view this page.");
@@ -74,7 +74,7 @@ if (!is_null($serverFilter)) {
 }
 $_xh_header = "";
 if (isset($_GET['run1']) || isset($_GET['run'])) {
-  include("themes/templates/header.tpl.php");
+  require("themes/templates/header.tpl.php");
   displayXHProfReport($xhprof_runs_impl, $params, $source, $run, $wts,
     $symbol, $sort, $run1, $run2);
 }
@@ -88,9 +88,9 @@ elseif (isset($_GET['geturl'])) {
   list($header, $body) = showChart($rs, TRUE);
   $_xh_header .= $header;
 
-  include("themes/templates/header.tpl.php");
+  require("themes/templates/header.tpl.php");
   $rs = $xhprof_runs_impl->getRuns($criteria);
-  include("themes/templates/emptyBody.tpl.php");
+  require("themes/templates/emptyBody.tpl.php");
 
   $url = htmlentities($_GET['geturl'], ENT_QUOTES, "UTF-8");
   displayRuns($rs, "Runs with URL: $url");
@@ -105,15 +105,15 @@ elseif (isset($_GET['getcurl'])) {
   $rs = $xhprof_runs_impl->getUrlStats($criteria);
   list($header, $body) = showChart($rs, TRUE);
   $_xh_header .= $header;
-  include("themes/templates/header.tpl.php");
+  require("themes/templates/header.tpl.php");
 
   $url = htmlentities($_GET['getcurl'], ENT_QUOTES, "UTF-8");
   $rs = $xhprof_runs_impl->getRuns($criteria);
-  include("themes/templates/emptyBody.tpl.php");
+  require("themes/templates/emptyBody.tpl.php");
   displayRuns($rs, "Runs with Simplified URL: $url");
 }
 elseif (isset($_GET['getruns'])) {
-  include("themes/templates/header.tpl.php");
+  require("themes/templates/header.tpl.php");
   $days = (int) $_GET['days'];
 
   switch ($_GET['getruns']) {
@@ -135,7 +135,7 @@ elseif (isset($_GET['getruns'])) {
   displayRuns($rs, "Worst runs by $load");
 }
 elseif (isset($_GET['hit'])) {
-  include("themes/templates/header.tpl.php");
+  require("themes/templates/header.tpl.php");
   $last = (isset($_GET['hit'])) ? $_GET['hit'] : 25;
   $last = (int) $last;
   $days = (isset($_GET['days'])) ? $_GET['days'] : 1;
@@ -194,7 +194,7 @@ elseif (isset($_GET['hit'])) {
 CODESE;
 }
 else {
-  include("themes/templates/header.tpl.php");
+  require("themes/templates/header.tpl.php");
   $last = (isset($_GET['last'])) ? $_GET['last'] : 25;
   $last = (int) $last;
   $criteria['order by'] = "timestamp";
@@ -203,4 +203,4 @@ else {
   displayRuns($rs, "Last $last Runs");
 }
 
-include("themes/templates/footer.tpl.php");
+require("themes/templates/footer.tpl.php");
