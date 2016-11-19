@@ -145,75 +145,10 @@
 <?php echo $script; ?>
         </div>
         <div id="graph">
-          <div id="options">
-            <?php echo get_home_button(); ?>
-            <label id="engine">
-              Engine:
-              <select>
-                <option>circo</option>
-                <option selected>dot</option>
-                <option>fdp</option>
-                <option>neato</option>
-                <option>osage</option>
-                <option>twopi</option>
-              </select>
-            </label>
-
-            <label id="format">
-              Format:
-              <select>
-                <option selected>svg</option>
-                <option>png</option>
-                <option>xdot</option>
-                <option>plain</option>
-                <option>ps</option>
-                <option>3D</option>
-              </select>
-            </label>
-
-            <label id="raw">
-              <input type="checkbox"> Show raw output
-            </label>
-
-            <?php echo get_show_internal_button('Show internal functions', 1); ?>
-            <span class="threshold">Threshold
-            <?php
-              echo get_threshold_button('++', 0.1, $threshold);
-              echo get_threshold_button('+', 0.01, $threshold);
-              echo get_threshold_button('-', -0.01, $threshold);
-              echo get_threshold_button('--', -0.1, $threshold);
-            ?>
-            </span>
-
-          </div>
-
+          <?php include(getcwd() . '/themes/templates/graph_filter_options.php'); ?>
           <div id="output">
             <div id="error"></div>
-            <svg version="1.1" id="L6" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-                 viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
-              <rect fill="none" stroke="#fff" stroke-width="4" x="25" y="25" width="50" height="50">
-                <animateTransform
-                  attributeName="transform"
-                  dur="0.5s"
-                  from="0 50 50"
-                  to="180 50 50"
-                  type="rotate"
-                  id="strokeBox"
-                  attributeType="XML"
-                  begin="rectBox.end"/>
-              </rect>
-              <rect x="27" y="27" fill="#fff" width="46" height="50">
-                <animate
-                  attributeName="height"
-                  dur="1.3s"
-                  attributeType="XML"
-                  from="50"
-                  to="0"
-                  id="rectBox"
-                  fill="freeze"
-                  begin="0s;strokeBox.end"/>
-              </rect>
-            </svg>
+            <?php include(getcwd() . '/themes/templates/loader_animation.php'); ?>
           </div>
         </div>
       </div>

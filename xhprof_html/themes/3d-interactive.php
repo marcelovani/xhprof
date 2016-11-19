@@ -7,13 +7,20 @@
   <style>
     body {
       font-family: Monospace;
-      background-color: #f0f0f0;
+      background-color: #000;
       margin: 0px;
       overflow: hidden;
+      color: #c8c8c8;
+    }
+    a, a:visited {
+      color: white;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
+<?php include(getcwd() . '/themes/templates/graph_filter_options.php'); ?>
+
 <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
 <script src="../../node_modules/three/build/three.min.js"></script>
 <script src="../../node_modules/three/examples/js/controls/TrackballControls.js"></script>
@@ -137,7 +144,7 @@ function init() {
       // @todo calculate offsets based on screen dimensions and zoom.
       offsetX = 500;
       offsetY = 1000;
-      offsetZ = 0;
+      offsetZ = Math.random() * 400 * Math.PI;
       o.position.x = object.position.x - offsetX;
       o.position.y = object.position.y - offsetY;
       o.position.z = object.position.z - offsetZ;
@@ -170,10 +177,11 @@ function init() {
   info.style.top = '10px';
   info.style.width = '100%';
   info.style.textAlign = 'center';
-  info.innerHTML = 'xhprof run <?php echo $run; ?>';
+  info.innerHTML = jQuery('#options' ).val();
   container.appendChild( info );
 
   stats = new Stats();
+  stats.dom.style.top = "20px";
   container.appendChild( stats.dom );
 
   renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );

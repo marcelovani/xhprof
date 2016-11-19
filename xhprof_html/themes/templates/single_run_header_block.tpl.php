@@ -30,8 +30,8 @@
       <h2 class="run-details">RunID: <?php echo $xhprof_runs_impl->run_details['id']; ?> against <?php echo $xhprof_runs_impl->run_details['server name'];?><?php echo htmlentities($xhprof_runs_impl->run_details['url'], ENT_QUOTES, 'UTF-8'); ?> </h2>
       <a href="callgraph.php?theme=raw&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Raw List</a>
       <a href="callgraph.php?theme=viz.js&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Callgraph</a>
-      <a href="callgraph.php?theme=3d&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">3D Viewer</a>
-      <a href="callgraph.php?theme=vr&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Stereo Viewer</a>
+      <a href="callgraph.php?theme=3d-interactive&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">3D Viewer</a>
+      <!--<a href="callgraph.php?theme=vr&run=<?php /*echo $xhprof_runs_impl->run_details['id']; */?>" class="callgraph">Stereo Viewer</a>-->
    </div>
     <div id="left-col">
      <div>
