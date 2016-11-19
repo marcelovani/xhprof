@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>three.js webgl - draggable cubes</title>
+  <title>Xhprof 3D</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <style>
@@ -43,6 +43,18 @@ function init() {
 
   camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
   camera.position.z = 1000;
+
+  //@todo trackpad
+  // Zoom: two fingers up and down
+  // Rotation CW/CCW: two fingers rotating
+  // Horizontal Rotation left<->right, up<->down: click and drag
+  // Pan: Alt + click and drag
+
+  //@todo leapmotion gestures
+  // Zoom: open hand front and back
+  // Rotation: two hands, lift one, lower the other
+  // Horizontal Rotation left<->right, up<->down: One hand in vertical waving to the direction to go
+  // Pan up/down/left/right: two hands, move to the direction to go
 
   controls = new THREE.TrackballControls( camera );
   controls.rotateSpeed = 1.0;
@@ -122,9 +134,10 @@ function init() {
 
     if (typeof(geometry) == 'object') {
       var o = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color:getHexColor(object.color) } ) );
+      // @todo calculate offsets based on screen dimensions and zoom.
       offsetX = 500;
       offsetY = 1000;
-      offsetZ = 500;
+      offsetZ = 0;
       o.position.x = object.position.x - offsetX;
       o.position.y = object.position.y - offsetY;
       o.position.z = object.position.z - offsetZ;
@@ -148,6 +161,7 @@ function init() {
 
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
+  renderer.setClearColor( 0xffffff, 0);
 
   container.appendChild( renderer.domElement );
 
@@ -156,7 +170,7 @@ function init() {
   info.style.top = '10px';
   info.style.width = '100%';
   info.style.textAlign = 'center';
-  info.innerHTML = '<a href="http://threejs.org" target="_blank">three.js</a> webgl - draggable cubes';
+  info.innerHTML = 'xhprof run <?php echo $run; ?>';
   container.appendChild( info );
 
   stats = new Stats();
