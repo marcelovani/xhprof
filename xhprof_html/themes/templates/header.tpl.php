@@ -25,7 +25,7 @@
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
     ga('create', 'UA-87733842-1', 'auto');
-    ga('send', 'pageview');
+    ga('send', 'pageview', 'xhprof', 'home');
 
   </script>
 
