@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "jquery": "^2.1.4",
+    "leapjs": "^0.6.4",
     "requirejs": "^2.1.20",
     "svg-pan-zoom": "^3.3.0",
     "three": "^0.82.1",
