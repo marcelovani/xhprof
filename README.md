@@ -35,11 +35,6 @@ Callgraph SVG
 ```cd xhprof_html; php -S 127.0.0.1:8000```
 6. Add xhprof to your code. See xhprof_html/sample.php
 
-## Dev Installation
-
-1. Run install
-```xhprof_html/$ npm install```
-
 ## For developers only
 
 Its possible to switch the theme by passing the theme name in the url i.e. theme=demo-dot-progress
