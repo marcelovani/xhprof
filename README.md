@@ -8,6 +8,12 @@
 - 3D viewer provides a virtual representation of the functions. You can rotate, pan, zoom the model or move a cube. It works great on tablets.
 - If you have LeapMotion you can control the model using your hands in the air.
 
+xhprof
+![](https://raw.githubusercontent.com/marcelovani/xhprof/master/xhprof_html/img/xhprof.png)
+
+Callgraph SVG
+![](https://raw.githubusercontent.com/marcelovani/xhprof/master/xhprof_html/img/callgraph.png)
+
 ## Roadmap
 - Add labels and arrows on 3D viewer.
 - VR support for Google Cardboard or similar.
