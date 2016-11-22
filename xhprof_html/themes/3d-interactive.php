@@ -26,6 +26,8 @@
 <script src="../../node_modules/three/examples/js/controls/TrackballControls.js"></script>
 <script src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
 <script src="../../node_modules/viz.js/viz.js"></script>
+<script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
+<script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
 <script src="../themes/3D/js/utils.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
