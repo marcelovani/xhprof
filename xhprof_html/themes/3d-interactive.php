@@ -27,8 +27,9 @@
 <script src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
 <script src="../../node_modules/viz.js/viz.js"></script>
 <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
-<script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
 <script src="../themes/3D/js/utils.js"></script>
+<!--js extracted from https://leapmotion.github.io/Leap-Three-Camera-Controls#gh-pages/-->
+<script src="../themes/3D/js/LeapTwoHandControls.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -43,6 +44,7 @@
 
 var container, stats;
 var camera, controls, scene, renderer;
+var leapController, leapControls;
 var objects = [];
 var plane = new THREE.Plane();
 var raycaster = new THREE.Raycaster();
@@ -55,12 +57,13 @@ init();
 animate();
 
 function init() {
+  leapController = new Leap.Controller();
 
   container = document.createElement( 'div' );
   document.body.appendChild( container );
 
-  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-  camera.position.z = 1000;
+  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 5000 );
+  camera.position.z = 100;
 
   //@todo trackpad
   // Zoom: two fingers up and down
@@ -82,6 +85,18 @@ function init() {
   controls.noPan = false;
   controls.staticMoving = true;
   controls.dynamicDampingFactor = 0.3;
+
+  leapControls = new THREE.LeapTwoHandControls( camera , leapController );
+  leapControls.params = {
+    translationSpeed   : 20,
+    translationDecay   : 0.3,
+    scaleDecay         : 0.5,
+    rotationSlerp      : 0.8,
+    rotationSpeed      : 4,
+    pinchThreshold     : 0.5,
+    transSmoothing     : 0.5,
+    rotationSmoothing  : 0.2
+  }
 
   scene = new THREE.Scene();
 
@@ -209,7 +224,7 @@ function init() {
   geometry = {};
   params = {};
 
-
+  leapController.connect();
 }
 
 function onWindowResize() {
@@ -318,20 +333,15 @@ function onDocumentMouseUp( event ) {
 //
 
 function animate() {
-
   requestAnimationFrame( animate );
-
   render();
   stats.update();
-
 }
 
 function render() {
-
+  leapControls.update();
   controls.update();
-
   renderer.render( scene, camera );
-
 }
 
 </script>
