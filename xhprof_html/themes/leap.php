@@ -1053,6 +1053,8 @@ controls.update();
   <script src="./themes/leap/leap.min.js"></script>
   <script src="./themes/leap/dat.gui.min.js"></script>
 
+  <script src="../../node_modules/viz.js/viz.js"></script>
+  <script src="../themes/3D/js/utils.js"></script>
 
   <script src="./themes/leap/LeapSpringControls.js"></script>
   <script src="./themes/leap/LeapPointerControls.js"></script>
@@ -1084,7 +1086,6 @@ controls.update();
      PRETTY GL BACKGROUND!
 
     */
-
     var camera , scene, renderer;
 
     var controller , controls = [];
@@ -1096,7 +1097,7 @@ controls.update();
     var slides = $('.slide');
     var slideCounter = $('#slideCounter');
     var guidat = $('.guidat');
-    console.log( slides );
+    //console.log( slides );
 
 
     init();
@@ -1131,12 +1132,12 @@ controls.update();
       activateGUI( slideNum );
       activateControl( slideNum );
 
-      console.log( slides[ slideNum ] );
+      //console.log( slides[ slideNum ] );
 
       var new1 =  $( slides[slideNum]).find('h1')[0].innerHTML;
-      console.log( new1 );
+      //console.log( new1 );
 
-      console.log( $("#mainTitle") );
+      //console.log( $("#mainTitle") );
       $("#mainTitle")[0].innerHTML = new1;
       for( var i = 0; i < slides.length; i++ ){
 
@@ -1156,7 +1157,7 @@ controls.update();
 
     function toggleInfo(){
 
-      console.log('hellos');
+      //console.log('hellos');
       $("#slides").toggle();
 
     }
@@ -1171,11 +1172,11 @@ controls.update();
       }
 
 
-      console.log( activeControl );
+      //console.log( activeControl );
       if( activeControl ){
-        console.log( activeControl );
+        //console.log( activeControl );
         if( activeControl.gui ){
-          console.log( activeControl );
+          //console.log( activeControl );
           activeControl.gui.open();
 
         }
@@ -1210,8 +1211,8 @@ controls.update();
       var wWidth = window.innerWidth;
       var wHeight = window.innerHeight;
 
-      console.log( slides.height() );
-      console.log( header.height() );
+      //console.log( slides.height() );
+      //console.log( header.height() );
 
       var newSlideHeight = wHeight - header.height();
       slides.height( newSlideHeight );*/
@@ -1220,17 +1221,17 @@ controls.update();
 
     function UC( change ,  value ){
 
-      console.log( this );
-      console.log( 'HELLO' );
-      console.log( change );
+      //console.log( this );
+      //console.log( 'HELLO' );
+      //console.log( change );
 
-         console.log( controls );
-            console.log( activeControl );
-            console.log( change.propertyName );
-            console.log( activeControl[change.propertyName] );
+         //console.log( controls );
+            //console.log( activeControl );
+            //console.log( change.propertyName );
+            //console.log( activeControl[change.propertyName] );
             activeControl[change.propertyName] = value;
-            console.log( change );
-            console.log( value );
+            //console.log( change );
+            //console.log( value );
 
 
     }
@@ -1241,7 +1242,6 @@ controls.update();
       camera.lookAt( new THREE.Vector3());
 
     }
-
 
       function init(){
 
@@ -1262,38 +1262,115 @@ controls.update();
         skybox = new THREE.Mesh( geometry , material );
         skybox.scale.multiplyScalar( 100 );
         skybox.position = camera.position;
-        scene.add( skybox );
+        //scene.add( skybox );
 
-        for( var i = 0; i < 300; i++ ){
-          var mesh = new THREE.Mesh( geometry , material );
-          mesh.position.x = (Math.random() - .5 ) * 5000;
-          mesh.position.y = (Math.random() - .5 ) * 5000;
-          mesh.position.z = (Math.random() - .5 ) * 5000;
-          scene.add( mesh );
+        ////////////////////////////////////////////////////////////////////////
+        // DotGraph include                                                   //
+        ////////////////////////////////////////////////////////////////////////
+        var dotGraph = {};
+        <?php
+        // Prepare graphlib-dot object.
+        $script = preg_replace('/(.+)/', '\'$1\' +', $script);
+        $script = preg_replace('/\}\'\s*\+/', "}'", $script);
+        print 'dotGraph = ' . $script . ';';
+        ?>
+        // Convert to dot plain.
+        var params = {
+          src: dotGraph,
+          options: {
+            engine: 'dot',
+            format: 'plain'
+          }
+        };
+        var dotPlain = Viz(params.src, params.options);
+        // Create dotObjects.
+        var dotObjects = dotToObject2( dotPlain );
+        var count = dotObjects.length;
+        var example = false;
+
+        if (example) {
+          for( var i = 0; i < 300; i++ ){
+            var mesh = new THREE.Mesh( geometry , material );
+            mesh.position.x = (Math.random() - .5 ) * 5000;
+            mesh.position.y = (Math.random() - .5 ) * 5000;
+            mesh.position.z = (Math.random() - .5 ) * 5000;
+            scene.add( mesh );
+          }
+
+
+//          var geometry = new THREE.Geometry();
+//          var material = new THREE.ParticleSystemMaterial({
+//            size:10,
+//            color:0x000000
+//          });
+//
+//          for( var i = 0; i < 20000; i++ ){
+//            var x = (Math.random() - .5 ) * 5000;
+//            var y = (Math.random() - .5 ) * 5000;
+//            var z = (Math.random() - .5 ) * 5000;
+//            geometry.vertices.push( new THREE.Vector3( x , y , z ) );
+//          }
+//          var particles = new THREE.ParticleSystem( geometry , material );
+//          scene.add( particles );
         }
+        else {
+          var geometry  = new THREE.BoxGeometry(40, 40, 40);
+          //var material  = new THREE.MeshLambertMaterial({color: getHexColor('0xEEE')});
 
+          for (var i = 0; i < count; i++) {
+            var object = dotObjects[i];
 
-        var geometry = new THREE.Geometry();
-        var material = new THREE.ParticleSystemMaterial({
-          size:10,
-          color:0x000000
-        });
+            switch (object.shape) {
+              case 'line':
+                //@todo implement this
+                //var geometry = geometryLine;
+                continue;
+                break;
+              case 'box':
+                //var geometry = new THREE.BoxGeometry(40, 40, 40);
+                //var geometry = geometryBox;
+                break;
+              case 'octagon':
+                //var geometry = geometryOctagon;
+                continue;
+                break;
+              default:
+            }
 
+            if (typeof(geometry) == 'object') {
+              material.color = getHexColor(object.color);//not working
 
-        for( var i = 0; i < 20000; i++ ){
-
-          var x = (Math.random() - .5 ) * 5000;
-          var y = (Math.random() - .5 ) * 5000;
-          var z = (Math.random() - .5 ) * 5000;
-
-          geometry.vertices.push( new THREE.Vector3( x , y , z ) );
-
-
+              //var o = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: getHexColor(object.color)}));
+              var mesh = new THREE.Mesh( geometry , material );
+              // @todo calculate offsets based on screen dimensions and zoom.
+              offsetX = 500;
+              offsetY = 1000;
+              offsetZ = Math.random() * 400 * Math.PI;
+              mesh.position.x = object.position.x - offsetX;
+              mesh.position.y = object.position.y - offsetY;
+              mesh.position.z = object.position.z - offsetZ;
+              //mesh.rotation.x = Math.random() * 2 * Math.PI;
+              //mesh.rotation.y = Math.random() * 2 * Math.PI;
+              //mesh.rotation.z = Math.random() * 2 * Math.PI;
+              mesh.scale.x = object.scale.x;
+              mesh.scale.y = object.scale.y;
+              mesh.scale.z = object.scale.z;
+              mesh.castShadow = true;
+              mesh.receiveShadow = true;
+              scene.add(mesh);
+              //objects.push( o );
+            }
+          }
+          object = {};
+          dotObjects = {};
+          dotGraph = {};
+          dotPlain = {};
+          geometry = {};
+          params = {};
         }
-
-        var particles = new THREE.ParticleSystem( geometry , material );
-        scene.add( particles );
-
+        ////////////////////////////////////////////////////////////////////////
+        // DotGraph include - end                                             //
+        ////////////////////////////////////////////////////////////////////////
 
         camera.position.z = 200;
         controller = new Leap.Controller();
