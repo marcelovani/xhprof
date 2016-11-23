@@ -112,10 +112,17 @@ function getMaterial(color) {
 	return material;
 }
 
+function getRgbColor(color) {
+	return new THREE.Color(getHexColor(color));
+}
+
 function getHexColor(color) {
 	switch ( color ) {
 		case 'white':
 			return 0xFFFFFF;
+
+		case 'lightgrey':
+			return 0xEFEFEF;
 
 		case 'black':
 			return 0x000000;
@@ -123,19 +130,15 @@ function getHexColor(color) {
 		case 'red':
 			return 0xFF0000;
 
-			break;
 		case 'blue':
 			return 0x0000FF;
 
-			break;
 		case 'green':
 			return 0x00FF00;
 
-			break;
 		case 'yellow':
 			return 0xFFF407;
 
-			break;
 		default:
 			return 0xfafafa;
 	}

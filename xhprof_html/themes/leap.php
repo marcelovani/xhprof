@@ -1256,10 +1256,12 @@ controls.update();
         renderer.domElement.id = "scene";
         document.body.appendChild( renderer.domElement );
 
-        var geometry  = new THREE.IcosahedronGeometry( 50 , 2 );
-        var material  = new THREE.MeshNormalMaterial({side:THREE.DoubleSide});
+        //var geometry  = new THREE.IcosahedronGeometry( 50 , 2 );
+        //var material  = new THREE.MeshNormalMaterial({side:THREE.DoubleSide});
+        var cube = new THREE.BoxGeometry( 50, 50, 50 );
+        var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
 
-        skybox = new THREE.Mesh( geometry , material );
+        skybox = new THREE.Mesh( cube , material );
         skybox.scale.multiplyScalar( 100 );
         skybox.position = camera.position;
         //scene.add( skybox );
@@ -1289,8 +1291,8 @@ controls.update();
         var example = false;
 
         if (example) {
-          for( var i = 0; i < 300; i++ ){
-            var mesh = new THREE.Mesh( geometry , material );
+          for( var i = 0; i < 300; i++ ) {
+            var mesh = new THREE.Mesh( cube , material );
             mesh.position.x = (Math.random() - .5 ) * 5000;
             mesh.position.y = (Math.random() - .5 ) * 5000;
             mesh.position.z = (Math.random() - .5 ) * 5000;
@@ -1298,7 +1300,7 @@ controls.update();
           }
 
 
-//          var geometry = new THREE.Geometry();
+//          var cube = new THREE.Geometry();
 //          var material = new THREE.ParticleSystemMaterial({
 //            size:10,
 //            color:0x000000
@@ -1308,13 +1310,13 @@ controls.update();
 //            var x = (Math.random() - .5 ) * 5000;
 //            var y = (Math.random() - .5 ) * 5000;
 //            var z = (Math.random() - .5 ) * 5000;
-//            geometry.vertices.push( new THREE.Vector3( x , y , z ) );
+//            cube.vertices.push( new THREE.Vector3( x , y , z ) );
 //          }
-//          var particles = new THREE.ParticleSystem( geometry , material );
+//          var particles = new THREE.ParticleSystem( cube , material );
 //          scene.add( particles );
         }
         else {
-          var geometry  = new THREE.BoxGeometry(40, 40, 40);
+          //var cube  = new THREE.BoxGeometry(40, 40, 40);
           //var material  = new THREE.MeshLambertMaterial({color: getHexColor('0xEEE')});
 
           for (var i = 0; i < count; i++) {
@@ -1327,8 +1329,8 @@ controls.update();
                 continue;
                 break;
               case 'box':
-                //var geometry = new THREE.BoxGeometry(40, 40, 40);
-                //var geometry = geometryBox;
+                //var cube = new THREE.BoxGeometry(40, 40, 40);
+                var geometry = cube;
                 break;
               case 'octagon':
                 //var geometry = geometryOctagon;
@@ -1338,10 +1340,11 @@ controls.update();
             }
 
             if (typeof(geometry) == 'object') {
-              material.color = getHexColor(object.color);//not working
+              m = material.clone();
+              m.color = getRgbColor(object.color);
 
               //var o = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: getHexColor(object.color)}));
-              var mesh = new THREE.Mesh( geometry , material );
+              var mesh = new THREE.Mesh( geometry , m );
               // @todo calculate offsets based on screen dimensions and zoom.
               offsetX = 500;
               offsetY = 1000;
