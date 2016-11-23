@@ -1049,9 +1049,12 @@ controls.update();
 
   -->
 
-  <script src="./themes/leap/jquery.min.js"></script>
-  <script src="./themes/leap/three.min.js"></script>
-  <script src="./themes/leap/leap.min.js"></script>
+<!--  <script src="./themes/leap/jquery.min.js"></script>-->
+<!--  <script src="./themes/leap/three.min.js"></script>-->
+<!--  <script src="./themes/leap/leap.min.js"></script>-->
+  <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../../node_modules/three/build/three.min.js"></script>
+  <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
   <script src="./themes/leap/dat.gui.min.js"></script>
 
   <script src="../../node_modules/viz.js/viz.js"></script>
@@ -1060,7 +1063,8 @@ controls.update();
   <script src="./themes/leap/LeapSpringControls.js"></script>
   <script src="./themes/leap/LeapPointerControls.js"></script>
   <script src="./themes/leap/LeapEyeLookControls.js"></script>
-  <script src="./themes/leap/LeapTwoHandControls.js"></script>
+<!--  <script src="./themes/leap/LeapTwoHandControls.js"></script>-->
+  <script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
   <script src="./themes/leap/LeapPinchRotateControls.js"></script>
   <script src="./themes/leap/LeapTrackballControls.js"></script>
   <script src="./themes/leap/LeapPaddleControls.js"></script>
@@ -1253,9 +1257,9 @@ controls.update();
         var cube = new THREE.BoxGeometry( 50, 50, 50 );
         var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
 
-        skybox = new THREE.Mesh( cube , material );
-        skybox.scale.multiplyScalar( 100 );
-        skybox.position = camera.position;
+//        skybox = new THREE.Mesh( cube , material );
+//        skybox.scale.multiplyScalar( 100 );
+//        skybox.position = camera.position;
         //scene.add( skybox );
 
         ////////////////////////////////////////////////////////////////////////
@@ -1264,7 +1268,7 @@ controls.update();
         <?php
           print getDotGraph($script);
         ?>
-        dotToSene(dotGraph, scene, []);
+        dotToScene(dotGraph, scene, []);
 
 
         camera.position.z = 200;
@@ -1334,7 +1338,7 @@ controls.update();
         control.params = {
           size        : 120,
           dampening   :   .99,
-          speed       : .01,
+          speed       : .01
         }
 
         for( propt in control.params ){
@@ -1373,7 +1377,7 @@ controls.update();
           eyeSize        : 10,
           eyeMass        : 10,
           eyeSpeed       : 10,
-          eyeDampening   : .9,
+          eyeDampening   : .9
         }
 
         for( propt in control.params ){
@@ -1419,14 +1423,14 @@ controls.update();
         control.gui.close();
 
         control.params = {
-          translationSpeed   : 20,
+          translationSpeed   : 10,
           translationDecay   : 0.3,
           scaleDecay         : 0.5,
           rotationSlerp      : 0.8,
           rotationSpeed      : 4,
           pinchThreshold     : 0.5,
           transSmoothing     : 0.5,
-          rotationSmoothing  : 0.2,
+          rotationSmoothing  : 0.2
 
         }
 
@@ -1445,6 +1449,7 @@ controls.update();
 
 
         controls.push( control );
+        //console.log(controls);
 
         /*
 
@@ -1607,7 +1612,7 @@ controls.update();
         }
         //controls.update();
 
-        skybox.position = camera.position;
+        //skybox.position = camera.position;
         renderer.render( scene , camera );
         requestAnimationFrame( animate );
 

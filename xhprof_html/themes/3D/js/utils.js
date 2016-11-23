@@ -337,7 +337,7 @@ function dotToObject2( dotGraph ) {
 	return objects;
 }
 
-function dotToSene(dotGraph, scene, objects) {
+function dotToScene(dotGraph, scene, objects) {
 	var cube = new THREE.BoxGeometry( 50, 50, 50 );
 	var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
 
@@ -356,10 +356,13 @@ function dotToSene(dotGraph, scene, objects) {
 	var dotObjects = dotToObject2( dotPlain );
 	var count = dotObjects.length;
 
-	var example = false;
+	var example = true;
 	if (example) {
 		for( var i = 0; i < 300; i++ ) {
-			var mesh = new THREE.Mesh( cube , material );
+			m = material.clone();
+			m.color.setRGB( Math.random() + 0.1, Math.random() + 0.1, Math.random() + 0.1 );
+
+			var mesh = new THREE.Mesh( cube , m );
 			mesh.position.x = (Math.random() - .5 ) * 5000;
 			mesh.position.y = (Math.random() - .5 ) * 5000;
 			mesh.position.z = (Math.random() - .5 ) * 5000;
