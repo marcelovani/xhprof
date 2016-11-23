@@ -3,7 +3,7 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">#guidat { position: fixed; top: 0; right: 0; width: auto; z-index: 1001; text-align: right; } .guidat { color: #fff; opacity: 0.97; text-align: left; float: right; margin-right: 20px; margin-bottom: 20px; background-color: #fff; } .guidat, .guidat input { font: 9.5px Lucida Grande, sans-serif; } .guidat-controllers { height: 300px; overflow-y: auto; overflow-x: hidden; background-color: rgba(0, 0, 0, 0.1); } a.guidat-toggle:link, a.guidat-toggle:visited, a.guidat-toggle:active { text-decoration: none; cursor: pointer; color: #fff; background-color: #222; text-align: center; display: block; padding: 5px; } a.guidat-toggle:hover { background-color: #000; } .guidat-controller { padding: 3px; height: 25px; clear: left; border-bottom: 1px solid #222; background-color: #111; } .guidat-controller, .guidat-controller input, .guidat-slider-bg, .guidat-slider-fg { -moz-transition: background-color 0.15s linear; -webkit-transition: background-color 0.15s linear; transition: background-color 0.15s linear; } .guidat-controller.boolean:hover, .guidat-controller.function:hover { background-color: #000; } .guidat-controller input { float: right; outline: none; border: 0; padding: 4px; margin-top: 2px; background-color: #222; } .guidat-controller select { margin-top: 4px; float: right; } .guidat-controller input:hover { background-color: #444; } .guidat-controller input:focus, .guidat-controller.active input { background-color: #555; color: #fff; } .guidat-controller.number { border-left: 5px solid #00aeff; } .guidat-controller.string { border-left: 5px solid #1ed36f; } .guidat-controller.string input { border: 0; color: #1ed36f; margin-right: 2px; width: 148px; } .guidat-controller.boolean { border-left: 5px solid #54396e; } .guidat-controller.function { border-left: 5px solid #e61d5f; } .guidat-controller.number input[type=text] { width: 35px; margin-left: 5px; margin-right: 2px; color: #00aeff; } .guidat .guidat-controller.boolean input { margin-top: 6px; margin-right: 2px; font-size: 20px; } .guidat-controller:last-child { border-bottom: none; -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5); box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5); } .guidat-propertyname { padding: 5px; padding-top: 7px; cursor: default; display: inline-block; } .guidat-controller .guidat-slider-bg:hover, .guidat-controller.active .guidat-slider-bg { background-color: #444; } .guidat-controller .guidat-slider-bg .guidat-slider-fg:hover, .guidat-controller.active .guidat-slider-bg .guidat-slider-fg { background-color: #52c8ff; } .guidat-slider-bg { background-color: #222; cursor: ew-resize; width: 40%; margin-top: 2px; float: right; height: 21px; } .guidat-slider-fg { cursor: ew-resize; background-color: #00aeff; height: 21px; } </style>
     <style>
 
-
+      
       body {
         margin:0px;
         font-family:"GeoSans";
@@ -95,7 +95,7 @@
         float:right;
 
       }
-
+      
       #header{
         -webkit-touch-callout: none;
 -webkit-user-select: none;
@@ -112,12 +112,12 @@ user-select: none;
       #header > div > a:hover{
         background:#444;
         text-decoration:none;
-
+      
       }
 
-
+    
       #socialLinks > a > img {
-
+      
         width:100%;
         height:100%;
         opacity:.7;
@@ -138,12 +138,11 @@ user-select: none;
         right:0px;
         text-align:right;
         padding: 20px;
-        display: none;
 
       }
 
       #downloadLinks > h1{
-
+  
         font-size:20px;
         color:#fff;
         border-bottom:1px solid white;
@@ -171,13 +170,13 @@ user-select: none;
         color:#fff;
         width:50%;
         overflow:auto;
-
+          
       }
       .activeSlide{
-
+     
         overflow:auto;
         padding:50px;
-
+      
       }
 
       #scene{
@@ -207,15 +206,20 @@ user-select: none;
       ::-webkit-scrollbar {
           width: 12px;
       }
-
+       
       ::-webkit-scrollbar-track {
-          -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+          -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
           border-radius: 10px;
       }
-
+       
       ::-webkit-scrollbar-thumb {
           border-radius: 10px;
-          -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+          -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+      }
+
+      @font-face {
+        font-family: "GeoSans";
+        src: url("examples/lib/GeosansLight.ttf");
       }
 
       .inactiveGui{
@@ -224,7 +228,7 @@ user-select: none;
 
       #guidat{
         top: 51px;
-        right: -20px;
+        right: -20;
       }
     </style>
 
@@ -232,8 +236,8 @@ user-select: none;
 
   <body>
   <div id="header">
-    <div id="mainTitle"> Leap Three Camera Controls </div>
-    <div id="slideCounter">0 / 14</div>
+    <div id="mainTitle"> Spring Controls </div>
+    <div id="slideCounter">8 / 14</div>
     <div id="slideControls">
       <a onclick="previousSlide()">&lt;</a>
       <a onclick="nextSlide()">&gt;</a>
@@ -243,16 +247,16 @@ user-select: none;
       <a onclick="resetCamera()"> RESET CAMERA </a>
     </div>
     <div id="toggleInfo">
-      <a onclick="toggleInfo()">  INFO </a>
+      <a onclick="toggleInfo()"> HIDE INFO </a>
     </div>
     <div id="socialLinks">
       <a target="_blank" href="http://twitter.com/share?text=Learn%20to%20make%20your%20%23threejs%20projects%20explorable%20with%20@LeapMotion&amp;url=http://leapmotion.github.io/Leap-Three-Camera-Controls/">
-
-        <img src="./themes/leap/twitter.png">
+        
+        <img src="./full-page_files/twitter.png">
       </a>
-      <a target="_blank" href="http://www.facebook.com/sharer.php?u=http://leapmotion.github.io/Leap-Three-Camera-Controls/"><img src="./themes/leap/facebook.png"></a>
-      <a target="_blank" href="https://github.com/leapmotion/Leap-Three-Camera-Controls"><img src="./themes/leap/github.png"></a>
-      <a target="_blank" href="https://developer.leapmotion.com/"><img src="./themes/leap/leapmotion.png"></a>
+      <a target="_blank" href="http://www.facebook.com/sharer.php?u=http://leapmotion.github.io/Leap-Three-Camera-Controls/"><img src="./full-page_files/facebook.png"></a>
+      <a target="_blank" href="https://github.com/leapmotion/Leap-Three-Camera-Controls"><img src="./full-page_files/github.png"></a>
+      <a target="_blank" href="https://developer.leapmotion.com/"><img src="./full-page_files/leapmotion.png"></a>
     </div>
   </div>
 
@@ -262,11 +266,11 @@ user-select: none;
     <a href="https://leapmotion.github.io/Leap-Three-Camera-Controls/controls.zip"> CONTROLS </a><br>
   </div>
   <div id="slides">
-
-    <div class="slide activeSlide" id="intro">
+  
+    <div class="slide inactiveSlide" id="intro">
       <h1> Leap Three Camera Controls </h1>
-      <p>
-        Have you ever used three.js? Have you ever wanted to see your work in 3D?
+      <p> 
+        Have you ever used three.js? Have you ever wanted to see your work in 3D? 
         Have you wondered how we got here, what the meaning of life is?
       </p>
       <p>
@@ -275,23 +279,23 @@ user-select: none;
         with just the flick of our wrist, the wave of our hands.
       </p>
       <p>
-        If you have never touched three.js before, your best bet is to check out one of the
+        If you have never touched three.js before, your best bet is to check out one of the 
         tutorials from someone who knows what they are doing ( which is most definitely not me ).
         Below are some good starting resources:
         </p><ul>
           <li><a href="https://github.com/mrdoob/three.js/">Three.js Github Repo</a></li>
-          <li><a href="http://aerotwist.com/tutorials/getting-started-with-three-js/">
+          <li><a href="http://aerotwist.com/tutorials/getting-started-with-three-js/"> 
             AeroTwist Three.js Tutorial</a></li>
         </ul>
       <p></p>
       <p>
         First we are going to quickly look at how to set up a three.js project with the camera controls,
-        but if you are comfortable with three.js, feel free to skip to slide 8, where we will begin looking
+        but if you are comfortable with three.js, feel free to skip to slide 8, where we will begin looking 
         at <code class="inline">LeapSpringControls</code>
       </p>
-      <p>
-        Please keep in mind that these controls are works in progress!
-        If you have ideas on how they could be made better, have ideas of your own,
+      <p> 
+        Please keep in mind that these controls are works in progress! 
+        If you have ideas on how they could be made better, have ideas of your own, 
         or just want to tell me about typos / bugs,
         <a target="_blank" href="https://github.com/leapmotion/Leap-Three-Camera-Controls"> Check out the Repo </a>
       or
@@ -303,14 +307,14 @@ user-select: none;
 
     <div class="slide inactiveSlide" id="includingScripts">
       <h1> Including Scripts </h1>
-
+      
       <p> Still with us? Good, than lets dive into some code right away!</p>
-      <p>
-        The point of these Leap-Three-Camera-Controls is to make it as easy as possible to get
-        something you've made to the point where it is using the Leap Motion Controller to make
-        more magic. But before magic comes CODE!
+      <p> 
+        The point of these Leap-Three-Camera-Controls is to make it as easy as possible to get 
+        something you've made to the point where it is using the Leap Motion Controller to make 
+        more magic. But before magic comes CODE! 
       </p>
-      <p>
+      <p> 
         The first thing we will do is to include all the files we need. For the purpose of this
         walkthrough, we will be defining the paths as we would in our examples, but keep in mind
         you will need to define your own paths:
@@ -362,11 +366,11 @@ var scene , camera , renderer;
       <p>
         Now that we've got the global variables defined, we can initialize them. We will be going over
         the THREE.JS initialization pretty quickly, so if it doesn't make sense to you, make sure you
-        check out <a href="http://aerotwist.com/tutorials/getting-started-with-three-js/">
-        Aerotwist's three.js tutorial</a>.
+        check out <a href="http://aerotwist.com/tutorials/getting-started-with-three-js/"> 
+        Aerotwist's three.js tutorial</a>. 
       </p>
       <p>
-        All of our code will be inside an <code class="inline">init</code> function. This function can be called
+        All of our code will be inside an <code class="inline">init</code> function. This function can be called 
         wherever you want, but for this slide we are more concerned about what's INSIDE the function call
       </p>
 
@@ -379,7 +383,7 @@ function init(){
   var h     = window.innerHeight;
 
   scene     = new THREE.Scene();
-  camera    = new THREE.PerspectiveCamera( 50 , w / h , 1 , 1000 );
+  camera    = new THREE.PerspectiveCamera( 50 , w / h , 1 , 1000 ); 
   renderer  = new THREE.WebGLRenderer();
 
   renderer.setSize( w , h );
@@ -389,7 +393,7 @@ function init(){
   var geometry  = new THREE.IcosahedronGeometry( 5 , 2 );
   var material  = new THREE.MeshNormalMaterial();
   var mesh      = new THREE.Mesh( geometry , material );
-
+  
   scene.add( mesh );
 
   // HERE IS WHERE WE WILL INITIALIZE OUR CONTROLS
@@ -422,7 +426,7 @@ function init(){
 // first off, create our leap controller to get data from
 controller = new Leap.Controller();
 
-// To get frames rolling!
+// To get frames rolling! 
 // Our Camera Controls, should do this on our own,
 // but its good practice to say it outright!
 controller.connect();
@@ -438,7 +442,7 @@ controls.rotationSpeed = 20;
 
 // but these parameters can also be updated anywhere else in the program!
 
-// It is important to note that with other controls,
+// It is important to note that with other controls, 
 // we may pass through our scene,
 // to add markers, placeholders and other visual feedback.
 // We will explore this more in later slides
@@ -449,10 +453,10 @@ controls.rotationSpeed = 20;
 
     </div>
 
-
+    
     <div class="slide inactiveSlide" id="animation">
       <h1> Animation </h1>
-      <p>
+      <p> 
         Now that we've got everything initialized, the only thing left to do is get frames rolling!
       </p>
 
@@ -470,7 +474,7 @@ function animate(){
       <p> Easy enough, right? </p>
 
       <h3><a href="https://leapmotion.github.io/Leap-Three-Camera-Controls/example.zip"> DOWNLOAD THE EXAMPLE SOURCE </a></h3>
-
+      
     </div>
 
     <div class="slide inactiveSlide" id="allTogetherNow">
@@ -480,7 +484,7 @@ function animate(){
       </p>
       <pre><code>
 &lt;html&gt;
-  &lt;body&gt;
+  &lt;body&gt;    
 
     &lt;script src = "lib/leap.min.js"                    &gt;&lt;/script&gt;
     &lt;script src = "lib/three.js"                       &gt;&lt;/script&gt;
@@ -501,7 +505,7 @@ function animate(){
         var h     = window.innerHeight;
 
         scene     = new THREE.Scene();
-        camera    = new THREE.PerspectiveCamera( 50 , w / h , 1 , 1000 );
+        camera    = new THREE.PerspectiveCamera( 50 , w / h , 1 , 1000 ); 
         renderer  = new THREE.WebGLRenderer();
 
         renderer.setSize( w , h );
@@ -510,7 +514,7 @@ function animate(){
         var geometry  = new THREE.IcosahedronGeometry( 5 , 2 );
         var material  = new THREE.MeshNormalMaterial();
         var mesh      = new THREE.Mesh( geometry , material );
-
+        
         scene.add( mesh );
 
         controller = new Leap.Controller();
@@ -525,7 +529,7 @@ function animate(){
       function animate(){
 
         requestAnimationFrame( animate );
-
+        
         controls.update();
         renderer.render( scene , camera );
 
@@ -536,10 +540,10 @@ function animate(){
 &lt;/html&gt;
       </code></pre>
 
-      <p>
-        Hopefully this all makes sense to you. If not, please check out
-        <a href="http://aerotwist.com/tutorials/getting-started-with-three-js/"> A TUTORIAL </a>.
-        Or reach out to me at icohen@leapmotion.com || @cabbibo
+      <p> 
+        Hopefully this all makes sense to you. If not, please check out 
+        <a href="http://aerotwist.com/tutorials/getting-started-with-three-js/"> A TUTORIAL </a>. 
+        Or reach out to me at icohen@leapmotion.com || @cabbibo 
       </p>
 
       <h3><a href="https://leapmotion.github.io/Leap-Three-Camera-Controls/example.zip"> DOWNLOAD THE EXAMPLE SOURCE </a></h3>
@@ -547,31 +551,31 @@ function animate(){
 
     </div>
 
-
+    
     <div class="slide inactiveSlide" id="nowForTheFunStuff">
       <h1> Now For The Fun Stuff </h1>
       <p>
         Congrats! You are now a graphics programmer! And a Leap programmer! And super cool , and popular!
         And you understand how to use the controls, so we can move onto describing each one in detail.
       </p>
-      <p>
+      <p> 
         Hopefully you don't look like this dude:
-        <img src="./themes/leap/coolGif.gif">
-        but if you do, don't worry! now we get to actually start using the camera.
+        <img src="./full-page_files/coolGif.gif">
+        but if you do, don't worry! now we get to actually start using the camera. 
       </p>
 
-      <p>
+      <p> 
         Whenever you are ready, head to the next slide to learn about <code class="inline">LeapSpringControls</code>
       </p>
     </div>
 
-    <div class="slide inactiveSlide" id="springControls">
+    <div class="slide activeSlide" id="springControls">
       <h1> Spring Controls </h1>
       <p>
         Spring controls attatch a spring from your camera to a target, which it
-        is always looking at. When you pinch, it places a new anchor that the
-        target will tween to, always giving you a smooth movement, while the spring
-        pulls the camera toward the target. To see exactly what this means,
+        is always looking at. When you pinch, it places a new anchor that the 
+        target will tween to, always giving you a smooth movement, while the spring 
+        pulls the camera toward the target. To see exactly what this means, 
         try adding markers to the anchor , hand , and target as described in
         the below code snippet
       </p>
@@ -609,8 +613,8 @@ controls.anchorSpeed    =  .1;
 controls.staticLength   = 100;
 
 // Adding meshes to the Anchor , Target and Hand
-var geo = new THREE.IcosahedronGeometry( 5, 2 );
-var mat = new THREE.MeshNormalMaterial();
+var geo = new THREE.IcosahedronGeometry( 5, 2 ); 
+var mat = new THREE.MeshNormalMaterial(); 
 
 var targetMesh  = new THREE.Mesh( geo , mat );
 var anchorMesh  = new THREE.Mesh( geo , mat );
@@ -630,13 +634,13 @@ controls.update();
         <li>size:           Tells us size of hand movements</li>
         <li>springConstant: Tells us value for Hooke's Law constant 'k' , which defines 'springyness' </li>
         <li>mass:           Tells us mass of camera</li>
-        <li>anchorSpeed:    Tells us how fast anchor tweens to target
+        <li>anchorSpeed:    Tells us how fast anchor tweens to target 
                             ( .5 and higher gets weird. but it shouldn't,
                               I just forgot how to do physics. Pull request maybe ?!!???!? )</li>
         <li>staticLength:   Tells us how far away from the target that the camera comes to rest</li>
       </ul>
 
-      <h3><a target="_blank" href="./themes/leap/LeapSpringControls.js"> SEE SOURCE </a></h3>
+      <h3><a target="_blank" href="./full-page_files/LeapSpringControls.js"> SEE SOURCE </a></h3>
 
 
     </div>
@@ -645,7 +649,7 @@ controls.update();
     <div class="slide inactiveSlide" id="pointerControls">
       <h1>Pointer Controls</h1>
       <p>
-        The pointer controls always has the camera always pointing at a
+        The pointer controls always has the camera always pointing at a 
         'target', when you pinch, you begin moving the camera around the object,
         and when you release, the camera will stop moving.
       </p>
@@ -653,7 +657,7 @@ controls.update();
       <ul>
         <li>Always looking at the same place, so its hard to get out of control</li>
         <li>Movements feel smoothish</li>
-        <li>Absolute positioning means that when comparing to the leap,
+        <li>Absolute positioning means that when comparing to the leap, 
           the position will always make sense</li>
       </ul>
       <p>Cons:</p>
@@ -689,7 +693,7 @@ controls.update();
 
       <p>Using the following parameters:</p>
       <ul>
-
+        
         <li>size:       Tells us how big the motions will be, basically the spherical
                       distance from the target</li>
         <li>
@@ -701,54 +705,54 @@ controls.update();
                         This number should be between 0 and 1
         </li>
         <li>
-        target:     Tells us where the camera is looking. A THREE.Vector3(),
+        target:     Tells us where the camera is looking. A THREE.Vector3(), 
                         target basically defines the center of the scene
         </li>
       </ul>
 
 
-      <h3><a target="_blank" href="./themes/leap/LeapPointerControls.js"> SEE SOURCE </a></h3>
-
+      <h3><a target="_blank" href="./full-page_files/LeapPointerControls.js"> SEE SOURCE </a></h3>
+      
     </div>
 
-
+    
     <div class="slide inactiveSlide" id="eyeLookControls">
       <h1> Leap Eye Look Controls </h1>
-
+      
       <p>
-        Eye Look Controls are very similar to the Pointer controls.
-        Infact when you use your right hand, they are exactly the same.
-        The biggest difference is that when you use your left hand, you
+        Eye Look Controls are very similar to the Pointer controls. 
+        Infact when you use your right hand, they are exactly the same. 
+        The biggest difference is that when you use your left hand, you 
         dynamically move the target. This leads to the ability to easily
         move around a scene, but always have a specific point you are focused on.
         Also, all movements are relative, rather than absolute.
       </p>
 
       <p>Pros:</p>
-
+      
       <ul>
         <li>Always looking at the same place, so its hard to get out of control </li>
         <li>Movements feel smoothish</li>
         <li>Relative movements allow for the exploration of the entire scene</li>
       </ul>
-
+      
       <p>Cons:</p>
-
+      
       <ul>
         <li>Moving camera near poles results in some weirdness...</li>
         <li>Uses pinch, which removes the ability to use it for other gestures</li>
         <li>Relative movement means that you can get very far away from your target, leading to depth being difficult to judge</li>
         <li>Difficult to move through an entire scene quickly</li>
       </ul>
-
+      
       <p>Pairings:</p>
-
+      
       <ul>
         <li>Slowly examining a full scene </li>
         <li>3D Modeling camera controls</li>
         <li>A quick addition to visual experiments</li>
       </ul>
-
+      
       <p>Called using: </p>
       <pre><code>&lt;!-- Include Script --&gt;
 &lt;script src="path/to/controls/LeapEyeLookControls.js"&gt;&lt;/script&gt;
@@ -781,7 +785,7 @@ controls.update();
       </code></pre>
 
       <p>Using the following parameters:</p>
-
+      
       <ul>
         <li>lookSize: Tells us how big the movements will be for the look object by adding bigger or smaller numbers to the force </li>
         <li>lookMass: Tells us more about how the look object will move by giving it different mass. A smaller mass with fling around the field while a larger mass will be slower / harder to move</li>
@@ -793,7 +797,7 @@ controls.update();
         <li>eyeDampening: Tells us how quickly the eye object will slow down</li>
       </ul>
 
-      <h3><a target="_blank" href="./themes/leap/LeapEyeLookControls.js"> SEE SOURCE </a></h3>
+      <h3><a target="_blank" href="./full-page_files/LeapEyeLookControls.js"> SEE SOURCE </a></h3>
     </div>
 
     <div class="slide inactiveSlide" id="twoHandControls">
@@ -839,8 +843,8 @@ controls.rotationSmoothing  = 0.2;
 controls.update();
       </code></pre>
 
-      <h3><a target="_blank" href="./themes/leap/LeapTwoHandControls.js"> SEE SOURCE </a></h3>
-
+      <h3><a target="_blank" href="./controls/LeapTwoHandControls.js"> SEE SOURCE </a></h3>
+      
       <!--<p>TODO: Description of Parameters</p>-->
 
 
@@ -905,44 +909,44 @@ controls.update();
       <li>maxZoom:                Tells us the farthest we can be</li>
       </ul>
 
-            <h3><a target="_blank" href="./themes/leap/LeapPinchRotateControls.js"> SEE SOURCE </a></h3>
+            <h3><a target="_blank" href="./controls/LeapPinchRotateControls.js"> SEE SOURCE </a></h3>
     </div>
 
     <div class="slide inactiveSlide" id="trackballControls">
       <h1>Leap Trackball Controls</h1>
-
+      
       <p>
         Trackball Controls let you swipe the camera around a target, as if you
         were pushing a giant bowling ball around ( your hand is always behind the ball )
         Also , if you turn your hand straight up, and zoom is enabled, you will
         stop spinning and start zooming, based on moving your hand forward and backwards
       </p>
-
+      
       <p>Pros:</p>
-
+      
       <ul>
         <li>Supersmooth. </li>
         <li>No Gimbal Lock!</li>
         <li>No use of Pinch! </li>
       </ul>
-
+      
       <p>Cons:</p>
-
+      
       <ul>
         <li>Only moves around single point</li>
         <li>Controls take some getting used to for some people</li>
         <li>No clear up vector, which leads to possible deorientation</li>
       </ul>
-
+      
       <p>Pairings:</p>
-
+      
       <ul>
         <li>3D Modeling camera controls</li>
         <li>A quick addition to visual experiments</li>
       </ul>
-
+      
       <p>Called using: </p>
-
+      
       <pre><code>
 &lt;!-- Include Script --&gt;
 &lt;script src="path/to/controls/LeapTrackballControls.js"&gt;&lt;/script&gt;
@@ -964,7 +968,7 @@ controls.update();
       </code></pre>
 
       <p>Using the following parameters:</p>
-
+      
       <ul>
         <li>rotationSpeed:      Tells us the speed of the rotation</li>
         <li>rotationDampening:  Tells us how quickly the rotation will slow down</li>
@@ -975,12 +979,12 @@ controls.update();
         <li>minZoom:            Tells us the closest we can be</li>
         <li>maxZoom:            Tells us the farthest we can be</li>
       </ul>
-      <h3><a target="_blank" href="./themes/leap/LeapTrackballControls.js"> SEE SOURCE </a></h3>
+      <h3><a target="_blank" href="./controls/LeapTrackballControls.js"> SEE SOURCE </a></h3>
     </div>
 
     <div class="slide inactiveSlide" id="paddleControls">
       <h1> Paddle Controls </h1>
-      <p>Paddle Controls Let you 'paddle' Around a scene, the way that you would paddle
+      <p>Paddle Controls Let you 'paddle' Around a scene, the way that you would paddle 
       through water. Pretty cool huh?</p>
       <p>Pros:</p>
       <ul>
@@ -1015,7 +1019,7 @@ controls.update();
       controls.fingerMatchPower     = 5;
       controls.velocityMatchPower   = 5;
       controls.movementSpeed        = 1;
-      controls.maxSpeed             = 10;
+      controls.maxSpeed             = 10; 
 
       // Inside Animate Function
       controls.update();
@@ -1033,7 +1037,7 @@ controls.update();
       <li>maxSpeed:               Tells us what we will limit the cameras speed to</li>
       </ul>
 
-      <h3><a target="_blank" href="./themes/leap/LeapPaddleControls.js"> SEE SOURCE </a></h3>
+      <h3><a target="_blank" href="./controls/LeapPaddleControls.js"> SEE SOURCE </a></h3>
     </div>
 
   </div>
@@ -1048,29 +1052,20 @@ controls.update();
 
   -->
 
-  <script src="./themes/leap/jquery.min.js"></script>
-  <script src="./themes/leap/three.min.js"></script>
+  <script src="./full-page_files/jquery.min.js"></script>
+  <script src="./full-page_files/three.min.js"></script>
+  <script src="./full-page_files/leap.min.js"></script>
+  <script src="./full-page_files/dat.gui.min.js"></script>
 
-  <script src="./themes/leap-hand/three.min.js"></script>
-  <script src="./themes/leap-hand/leap-0.6.3.min.js"></script>
-  <script src="./themes/leap-hand/leap-plugins-0.1.11pre.js"></script>
-  <script src="./themes/leap-hand/leap.rigged-hand-0.1.5.min.js"></script>
 
-<!--  <script src="./themes/leap/leap.min.js"></script>-->
-<!--  <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>-->
-<!--  <script src="../../node_modules/leapjs/examples/lib/leap-plugins-0.1.6.js"></script>-->
-
-  <script src="./themes/leap/dat.gui.min.js"></script>
-  <script src="../../node_modules/viz.js/viz.js"></script>
-  <script src="../themes/3D/js/utils.js"></script>
-
-  <script src="./themes/leap/LeapSpringControls.js"></script>
-  <script src="./themes/leap/LeapPointerControls.js"></script>
-  <script src="./themes/leap/LeapEyeLookControls.js"></script>
-  <script src="./themes/leap/LeapTwoHandControls.js"></script>
-  <script src="./themes/leap/LeapPinchRotateControls.js"></script>
-  <script src="./themes/leap/LeapTrackballControls.js"></script>
-  <script src="./themes/leap/LeapPaddleControls.js"></script>
+  <script src="./controls/LeapSpringControls.js"></script>
+  <script src="./controls/LeapPointerControls.js"></script>
+  <script src="./controls/LeapEyeLookControls.js"></script>
+  <script src="./controls/LeapTwoHandControls.js"></script>
+  <script src="./controls/LeapPinchRotateControls.js"></script>
+  <script src="./controls/LeapTrackballControls.js"></script>
+  <script src="./controls/LeapPaddleControls.js"></script>
+  
   <!--
 
     ORDER GOES:
@@ -1084,8 +1079,8 @@ controls.update();
       Paddle
 
   -->
-
-
+  
+  
   <script>
 
     /*
@@ -1093,26 +1088,25 @@ controls.update();
      PRETTY GL BACKGROUND!
 
     */
+
     var camera , scene, renderer;
 
     var controller , controls = [];
     var activeControl = 0;
-
-    var activeSlide = 11; // Jump to slide 11.
+    
+    var activeSlide = 0;
     var totalSlides = 14;
 
     var slides = $('.slide');
     var slideCounter = $('#slideCounter');
     var guidat = $('.guidat');
-    //console.log( slides );
+    console.log( slides );
 
-
+    
     init();
-    toggleInfo();
     animate();
     activateSlide( activeSlide );
     resizeLayout();
-    resetCamera();
 
 
     function nextSlide(){
@@ -1140,12 +1134,12 @@ controls.update();
       activateGUI( slideNum );
       activateControl( slideNum );
 
-      //console.log( slides[ slideNum ] );
+      console.log( slides[ slideNum ] );
 
       var new1 =  $( slides[slideNum]).find('h1')[0].innerHTML;
-      //console.log( new1 );
+      console.log( new1 );
 
-      //console.log( $("#mainTitle") );
+      console.log( $("#mainTitle") );
       $("#mainTitle")[0].innerHTML = new1;
       for( var i = 0; i < slides.length; i++ ){
 
@@ -1165,26 +1159,26 @@ controls.update();
 
     function toggleInfo(){
 
-      //console.log('hellos');
+      console.log('hellos');
       $("#slides").toggle();
 
     }
     function activateControl( slideNum ){
 
       var id = slideNum - 8;
-
+     
       if( controls[id] ){
         activeControl = controls[id];
       }else{
         activeControl = undefined;
       }
 
-
-      //console.log( activeControl );
+      
+      console.log( activeControl );
       if( activeControl ){
-        //console.log( activeControl );
+        console.log( activeControl );
         if( activeControl.gui ){
-          //console.log( activeControl );
+          console.log( activeControl );
           activeControl.gui.open();
 
         }
@@ -1219,8 +1213,8 @@ controls.update();
       var wWidth = window.innerWidth;
       var wHeight = window.innerHeight;
 
-      //console.log( slides.height() );
-      //console.log( header.height() );
+      console.log( slides.height() );
+      console.log( header.height() );
 
       var newSlideHeight = wHeight - header.height();
       slides.height( newSlideHeight );*/
@@ -1229,17 +1223,17 @@ controls.update();
 
     function UC( change ,  value ){
 
-      //console.log( this );
-      //console.log( 'HELLO' );
-      //console.log( change );
+      console.log( this );
+      console.log( 'HELLO' );
+      console.log( change );
 
-         //console.log( controls );
-            //console.log( activeControl );
-            //console.log( change.propertyName );
-            //console.log( activeControl[change.propertyName] );
+         console.log( controls );
+            console.log( activeControl );
+            console.log( change.propertyName );
+            console.log( activeControl[change.propertyName] );
             activeControl[change.propertyName] = value;
-            //console.log( change );
-            //console.log( value );
+            console.log( change );
+            console.log( value );
 
 
     }
@@ -1250,6 +1244,7 @@ controls.update();
       camera.lookAt( new THREE.Vector3());
 
     }
+
 
       function init(){
 
@@ -1262,7 +1257,6 @@ controls.update();
 
         renderer.setSize( w , h );
         renderer.domElement.id = "scene";
-
         document.body.appendChild( renderer.domElement );
 
         var geometry  = new THREE.IcosahedronGeometry( 50 , 2 );
@@ -1271,156 +1265,42 @@ controls.update();
         skybox = new THREE.Mesh( geometry , material );
         skybox.scale.multiplyScalar( 100 );
         skybox.position = camera.position;
-        //scene.add( skybox );
+        scene.add( skybox );
 
-        ////////////////////////////////////////////////////////////////////////
-        // DotGraph include                                                   //
-        ////////////////////////////////////////////////////////////////////////
-        var dotGraph = {};
-        <?php
-        // Prepare graphlib-dot object.
-        $script = preg_replace('/(.+)/', '\'$1\' +', $script);
-        $script = preg_replace('/\}\'\s*\+/', "}'", $script);
-        print 'dotGraph = ' . $script . ';';
-        ?>
-        // Convert to dot plain.
-        var params = {
-          src: dotGraph,
-          options: {
-            engine: 'dot',
-            format: 'plain'
-          }
-        };
-        var dotPlain = Viz(params.src, params.options);
-        // Create dotObjects.
-        var dotObjects = dotToObject2( dotPlain );
-        var count = dotObjects.length;
-        var example = true;
-
-        if (example) {
-          for( var i = 0; i < 300; i++ ){
-            var mesh = new THREE.Mesh( geometry , material );
-            mesh.position.x = (Math.random() - .5 ) * 5000;
-            mesh.position.y = (Math.random() - .5 ) * 5000;
-            mesh.position.z = (Math.random() - .5 ) * 5000;
-            scene.add( mesh );
-          }
-
-
-//          var geometry = new THREE.Geometry();
-//          var material = new THREE.ParticleSystemMaterial({
-//            size:10,
-//            color:0x000000
-//          });
-//
-//          for( var i = 0; i < 20000; i++ ){
-//            var x = (Math.random() - .5 ) * 5000;
-//            var y = (Math.random() - .5 ) * 5000;
-//            var z = (Math.random() - .5 ) * 5000;
-//            geometry.vertices.push( new THREE.Vector3( x , y , z ) );
-//          }
-//          var particles = new THREE.ParticleSystem( geometry , material );
-//          scene.add( particles );
+        for( var i = 0; i < 300; i++ ){
+          var mesh = new THREE.Mesh( geometry , material );
+          mesh.position.x = (Math.random() - .5 ) * 5000;
+          mesh.position.y = (Math.random() - .5 ) * 5000;
+          mesh.position.z = (Math.random() - .5 ) * 5000;
+          scene.add( mesh );
         }
-        else {
-          var geometry  = new THREE.BoxGeometry(40, 40, 40);
-          //var material  = new THREE.MeshLambertMaterial({color: getHexColor('0xEEE')});
+        
 
-          for (var i = 0; i < count; i++) {
-            var object = dotObjects[i];
+        var geometry = new THREE.Geometry();
+        var material = new THREE.ParticleSystemMaterial({
+          size:10,
+          color:0x000000
+        });
 
-            switch (object.shape) {
-              case 'line':
-                //@todo implement this
-                //var geometry = geometryLine;
-                continue;
-                break;
-              case 'box':
-                //var geometry = new THREE.BoxGeometry(40, 40, 40);
-                //var geometry = geometryBox;
-                break;
-              case 'octagon':
-                //var geometry = geometryOctagon;
-                continue;
-                break;
-              default:
-            }
+  
+        for( var i = 0; i < 20000; i++ ){
 
-            if (typeof(geometry) == 'object') {
-              material.color = getHexColor(object.color);//not working
+          var x = (Math.random() - .5 ) * 5000;
+          var y = (Math.random() - .5 ) * 5000;
+          var z = (Math.random() - .5 ) * 5000;
 
-              //var o = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: getHexColor(object.color)}));
-              var mesh = new THREE.Mesh( geometry , material );
-              // @todo calculate offsets based on screen dimensions and zoom.
-              offsetX = 500;
-              offsetY = 1000;
-              offsetZ = Math.random() * 400 * Math.PI;
-              mesh.position.x = object.position.x - offsetX;
-              mesh.position.y = object.position.y - offsetY;
-              mesh.position.z = object.position.z - offsetZ;
-              //mesh.rotation.x = Math.random() * 2 * Math.PI;
-              //mesh.rotation.y = Math.random() * 2 * Math.PI;
-              //mesh.rotation.z = Math.random() * 2 * Math.PI;
-              mesh.scale.x = object.scale.x;
-              mesh.scale.y = object.scale.y;
-              mesh.scale.z = object.scale.z;
-              mesh.castShadow = true;
-              mesh.receiveShadow = true;
-              scene.add(mesh);
-              //objects.push( o );
-            }
-          }
-          object = {};
-          dotObjects = {};
-          dotGraph = {};
-          dotPlain = {};
-          geometry = {};
-          params = {};
+          geometry.vertices.push( new THREE.Vector3( x , y , z ) );
+
+
         }
-        ////////////////////////////////////////////////////////////////////////
-        // DotGraph include - end                                             //
-        ////////////////////////////////////////////////////////////////////////
+
+        var particles = new THREE.ParticleSystem( geometry , material );
+        scene.add( particles );
+
 
         camera.position.z = 200;
         controller = new Leap.Controller();
-
-        ////////////////////////////////////////////////////////////////////////
-        // Hands //
-        ////////////////////////////////////////////////////////////////////////
-        controller.loop()
-//          // note that transform must be _before_ rigged hand
-          .use('transform', {
-            quaternion: new THREE.Quaternion,
-            position: new THREE.Vector3,
-            scale: 3
-          })
-//          //.use('playback', {recording: 'finger-tap-54fps.json.lz'})
-          .use('riggedHand', {
-            dotsMode: true,
-            parent: scene,
-            renderFn: function(){
-              renderer.render(scene, camera);
-              //p = camera.position.z - 500;
-              //controller.plugins.transform.position.z = p;
-              //console.log(controller.plugins.transform.position);
-              //console.log(camera.position);
-              //controller.plugins.transform.position = camera.position;
-              //this.offset.z = camera.position.z;
-              //console.log(this);
-//              this.plugins.transform.position.set(
-//                0,0,parseInt(camera.position.z, 10)
-//              );
-            }
-
-          })
-          .connect();
-
-
-        ////////////////////////////////////////////////////////////////////////
-        // Hand ends //
-        ////////////////////////////////////////////////////////////////////////
-
-        //  controller.connect();
+        controller.connect();
 
 
         /*
@@ -1444,7 +1324,7 @@ controls.update();
           anchorSpeed    :  .1,
           staticLength   : 100,
         }
-
+       
         for( propt in control.params ){
           control[propt] = control.params[propt]
         }
@@ -1464,7 +1344,7 @@ controls.update();
         control.gui.add( control.params , 'mass' , .0001 , 100        ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'anchorSpeed' , .0 , .6     ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'staticLength' , 0 , 5000   ).onChange(function(v){UC( this,v )});
-
+       
         controls.push( control );
 
         /*
@@ -1487,7 +1367,7 @@ controls.update();
           dampening   :   .99,
           speed       : .01,
         }
-
+       
         for( propt in control.params ){
           control[propt] = control.params[propt]
         }
@@ -1495,7 +1375,7 @@ controls.update();
         control.gui.add( control.params , 'dampening' , .5 , .999     ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'size' , 0 , 5000           ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'speed' , 0 , 10            ).onChange(function(v){UC( this,v )});
-
+       
         controls.push( control );
 
 
@@ -1526,7 +1406,7 @@ controls.update();
           eyeSpeed       : 10,
           eyeDampening   : .9,
         }
-
+       
         for( propt in control.params ){
           control[propt] = control.params[propt]
         }
@@ -1549,7 +1429,7 @@ controls.update();
         control.gui.add( control.params , 'eyeMass'        , 0  , 100   ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'eyeSpeed'       , 0  , 1000  ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'eyeDampening'   , .5 , .999  ).onChange(function(v){UC( this,v )});
-
+       
         controls.push( control );
 
 
@@ -1578,9 +1458,9 @@ controls.update();
           pinchThreshold     : 0.5,
           transSmoothing     : 0.5,
           rotationSmoothing  : 0.2,
-
+                   
         }
-
+       
         for( propt in control.params ){
           control[propt] = control.params[propt]
         }
@@ -1594,7 +1474,7 @@ controls.update();
         control.gui.add( control.params , 'transSmoothing'      , 0  , 1000  ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'rotationSmoothing'   , .5 , .999  ).onChange(function(v){UC( this,v )});
 
-
+       
         controls.push( control );
 
         /*
@@ -1640,7 +1520,7 @@ controls.update();
         control.gui.add( control.params , 'zoomEnabled'                         ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'minZoom' , 10 , 10000                ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'maxZoom' , 10 , 10000                ).onChange(function(v){UC( this,v )});
-
+      
         controls.push( control );
 
 
@@ -1689,7 +1569,7 @@ controls.update();
         control.gui.add( control.params , 'zoomEnabled'                         ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'minZoom' , 10 , 10000                ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'maxZoom' , 10 , 10000                ).onChange(function(v){UC( this,v )});
-
+      
         controls.push( control );
 
 
@@ -1715,8 +1595,8 @@ controls.update();
           fingerMatchPower     :   5,
           velocityMatchPower   :   5,
           movementSpeed        :   1,
-          maxSpeed             :  10,
-        }
+          maxSpeed             :  10, 
+        }        
 
 
         for( propt in control.params ){
@@ -1731,14 +1611,14 @@ controls.update();
         control.gui.add( control.params , 'velocityMatchPower'    , 0   , 10    ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'movementSpeed'         , 0   , 100   ).onChange(function(v){UC( this,v )});
         control.gui.add( control.params , 'maxSpeed'              , 0   , 1000  ).onChange(function(v){UC( this,v )});
-
+                                                                                
         controls.push( control );
 
 
 
 
         window.addEventListener( 'resize', onResize , false );
-
+        
 
       }
 
@@ -1749,7 +1629,7 @@ controls.update();
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-      }
+      }  
 
       function animate(){
 
@@ -1759,14 +1639,14 @@ controls.update();
         //controls.update();
 
         skybox.position = camera.position;
-        //renderer.render( scene , camera );
+        renderer.render( scene , camera );
         requestAnimationFrame( animate );
-
+        
       }
 
 
 
-  </script><canvas width="1196" height="726" id="scene" style="width: 1196px; height: 726px;"></canvas><div id="guidat"><div class="guidat inactiveGui" id="springControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">dampening</span><input id="dampening" type="text" value="0.75"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 50.1002%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">size</span><input id="size" type="text" value="120"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 2.4%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">springConstant</span><input id="springConstant" type="text" value="1"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">mass</span><input id="mass" type="text" value="100"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 100%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">anchorSpeed</span><input id="anchorSpeed" type="text" value="0.1"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 16.6667%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">staticLength</span><input id="staticLength" type="text" value="100"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 2%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="pointerControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">dampening</span><input id="dampening" type="text" value="0.99"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 98.1964%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">size</span><input id="size" type="text" value="120"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 2.4%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">speed</span><input id="speed" type="text" value="0.01"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.1%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="eyeLookControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">lookSize</span><input id="lookSize" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">lookMass</span><input id="lookMass" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">lookSpeed</span><input id="lookSpeed" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">lookDampening</span><input id="lookDampening" type="text" value="0.9"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 80.1603%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">eyeSize</span><input id="eyeSize" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">eyeMass</span><input id="eyeMass" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">eyeSpeed</span><input id="eyeSpeed" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">eyeDampening</span><input id="eyeDampening" type="text" value="0.9"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 80.1603%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="twoHandControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">translationSpeed</span><input id="translationSpeed" type="text" value="20"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 2%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">translationDecay</span><input id="translationDecay" type="text" value="0.3"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.3%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">scaleDecay</span><input id="scaleDecay" type="text" value="0.5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.05%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationSlerp</span><input id="rotationSlerp" type="text" value="0.8"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 60.1202%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationSpeed</span><input id="rotationSpeed" type="text" value="4"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.4%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">pinchThreshold</span><input id="pinchThreshold" type="text" value="0.5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.5%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">transSmoothing</span><input id="transSmoothing" type="text" value="0.5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.05%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationSmoothing</span><input id="rotationSmoothing" type="text" value="0.2"><div class="guidat-slider-bg"><div class="guidat-slider-fg"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="pinchRotateControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">rotationSpeed</span><input id="rotationSpeed" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationLowDampening</span><input id="rotationLowDampening" type="text" value="0.98"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 93.3364%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationHighDampening</span><input id="rotationHighDampening" type="text" value="0.7"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoom</span><input id="zoom" type="text" value="40"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.3003%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoomDampening</span><input id="zoomDampening" type="text" value="0.6"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 20.0004%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoomSpeedRatio</span><input id="zoomSpeedRatio" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoomVsRotate</span><input id="zoomVsRotate" type="text" value="1"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller boolean" style="cursor: pointer;"><span class="guidat-propertyname" style="cursor: pointer;">zoomEnabled</span><input type="checkbox"></div><div class="guidat-controller number"><span class="guidat-propertyname">minZoom</span><input id="minZoom" type="text" value="20"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.1001%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">maxZoom</span><input id="maxZoom" type="text" value="80"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.700701%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="trackballControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">rotationSpeed</span><input id="rotationSpeed" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationLowDampening</span><input id="rotationLowDampening" type="text" value="0.98"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 93.3364%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationHighDampening</span><input id="rotationHighDampening" type="text" value="0.7"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoom</span><input id="zoom" type="text" value="40"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.3003%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoomDampening</span><input id="zoomDampening" type="text" value="0.6"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 20.0004%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoomSpeedRatio</span><input id="zoomSpeedRatio" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller boolean" style="cursor: pointer;"><span class="guidat-propertyname" style="cursor: pointer;">zoomEnabled</span><input type="checkbox"></div><div class="guidat-controller number"><span class="guidat-propertyname">minZoom</span><input id="minZoom" type="text" value="20"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.1001%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">maxZoom</span><input id="maxZoom" type="text" value="80"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.700701%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="paddleControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">weakDampening</span><input id="weakDampening" type="text" value="0.99"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 98.1964%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">strongDampening</span><input id="strongDampening" type="text" value="0.9"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 80.1603%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">fingerMatchCutoff</span><input id="fingerMatchCutoff" type="text" value="0.5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 50%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">velocityMatchCutoff</span><input id="velocityMatchCutoff" type="text" value="0.5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 50%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">fingerMatchPower</span><input id="fingerMatchPower" type="text" value="5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 50%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">velocityMatchPower</span><input id="velocityMatchPower" type="text" value="5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 50%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">movementSpeed</span><input id="movementSpeed" type="text" value="1"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">maxSpeed</span><input id="maxSpeed" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div></div>
-
+  </script><canvas width="2318" height="1264" id="scene" style="width: 1159px; height: 632px;"></canvas><div id="guidat"><div class="guidat activeGui" id="springControls" style="width: 280px;"><div class="guidat-controllers" style="height: 191px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">dampening</span><input id="dampening" type="text" value="0.75"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 50.1002%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">size</span><input id="size" type="text" value="120"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 2.4%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">springConstant</span><input id="springConstant" type="text" value="1"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">mass</span><input id="mass" type="text" value="100"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 100%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">anchorSpeed</span><input id="anchorSpeed" type="text" value="0.1"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 16.6667%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">staticLength</span><input id="staticLength" type="text" value="100"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 2%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Close Controls</a></div><div class="guidat inactiveGui" id="pointerControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">dampening</span><input id="dampening" type="text" value="0.99"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 98.1964%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">size</span><input id="size" type="text" value="120"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 2.4%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">speed</span><input id="speed" type="text" value="0.01"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.1%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="eyeLookControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">lookSize</span><input id="lookSize" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">lookMass</span><input id="lookMass" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">lookSpeed</span><input id="lookSpeed" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">lookDampening</span><input id="lookDampening" type="text" value="0.9"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 80.1603%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">eyeSize</span><input id="eyeSize" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">eyeMass</span><input id="eyeMass" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">eyeSpeed</span><input id="eyeSpeed" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">eyeDampening</span><input id="eyeDampening" type="text" value="0.9"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 80.1603%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="twoHandControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">translationSpeed</span><input id="translationSpeed" type="text" value="20"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 2%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">translationDecay</span><input id="translationDecay" type="text" value="0.3"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.3%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">scaleDecay</span><input id="scaleDecay" type="text" value="0.5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.05%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationSlerp</span><input id="rotationSlerp" type="text" value="0.8"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 60.1202%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationSpeed</span><input id="rotationSpeed" type="text" value="4"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.4%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">pinchThreshold</span><input id="pinchThreshold" type="text" value="0.5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.5%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">transSmoothing</span><input id="transSmoothing" type="text" value="0.5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.05%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationSmoothing</span><input id="rotationSmoothing" type="text" value="0.2"><div class="guidat-slider-bg"><div class="guidat-slider-fg"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="pinchRotateControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">rotationSpeed</span><input id="rotationSpeed" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationLowDampening</span><input id="rotationLowDampening" type="text" value="0.98"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 93.3364%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationHighDampening</span><input id="rotationHighDampening" type="text" value="0.7"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoom</span><input id="zoom" type="text" value="40"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.3003%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoomDampening</span><input id="zoomDampening" type="text" value="0.6"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 20.0004%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoomSpeedRatio</span><input id="zoomSpeedRatio" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoomVsRotate</span><input id="zoomVsRotate" type="text" value="1"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller boolean" style="cursor: pointer;"><span class="guidat-propertyname" style="cursor: pointer;">zoomEnabled</span><input type="checkbox"></div><div class="guidat-controller number"><span class="guidat-propertyname">minZoom</span><input id="minZoom" type="text" value="20"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.1001%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">maxZoom</span><input id="maxZoom" type="text" value="80"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.700701%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="trackballControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">rotationSpeed</span><input id="rotationSpeed" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationLowDampening</span><input id="rotationLowDampening" type="text" value="0.98"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 93.3364%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">rotationHighDampening</span><input id="rotationHighDampening" type="text" value="0.7"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoom</span><input id="zoom" type="text" value="40"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.3003%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoomDampening</span><input id="zoomDampening" type="text" value="0.6"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 20.0004%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">zoomSpeedRatio</span><input id="zoomSpeedRatio" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 10%;"></div></div></div><div class="guidat-controller boolean" style="cursor: pointer;"><span class="guidat-propertyname" style="cursor: pointer;">zoomEnabled</span><input type="checkbox"></div><div class="guidat-controller number"><span class="guidat-propertyname">minZoom</span><input id="minZoom" type="text" value="20"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.1001%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">maxZoom</span><input id="maxZoom" type="text" value="80"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 0.700701%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div><div class="guidat inactiveGui" id="paddleControls" style="width: 280px;"><div class="guidat-controllers" style="height: 0px; overflow-y: hidden;"><div class="guidat-controller number"><span class="guidat-propertyname">weakDampening</span><input id="weakDampening" type="text" value="0.99"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 98.1964%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">strongDampening</span><input id="strongDampening" type="text" value="0.9"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 80.1603%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">fingerMatchCutoff</span><input id="fingerMatchCutoff" type="text" value="0.5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 50%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">velocityMatchCutoff</span><input id="velocityMatchCutoff" type="text" value="0.5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 50%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">fingerMatchPower</span><input id="fingerMatchPower" type="text" value="5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 50%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">velocityMatchPower</span><input id="velocityMatchPower" type="text" value="5"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 50%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">movementSpeed</span><input id="movementSpeed" type="text" value="1"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div><div class="guidat-controller number"><span class="guidat-propertyname">maxSpeed</span><input id="maxSpeed" type="text" value="10"><div class="guidat-slider-bg"><div class="guidat-slider-fg" style="width: 1%;"></div></div></div></div><a class="guidat-toggle" href="https://leapmotion.github.io/Leap-Three-Camera-Controls/#">Open Controls</a></div></div>
+  
 
 </body></html>

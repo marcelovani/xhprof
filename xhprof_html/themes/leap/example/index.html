@@ -1,0 +1,163 @@
+<html>
+  <head>
+    <style>
+
+      #container{
+
+        background:#000;
+        position:absolute;
+        top:0px;
+        left:0px;
+
+      }
+
+    </style>
+  </head>
+  <body>    
+
+    <div id="container"></div>
+
+    <script src="leap.min.js"></script>
+    <script src="three.min.js"></script>
+
+    <script src="LeapSpringControls.js"></script>
+    
+    <script>
+
+      var container , camera , scener, renderer , stats;
+
+      var controller , controls;
+
+      init();
+      animate();
+
+      function init(){
+
+        controller = new Leap.Controller();
+     
+        scene = new THREE.Scene();
+
+        camera = new THREE.PerspectiveCamera(
+          50 ,
+          window.innerWidth / window.innerHeight,
+          1 ,
+          5000
+        );
+
+        camera.position.z = 100;
+        console.log( camera );
+
+
+
+        /*
+
+           Setting up controls
+
+        */
+
+        controls = new THREE.LeapSpringControls( camera , controller , scene );
+
+        controls.dampening      = .75;
+        controls.size           = 120;
+        controls.springConstant =   1;
+        controls.mass           = 100;
+        controls.anchorSpeed    =  .1;
+        controls.staticLength   = 100;
+
+        var geo = new THREE.IcosahedronGeometry( 5, 2 ); 
+        var mat = new THREE.MeshNormalMaterial(); 
+
+        var targetMesh  = new THREE.Mesh( geo , mat );
+        var anchorMesh  = new THREE.Mesh( geo , mat );
+        var handMesh    = new THREE.Mesh( geo , mat );
+
+        controls.addTargetMarker( targetMesh );
+        controls.addAnchorMarker( anchorMesh );
+        controls.addHandMarker(     handMesh );
+
+
+        /*
+
+           Adding some cubes
+
+        */
+        var material = new THREE.MeshNormalMaterial();
+        var geometry = new THREE.BoxGeometry( 20 , 20 , 20 );
+        
+        for( var i = 0; i < 100; i ++ ){
+
+          var mesh = new THREE.Mesh( geometry , material );
+          mesh.position.x = ( Math.random() - .5 ) * 500;
+          mesh.position.y = ( Math.random() - .5 ) * 500;
+          mesh.position.z = ( Math.random() - .5 ) * 500;
+
+          mesh.rotation.x = Math.random() * Math.PI;
+          mesh.rotation.y = Math.random() * Math.PI;
+          mesh.rotation.z = Math.random() * Math.PI;
+
+          scene.add( mesh );
+
+        }
+
+        /*
+
+           Creating particles to help give people reference points 
+           when rotating
+
+        */
+
+        for( var i = 0; i < 10; i++ ){
+          
+          var geometry = new THREE.Geometry();
+
+          for( var j = 0; j < 1000; j++ ){
+
+            var x = (Math.random() - .5 ) * 2000;
+            var y = (Math.random() - .5 ) * 2000;
+            var z = (Math.random() - .5 ) * 2000;
+            geometry.vertices.push( new THREE.Vector3( x , y , z ) );
+
+          }
+
+          var r = Math.abs( Math.sin( i ) ) * .5 + .5;
+          var g = Math.abs( Math.cos( i )) * .5 + .5;
+          var b = Math.abs( Math.tan( i+1 )) * .5 + .5;
+          var color = new THREE.Color( r , g , b );
+          var material = new THREE.ParticleSystemMaterial({
+              size: 2,
+              color: color
+
+          });
+
+          var particleSystem = new THREE.ParticleSystem( geometry , material );
+
+          scene.add( particleSystem );
+        }
+        
+        container = document.getElementById( 'container' );
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        container.appendChild( renderer.domElement );      
+
+        controller.connect();
+
+
+      }
+
+
+      function animate(){
+
+
+        // Don't forget to update your controls!
+        controls.update();
+        renderer.render( scene , camera );
+
+        requestAnimationFrame( animate );
+
+      }
+
+
+    </script>
+
+  </body>
+</html>
