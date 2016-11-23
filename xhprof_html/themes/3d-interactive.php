@@ -99,78 +99,14 @@ function init() {
 
   scene.add( light );
 
-  var dotGraph = {};
+  ////////////////////////////////////////////////////////////////////////
+  // DotGraph include                                                   //
+  ////////////////////////////////////////////////////////////////////////
   <?php
-  // Prepare graphlib-dot object.
-  $script = preg_replace('/(.+)/', '\'$1\' +', $script);
-  $script = preg_replace('/\}\'\s*\+/', "}'", $script);
-  print 'dotGraph = ' . $script . ';';
+    print getDotGraph($script);
   ?>
-  // Convert to dot plain.
-  var params = {
-    src: dotGraph,
-    options: {
-      engine: 'dot',
-      format: 'plain'
-    }
-  };
-  var dotPlain = Viz(params.src, params.options);
-  // Create dotObjects.
-  var dotObjects = dotToObject2( dotPlain );
-  var count = dotObjects.length;
-/*
-  for ( var i = 0; i < 20; i ++ ) {
-    var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
-    object.position.x = Math.random() * 1000 - 500;
-    object.position.y = Math.random() * 600 - 300;
-    object.position.z = Math.random() * 800 - 400;
-//    object.rotation.x = Math.random() * 2 * Math.PI;
-//    object.rotation.y = Math.random() * 2 * Math.PI;
-//    object.rotation.z = Math.random() * 2 * Math.PI;
-    object.scale.x = Math.random() * 2 + 1;
-    object.scale.y = Math.random() * 2 + 1;
-    object.scale.z = Math.random() * 2 + 1;
-    object.castShadow = true;
-    object.receiveShadow = true;
-    scene.add( object );
-    dotObjects.push( object );
-  }*/
-  for ( var i = 0; i < count; i ++ ) {
-    var object = dotObjects[i];
+  dotToSene(dotGraph, scene, objects);
 
-    switch (object.shape) {
-      case 'line':
-        //@todo implement this
-        continue;
-        break;
-      case 'box':
-        var geometry = new THREE.BoxGeometry( 40, 40, 40 );
-        break;
-      case 'octagon':
-      default:
-    }
-
-    if (typeof(geometry) == 'object') {
-      var o = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color:getHexColor(object.color) } ) );
-      // @todo calculate offsets based on screen dimensions and zoom.
-      offsetX = 500;
-      offsetY = 1000;
-      offsetZ = Math.random() * 400 * Math.PI;
-      o.position.x = object.position.x - offsetX;
-      o.position.y = object.position.y - offsetY;
-      o.position.z = object.position.z - offsetZ;
-      //o.rotation.x = Math.random() * 2 * Math.PI;
-      //o.rotation.y = Math.random() * 2 * Math.PI;
-      //o.rotation.z = Math.random() * 2 * Math.PI;
-      o.scale.x = object.scale.x;
-      o.scale.y = object.scale.y;
-      o.scale.z = object.scale.z;
-      o.castShadow = true;
-      o.receiveShadow = true;
-      scene.add( o );
-      objects.push( o );
-    }
-  }
   renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setClearColor( 0xf0f0f0 );
   renderer.setPixelRatio( window.devicePixelRatio );

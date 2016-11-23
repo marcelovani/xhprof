@@ -336,3 +336,88 @@ function dotToObject2( dotGraph ) {
 
 	return objects;
 }
+
+function dotToSene(dotGraph, scene, objects) {
+	var cube = new THREE.BoxGeometry( 50, 50, 50 );
+	var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
+
+	// Convert to dot plain.
+	var params = {
+		src: dotGraph,
+		options: {
+			engine: 'dot',
+			format: 'plain'
+		}
+	};
+
+	var dotPlain = Viz(params.src, params.options);
+
+	// Create dotObjects.
+	var dotObjects = dotToObject2( dotPlain );
+	var count = dotObjects.length;
+
+	var example = false;
+	if (example) {
+		for( var i = 0; i < 300; i++ ) {
+			var mesh = new THREE.Mesh( cube , material );
+			mesh.position.x = (Math.random() - .5 ) * 5000;
+			mesh.position.y = (Math.random() - .5 ) * 5000;
+			mesh.position.z = (Math.random() - .5 ) * 5000;
+			scene.add( mesh );
+		}
+	}
+	else {
+		for (var i = 0; i < count; i++) {
+			var object = dotObjects[i];
+
+			switch (object.shape) {
+				case 'line':
+					//@todo implement this
+					//var geometry = line;
+					continue;
+					break;
+				case 'box':
+					var geometry = cube;
+					break;
+				case 'octagon':
+					//@todo implement this
+					//var geometry = octagon;
+					continue;
+					break;
+				default:
+			}
+
+			if (typeof(geometry) == 'object') {
+				m = material.clone();
+				m.color = getRgbColor(object.color);
+
+				var mesh = new THREE.Mesh( geometry , m );
+				// @todo calculate offsets based on screen dimensions and zoom.
+				offsetX = 500;
+				offsetY = 1000;
+				offsetZ = Math.random() * 400 * Math.PI;
+				mesh.position.x = object.position.x - offsetX;
+				mesh.position.y = object.position.y - offsetY;
+				mesh.position.z = object.position.z - offsetZ;
+				//mesh.rotation.x = Math.random() * 2 * Math.PI;
+				//mesh.rotation.y = Math.random() * 2 * Math.PI;
+				//mesh.rotation.z = Math.random() * 2 * Math.PI;
+				mesh.scale.x = object.scale.x;
+				mesh.scale.y = object.scale.y;
+				mesh.scale.z = object.scale.z;
+				mesh.castShadow = true;
+				mesh.receiveShadow = true;
+				scene.add(mesh);
+				objects.push(mesh);
+			}
+		}
+
+		object = {};
+		dotObjects = {};
+		dotGraph = {};
+		dotPlain = {};
+		geometry = {};
+		params = {};
+	}
+
+}
