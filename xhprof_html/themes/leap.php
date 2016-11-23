@@ -1256,8 +1256,6 @@ controls.update();
         renderer.domElement.id = "scene";
         document.body.appendChild( renderer.domElement );
 
-        //var geometry  = new THREE.IcosahedronGeometry( 50 , 2 );
-        //var material  = new THREE.MeshNormalMaterial({side:THREE.DoubleSide});
         var cube = new THREE.BoxGeometry( 50, 50, 50 );
         var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
 
@@ -1298,42 +1296,23 @@ controls.update();
             mesh.position.z = (Math.random() - .5 ) * 5000;
             scene.add( mesh );
           }
-
-
-//          var cube = new THREE.Geometry();
-//          var material = new THREE.ParticleSystemMaterial({
-//            size:10,
-//            color:0x000000
-//          });
-//
-//          for( var i = 0; i < 20000; i++ ){
-//            var x = (Math.random() - .5 ) * 5000;
-//            var y = (Math.random() - .5 ) * 5000;
-//            var z = (Math.random() - .5 ) * 5000;
-//            cube.vertices.push( new THREE.Vector3( x , y , z ) );
-//          }
-//          var particles = new THREE.ParticleSystem( cube , material );
-//          scene.add( particles );
         }
         else {
-          //var cube  = new THREE.BoxGeometry(40, 40, 40);
-          //var material  = new THREE.MeshLambertMaterial({color: getHexColor('0xEEE')});
-
           for (var i = 0; i < count; i++) {
             var object = dotObjects[i];
 
             switch (object.shape) {
               case 'line':
                 //@todo implement this
-                //var geometry = geometryLine;
+                //var geometry = line;
                 continue;
                 break;
               case 'box':
-                //var cube = new THREE.BoxGeometry(40, 40, 40);
                 var geometry = cube;
                 break;
               case 'octagon':
-                //var geometry = geometryOctagon;
+                //@todo implement this
+                //var geometry = octagon;
                 continue;
                 break;
               default:
