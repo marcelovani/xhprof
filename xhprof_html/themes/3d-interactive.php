@@ -33,11 +33,12 @@
 <script src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
 <script src="../../node_modules/viz.js/viz.js"></script>
 <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
-<script src="../../node_modules/leapjs/examples/lib/leap-plugins-0.1.6.js"></script>
 <script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
 <!--<script src="../themes/leap/LeapTwoHandControls.js"></script>-->
 <script src="../themes/3D/js/utils.js"></script>
 <script src="../themes/3D/js/leap.rigged-hand-0.1.5.min.js"></script>
+<!--<script src="../../node_modules/leapjs/examples/lib/leap-plugins-0.1.6.js"></script>-->
+<script src="../themes/3D/js/leap-plugins-0.1.11pre.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -100,7 +101,6 @@ function init() {
 
   //
 
-
   //@todo trackpad
   // Zoom: two fingers up and down
   // Rotation CW/CCW: two fingers rotating
@@ -116,23 +116,26 @@ function init() {
   leapController = new Leap.Controller();
   leapController.connect();
 
-//  leapController.loop()
-//    // note that transform must be _before_ rigged hand
-////    .use('transform', {
-////      quaternion: new THREE.Quaternion,
-////      position: new THREE.Vector3,
-////      scale: 0.3
-////    })
-//    //.use('playback', {recording: 'finger-tap-54fps.json.lz'})
-//    .use('riggedHand', {
-//      dotsMode: false,
-//      parent: scene,
-//      renderFn: function(){
-//        animate();
-//      }
-//
-//    })
-//    .connect();
+  leapController.loop()
+    // note that transform must be _before_ rigged hand
+    .use('transform', {
+      quaternion: new THREE.Quaternion,
+      position: new THREE.Vector3,
+      scale: 0.5
+    })
+    //.use('playback', {recording: 'finger-tap-54fps.json.lz'})
+    .use('riggedHand', {
+      dotsMode: false,
+      parent: scene,
+      renderFn: function() {
+        render();
+        // @todo make hands stay in front of the camera.
+        stats.update();
+      }
+
+    })
+    .connect();
+  window.transformPlugin = leapController.plugins.transform;
 
   leapControls = new THREE.LeapTwoHandControls( camera, leapController );
   leapControls['translationSpeed'] = 10;
@@ -143,9 +146,6 @@ function init() {
   leapControls['pinchThreshold'] = 0.5;
   leapControls['transSmoothing'] = 0.5;
   leapControls['rotationSmoothing'] = 0.2;
-  console.log(leapControls);
-
-  //window.transformPlugin = Leap.loopController.plugins.transform;
 
   trackpadControls = new THREE.TrackballControls( camera );
   trackpadControls.rotateSpeed = 1.0;
@@ -160,7 +160,7 @@ function init() {
 
   window.addEventListener( 'resize', onWindowResize, false );
 
-  animate();
+//  animate();
 }
 
 function animate() {

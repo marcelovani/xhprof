@@ -40,5 +40,13 @@
   <span id="resetCamera">
     <a onclick="resetCamera()">Reset camera</a>
   </span>
+  <span id="debug">
+    <span class="a"></span>
+    <span class="b"></span>
+    <span class="c"></span>
+    <span class="d"></span>
+    <span class="e"></span>
+    <span class="f"></span>
+  </span>
 
 </div>
