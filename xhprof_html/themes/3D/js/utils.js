@@ -421,3 +421,8 @@ function dotToSene(dotGraph, scene, objects) {
 	}
 
 }
+
+function resetCamera(){
+	window.camera.position.set( 0 , 0 , 1000 );
+	window.camera.lookAt( new THREE.Vector3());
+}

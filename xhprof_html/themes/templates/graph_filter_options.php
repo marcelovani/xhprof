@@ -36,6 +36,9 @@
     echo get_threshold_button('-', -0.01, $threshold);
     echo get_threshold_button('--', -0.1, $threshold);
     ?>
-            </span>
+  </span>
+  <span id="resetCamera">
+    <a onclick="resetCamera()">Reset camera</a>
+  </span>
 
 </div>

@@ -226,6 +226,7 @@ user-select: none;
         top: 51px;
         right: -20px;
       }
+
     </style>
 
   </head>
@@ -1236,13 +1237,6 @@ controls.update();
 
     }
 
-    function resetCamera(){
-
-      camera.position.set( 0 , 0 , 1000 );
-      camera.lookAt( new THREE.Vector3());
-
-    }
-
       function init(){
 
         var w     = window.innerWidth;
@@ -1272,7 +1266,7 @@ controls.update();
         ?>
         dotToSene(dotGraph, scene, []);
 
-        
+
         camera.position.z = 200;
         controller = new Leap.Controller();
         controller.connect();

@@ -16,6 +16,12 @@
       color: white;
       text-decoration: none;
     }
+    #engine,
+    #format,
+    #raw {
+      display: none;
+    }
+
   </style>
 </head>
 <body>
