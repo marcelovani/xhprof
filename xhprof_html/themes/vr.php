@@ -108,6 +108,9 @@
 		<script src="./themes/VR/js/CSS3DStereoRenderer.js"></script>
     <script src="../../node_modules/viz.js/viz.js"></script>
     <script src="../themes/3D/js/utils.js"></script>
+    <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
+    <script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
+    <script src="../themes/3D/js/leap-plugins-0.1.11pre.js"></script>
 
     <div id="container"></div>
 		<div id="info"><a href="http://threejs.org" target="_blank">three.js css3d</a> - periodic table. <a href="https://plus.google.com/113862800338869870683/posts/QcFk5HrWran" target="_blank">info</a>.</div>
@@ -244,6 +247,9 @@
 
 			var camera, scene, renderer;
 			var controls;
+      var leapController;
+      var leapControls;
+      var transformPlugin;
 
 			var objects = [];
 			var targets = { table: [], sphere: [], helix: [], grid: [] };
@@ -286,7 +292,7 @@
 
 
       init();
-			animate();
+      animate();
 
 			function init() {
 
@@ -336,7 +342,7 @@
 
 					targets.table.push( object );
 
-				}
+        }
 
 				// sphere
 
@@ -413,6 +419,19 @@
 				controls.minDistance = 500;
 				controls.maxDistance = 6000;
 				controls.addEventListener( 'change', render );
+
+        leapController = new Leap.Controller();
+        leapController.connect();
+
+        leapControls = new THREE.LeapTwoHandControls( camera, leapController );
+        leapControls['translationSpeed'] = 10;
+        leapControls['translationDecay'] = 0.3;
+        leapControls['scaleDecay'] = 0.5;
+        leapControls['rotationSlerp'] = 0.8;
+        leapControls['rotationSpeed'] = 4;
+        leapControls['pinchThreshold'] = 0.5;
+        leapControls['transSmoothing'] = 0.5;
+        leapControls['rotationSmoothing'] = 0.2;
 
 				var button = document.getElementById( 'table' );
 				button.addEventListener( 'click', function ( event ) {
@@ -494,6 +513,8 @@
 				requestAnimationFrame( animate );
 
 				TWEEN.update();
+
+        leapControls.update();
 
 				controls.update();
 
