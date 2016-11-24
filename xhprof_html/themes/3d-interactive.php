@@ -116,26 +116,26 @@ function init() {
   leapController = new Leap.Controller();
   leapController.connect();
 
-  leapController.loop()
-    // note that transform must be _before_ rigged hand
-    .use('transform', {
-      quaternion: new THREE.Quaternion,
-      position: new THREE.Vector3,
-      scale: 0.5
-    })
-    //.use('playback', {recording: 'finger-tap-54fps.json.lz'})
-    .use('riggedHand', {
-      dotsMode: false,
-      parent: scene,
-      renderFn: function() {
-        render();
-        // @todo make hands stay in front of the camera.
-        stats.update();
-      }
-
-    })
-    .connect();
-  window.transformPlugin = leapController.plugins.transform;
+//  leapController.loop()
+//    // note that transform must be _before_ rigged hand
+//    .use('transform', {
+//      quaternion: new THREE.Quaternion,
+//      position: new THREE.Vector3,
+//      scale: 0.5
+//    })
+//    //.use('playback', {recording: 'finger-tap-54fps.json.lz'})
+//    .use('riggedHand', {
+//      dotsMode: false,
+//      parent: scene,
+//      renderFn: function() {
+//        render();
+//        // @todo make hands stay in front of the camera.
+//        stats.update();
+//      }
+//
+//    })
+//    .connect();
+//  window.transformPlugin = leapController.plugins.transform;
 
   leapControls = new THREE.LeapTwoHandControls( camera, leapController );
   leapControls['translationSpeed'] = 10;
@@ -160,7 +160,7 @@ function init() {
 
   window.addEventListener( 'resize', onWindowResize, false );
 
-//  animate();
+  animate();
 }
 
 function animate() {
@@ -172,7 +172,7 @@ function animate() {
 function render() {
   renderer.render( scene, camera );
   trackpadControls.update();
-  leapControls.update();
+  //leapControls.update();
 }
 
 function onWindowResize() {

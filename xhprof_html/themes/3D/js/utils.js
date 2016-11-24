@@ -263,6 +263,7 @@ function dotToObject2( dotGraph ) {
 						break;
 				}
 
+				o.label = label;
 				o.shape = shape;
 				o.color = fillcolor;
 				o.position = {
@@ -337,10 +338,8 @@ function dotToObject2( dotGraph ) {
 	return objects;
 }
 
-function dotToScene(dotGraph, scene, objects) {
-	var cube = new THREE.BoxGeometry( 50, 50, 50 );
-	var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
-
+// Convert to dot plain.
+function dotPlain(dotGraph) {
 	// Convert to dot plain.
 	var params = {
 		src: dotGraph,
@@ -350,13 +349,18 @@ function dotToScene(dotGraph, scene, objects) {
 		}
 	};
 
-	var dotPlain = Viz(params.src, params.options);
+	return Viz(params.src, params.options);
+}
+
+function dotToScene(dotGraph, scene, objects) {
+	var cube = new THREE.BoxGeometry( 50, 50, 50 );
+	var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
 
 	// Create dotObjects.
-	var dotObjects = dotToObject2( dotPlain );
+	var dotObjects = dotToObject2( dotPlain(dotGraph) );
 	var count = dotObjects.length;
 
-	var example = true;
+	var example = false;
 	if (example) {
 		for( var i = 0; i < 300; i++ ) {
 			m = material.clone();
