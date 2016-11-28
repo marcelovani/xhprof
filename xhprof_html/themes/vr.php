@@ -30,6 +30,7 @@
 				font-weight: bold;
 				text-align: center;
 				z-index: 1;
+        display: none;
 			}
 
 			#menu {
@@ -50,8 +51,8 @@
 			}
 
 			.element:hover {
-				box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
-				border: 1px solid rgba(127,255,255,0.75);
+				box-shadow: 0px 0px 20px 7px rgb(26, 79, 255);
+				border: 1px solid rgb(5, 47, 253);
 			}
 
 				.element .number {
@@ -94,7 +95,8 @@
 			button:hover {
 				background-color: rgba(0,255,255,0.5);
 			}
-			button:active {
+			button:active,
+			button.active {
 				color: #000000;
 				background-color: rgba(0,255,255,0.75);
 			}
@@ -102,12 +104,12 @@
 	</head>
 	<body>
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="./themes/VR/js/three.min.js"></script>
-		<script src="./themes/VR/js/tween.min.js"></script>
-		<script src="./themes/VR/js/TrackballControls.js"></script>
-		<script src="./themes/VR/js/CSS3DStereoRenderer.js"></script>
-    <script src="../../node_modules/viz.js/viz.js"></script>
+    <script src="../../node_modules/three/build/three.min.js"></script>
+    <script src="../../node_modules/three/examples/js/libs/tween.min.js"></script>
+    <script src="../../node_modules/three/examples/js/controls/TrackballControls.js"></script>
+    <script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
     <script src="../themes/3D/js/utils.js"></script>
+    <script src="../../node_modules/viz.js/viz.js"></script>
     <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
     <script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
     <script src="../themes/3D/js/leap-plugins-0.1.11pre.js"></script>
@@ -119,6 +121,9 @@
 			<button id="sphere">SPHERE</button>
 			<button id="helix">HELIX</button>
 			<button id="grid">GRID</button>
+
+      <button id="3d" class="group_3d active">3D</button>
+      <button id="vr" class="group_3d">VR</button>
 		</div>
 
 		<script>
@@ -249,7 +254,6 @@
 			var controls;
       var leapController;
       var leapControls;
-      var transformPlugin;
 
 			var objects = [];
 			var targets = { table: [], sphere: [], helix: [], grid: [] };
@@ -278,7 +282,7 @@
                 color = '255,0,0';
                 break;
               case 'yellow':
-                color = '255,255,102';
+                color = '251,255,32';
                 break;
               default:
                 color = '0,127,127';
@@ -290,12 +294,40 @@
         }
       }
 
+      var renderers = [];
+      renderers['3d'] = "../../node_modules/three/examples/js/renderers/CSS3DRenderer.js";
+      renderers['vr'] = "./themes/VR/js/CSS3DStereoRenderer2.js";
 
-      init();
-      animate();
+      setRenderer('3d');
+
+      function getRenderer() {
+        if (typeof(THREE.CSS3DRenderer) == 'function') {
+          return new THREE.CSS3DRenderer();
+        }
+        if (typeof(THREE.CSS3DStereoRenderer) == 'function') {
+          return new THREE.CSS3DStereoRenderer();
+        }
+      }
+
+      function setRenderer(type) {
+        // Clean everything.
+        camera = {};
+        scene = {};
+        renderer = {};
+        delete THREE.CSS3DRenderer;
+        delete THREE.CSS3DStereoRenderer;
+        jQuery('#container').html('');
+
+        // Remove js. @Todo loop renderers
+        removeJS(renderers['3d']);
+        removeJS(renderers['vr']);
+
+        // Load js
+        loadJS(renderers[type], init, document.body);
+      }
 
 			function init() {
-
+        renderer = getRenderer();
 				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
 				camera.position.z = 3000;
 
@@ -326,6 +358,12 @@
 					details.innerHTML = table[i][1];
 					element.appendChild( details );
 
+          // Used with WegGl renderer
+          var cube = new THREE.BoxGeometry( 50, 50, 50 );
+          var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
+          var object = new THREE.Mesh( cube , material );
+
+          // Used with CSS renderer
 					var object = new THREE.CSS3DObject( element );
 					object.position.x = Math.random() * 4000 - 2000;
 					object.position.y = Math.random() * 4000 - 2000;
@@ -381,6 +419,7 @@
 					object.position.y = - ( i * 8 ) + 450;
 					object.position.z = 900 * Math.cos( phi );
 
+          // Look at the camera.
 					vector.x = camera.position.x;
 					vector.y = camera.position.y;
 					vector.z = camera.position.z;
@@ -407,10 +446,10 @@
 
 				//
 
-				renderer = new THREE.CSS3DStereoRenderer();
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				renderer.domElement.style.position = 'absolute';
-				document.getElementById( 'container' ).appendChild( renderer.domElement );
+        renderer.domElement.style.position = 'absolute';
+        container = document.getElementById( 'container' );
+        container.appendChild( renderer.domElement );
+        renderer.setSize( window.innerWidth, window.innerHeight );
 
 				//
 
@@ -461,12 +500,31 @@
 
 				}, false );
 
+        var button = document.getElementById( '3d' );
+        button.addEventListener( 'click', function ( event ) {
+          if (jQuery('#3d.active').length == 0) {
+            jQuery('.group_3d').removeClass('active');
+            jQuery('#3d').addClass('active');
+            setRenderer('3d');
+          }
+        }, false );
+
+        var button = document.getElementById( 'vr' );
+        button.addEventListener( 'click', function ( event ) {
+          if (jQuery('#vr.active').length == 0) {
+            jQuery('.group_3d').removeClass('active');
+            jQuery('#vr').addClass('active');
+            setRenderer('vr');
+          }
+        }, false );
+
 				transform( targets.table, 2000 );
 
 				//
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
+        animate();
 			}
 
 			function transform( targets, duration ) {
@@ -518,7 +576,10 @@
 
 				controls.update();
 
-			}
+        <?php //include ('../xhprof_lib/socks_client.php'); ?>
+
+
+      }
 
 			function render() {
 
@@ -527,5 +588,10 @@
 			}
 
 		</script>
+
+<!--    <iframe id="tunnel">-->
+      <?php //require_once ('../xhprof_lib/socks_server.php'); ?>
+<!--    </iframe>-->
+
 	</body>
 </html>
