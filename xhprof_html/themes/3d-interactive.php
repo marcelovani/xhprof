@@ -35,6 +35,8 @@
 <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
 <script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
 <!--<script src="../themes/leap/LeapTwoHandControls.js"></script>-->
+<script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
+<script src="../../node_modules/three/examples/js/effects/VREffect.js"></script>
 <script src="../themes/3D/js/utils.js"></script>
 <script src="../themes/3D/js/leap.rigged-hand-0.1.5.min.js"></script>
 <!--<script src="../../node_modules/leapjs/examples/lib/leap-plugins-0.1.6.js"></script>-->
@@ -81,7 +83,7 @@ function init() {
   container = document.body;
   container.appendChild( renderer.domElement );
 
-  camera.position.z = 200;
+  camera.position.z = 2000;
 
   ////////////////////////////////////////////////////////////////////////
   // DotGraph include                                                   //
@@ -159,6 +161,11 @@ function init() {
   //
 
   window.addEventListener( 'resize', onWindowResize, false );
+
+  // Add stereo effect
+  renderer = new THREE.StereoEffect( renderer );
+  // Add VR effect
+  //renderer = new THREE.VREffect( renderer );
 
   animate();
 }
