@@ -401,7 +401,7 @@ function dotToScene(dotGraph, scene, objects) {
 				var mesh = new THREE.Mesh( geometry , m );
 				// @todo calculate offsets based on screen dimensions and zoom.
 				offsetX = 500;
-				offsetY = 1000;
+				offsetY = 100;
 				offsetZ = Math.random() * 400 * Math.PI;
 				mesh.position.x = object.position.x - offsetX;
 				mesh.position.y = object.position.y - offsetY;
@@ -432,4 +432,35 @@ function dotToScene(dotGraph, scene, objects) {
 function resetCamera(){
 	window.camera.position.set( 0 , 0 , 1000 );
 	window.camera.lookAt( new THREE.Vector3());
+}
+
+function loadJS(url, implementationCode, location) {
+
+	//url is URL of external file, implementationCode is the code
+	//to be called from the file, location is the location to
+	//insert the <script> element
+
+	//usage:
+	// var loadJS = loadJS(url, implementationCode, location);
+	// var yourCodeToBeCalled = function(){
+	//   your code goes here
+	// }
+	// loadJS('yourcode.js', yourCodeToBeCalled, document.body);
+
+
+	var scriptTag = document.createElement('script');
+	scriptTag.src = url;
+
+	scriptTag.onload = implementationCode;
+	scriptTag.onreadystatechange = implementationCode;
+
+	location.appendChild(scriptTag);
+};
+
+function removeJS(filename){
+	var tags = document.getElementsByTagName('script');
+	for (var i = tags.length; i >= 0; i--){ //search backwards within nodelist for matching elements to remove
+		if (tags[i] && tags[i].getAttribute('src') != null && tags[i].getAttribute('src').indexOf(filename) != -1)
+			tags[i].parentNode.removeChild(tags[i]); //remove element by calling parentNode.removeChild()
+	}
 }
