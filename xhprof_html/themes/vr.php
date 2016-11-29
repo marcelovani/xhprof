@@ -9,11 +9,13 @@
 	<body>
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../../node_modules/three/build/three.min.js"></script>
+    <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
     <script src="../../node_modules/three/examples/js/libs/tween.min.js"></script>
-    <script src="../../node_modules/three/examples/js/controls/TrackballControls.js"></script>
     <script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
+
     <script src="../themes/3D/js/utils.js"></script>
     <script src="../themes/VR/js/vrPanel.js"></script>
+    <script src="../themes/VR/js/vrControllers.js"></script>
     <script src="../themes/VR/js/vrRenderer.js"></script>
     <script src="../themes/VR/js/vrPlot.js"></script>
     <script src="../themes/VR/js/vrShapeTable.js"></script>
@@ -22,11 +24,6 @@
     <script src="../themes/VR/js/vrShapeSphere.js"></script>
     <script src="../themes/VR/js/vrShapeGrid.js"></script>
     <script src="../../node_modules/viz.js/viz.js"></script>
-    <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
-    <script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
-    <script src="../themes/3D/js/leap-plugins-0.1.11pre.js"></script>
-<!--    <script src="../../node_modules/three/examples/js/controls/DeviceOrientationControls.js"></script>-->
-    <script src="../themes/accelerometer/DeviceOrientationController.js"></script>
 
     <div id="container"></div>
 		<div id="info"><a href="http://threejs.org" target="_blank">three.js css3d</a> - periodic table. <a href="https://plus.google.com/113862800338869870683/posts/QcFk5HrWran" target="_blank">info</a>.</div>
@@ -45,18 +42,14 @@
       </span>
 
       <span class="group">
-        <button id="accelerometer" class="group-controls">Accelerometer</button>
-        <button id="leapmotion" class="group-controls">LeapMotion</button>
-        <button id="trackpad" class="group-controls active">Trackpad</button>
+        <button id="accelerometerControls" class="group-controls">Accelerometer</button>
+        <button id="leapControls" class="group-controls">LeapMotion</button>
+        <button id="trackpadControls" class="group-controls">Trackpad</button>
       </span>
 		</div>
 
 		<script>
 			var camera, scene, renderer;
-			var controls;
-      var leapController;
-      var leapControls;
-      var accelerometerControls;
 
 			var objects = [];
 			var targets = { table: [], sphere: [], helix: [], tube: [], grid: [] };
@@ -114,31 +107,12 @@
         renderer.setSize( window.innerWidth, window.innerHeight );
 
 				//
-
-				controls = new THREE.TrackballControls( camera, renderer.domElement );
-				controls.rotateSpeed = 0.5;
-				controls.minDistance = 500;
-				controls.maxDistance = 6000;
-				controls.addEventListener( 'change', render );
-
-        leapController = new Leap.Controller();
-        leapController.connect();
-
-        leapControls = new THREE.LeapTwoHandControls( camera, leapController );
-        leapControls['translationSpeed'] = 10;
-        leapControls['translationDecay'] = 0.3;
-        leapControls['scaleDecay'] = 0.5;
-        leapControls['rotationSlerp'] = 0.8;
-        leapControls['rotationSpeed'] = 4;
-        leapControls['pinchThreshold'] = 0.5;
-        leapControls['transSmoothing'] = 0.5;
-        leapControls['rotationSmoothing'] = 0.2;
-
-        accelerometerControls = new DeviceOrientationController( camera, renderer.domElement );
-        accelerometerControls.connect();
-        //camera.position.z = 1;
-
         vrPannel();
+
+        // Enable trackball controls.
+        jQuery('#trackpadControls').click();
+
+        //updateControllers();
 
         // Default style.
         jQuery('#tube').click();
@@ -193,12 +167,7 @@
 
 				TWEEN.update();
 
-        leapControls.update();
-
-				controls.update();
-
-        accelerometerControls.update();
-
+        updateControllers();
         <?php //include ('../xhprof_lib/socks_client.php'); ?>
 
       }

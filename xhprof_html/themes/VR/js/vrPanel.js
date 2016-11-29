@@ -57,33 +57,39 @@ function vrPannel() {
 		}
 	}, false );
 
-	var button = document.getElementById( 'accelerometer' );
+	var button = document.getElementById( 'accelerometerControls' );
 	button.addEventListener( 'click', function ( event ) {
-		if (jQuery('#accelerometer.active').length == 0) {
-			jQuery('#accelerometer').addClass('active');
+		if (jQuery('#accelerometerControls.active').length == 0) {
+			jQuery('#accelerometerControls').addClass('active');
+			enabledControllers.accelerometerControls = true;
 		}
 		else {
-			jQuery('#accelerometer').removeClass('active');
+			jQuery('#accelerometerControls').removeClass('active');
+			enabledControllers.accelerometerControls = false;
 		}
 	}, false );
 
-	var button = document.getElementById( 'trackpad' );
+	var button = document.getElementById( 'trackpadControls' );
 	button.addEventListener( 'click', function ( event ) {
-		if (jQuery('#trackpad.active').length == 0) {
-			jQuery('#trackpad').addClass('active');
+		if (jQuery('#trackpadControls.active').length == 0) {
+			jQuery('#trackpadControls').addClass('active');
+			enabledControllers.trackpadControls = true;
 		}
 		else {
-			jQuery('#trackpad').removeClass('active');
+			jQuery('#trackpadControls').removeClass('active');
+			enabledControllers.trackpadControls = false;
 		}
 	}, false );
 
-	var button = document.getElementById( 'leapmotion' );
+	var button = document.getElementById( 'leapControls' );
 	button.addEventListener( 'click', function ( event ) {
-		if (jQuery('#leapmotion.active').length == 0) {
-			jQuery('#leapmotion').addClass('active');
+		if (jQuery('#leapControls.active').length == 0) {
+			jQuery('#leapControls').addClass('active');
+			enabledControllers.leapControls = true;
 		}
 		else {
-			jQuery('#leapmotion').removeClass('active');
+			jQuery('#leapControls').removeClass('active');
+			enabledControllers.leapControls = false;
 		}
 	}, false );
 }
