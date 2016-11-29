@@ -109,6 +109,7 @@
     <script src="../../node_modules/three/examples/js/renderers/CSS3DRenderer.js"></script>
     <script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
 		<script src="../../node_modules/three/examples/js/controls/TrackballControls.js"></script>
+    <script src="../../node_modules/three/examples/js/controls/DeviceOrientationControls.js"></script>
 
 		<div id="container"></div>
 		<div id="info"><a href="http://threejs.org" target="_blank">three.js css3d</a> - periodic table. <a href="https://plus.google.com/113862800338869870683/posts/QcFk5HrWran" target="_blank">info</a>.</div>
@@ -244,6 +245,7 @@
 
 			var camera, scene, renderer;
 			var controls;
+      var accelerometerControls;
 
 			var objects = [];
 			var targets = { table: [], sphere: [], helix: [], grid: [] };
@@ -384,6 +386,9 @@
 				controls.maxDistance = 6000;
 				controls.addEventListener( 'change', render );
 
+        accelerometerControls = new THREE.DeviceOrientationControls( camera, renderer.domElement );
+        accelerometerControls.connect();
+
 				var button = document.getElementById( 'table' );
 				button.addEventListener( 'click', function ( event ) {
 
@@ -466,6 +471,8 @@
 				TWEEN.update();
 
 				controls.update();
+
+        accelerometerControls.update();
 
 			}
 
