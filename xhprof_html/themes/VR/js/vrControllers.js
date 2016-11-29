@@ -70,7 +70,7 @@ function initController( type ) {
 				if ( typeof(accelerometerControls) != 'object' ) {
 					accelerometerControls = new THREE.DeviceOrientationControls( camera );
 					//accelerometerControls.connect();
-				  camera.position.z = 1;
+				  //camera.position.z = 1;
 				} else {
 					accelerometerControls.update();
 				}

@@ -65,12 +65,9 @@
   var scale = 1.5; //@todo get from object.
 
   scene = new THREE.Scene();
-  ////////////////////////////////////////////////////////////////////////
-  // DotGraph include                                                   //
-  ////////////////////////////////////////////////////////////////////////
-  <?php
-    print getDotGraph($script);
-  ?>
+
+  <?php print getDotGraph($script); ?>
+
   // Position objects.
   var dotObjects = dotToObject2( dotPlain( dotGraph ) );
 
@@ -81,7 +78,23 @@
   var offsetX = (plot.x2 - plot.x1) * scale / 2;
   var offsetY = (plot.y2 - plot.y1) * scale / 2;
 
-  setRenderer( '3d' );
+  (function () {
+    "use strict";
+    window.addEventListener( 'load', function () {
+      setRenderer( '3d' );
+
+      var animate = function () {
+        updateControllers();
+        window.requestAnimationFrame( animate );
+        TWEEN.update();
+        render();
+      };
+
+      animate();
+
+    }, false );
+
+  })();
 
   function init() {
     scene = new THREE.Scene();
@@ -115,22 +128,13 @@
 
     window.addEventListener( 'resize', onWindowResize, false );
 
-    animate();
-  }
-
-  function animate() {
-
-    requestAnimationFrame( animate );
-
-    TWEEN.update();
-
-    updateControllers();
-    <?php //include ('../xhprof_lib/socks_client.php'); ?>
-
+    //animate();
   }
 
   function render() {
-    renderer.render( scene, camera );
+    if (typeof(renderer.render) == 'function') {
+      renderer.render( scene, camera );
+    }
   }
 
 </script>
