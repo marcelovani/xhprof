@@ -1,3 +1,12 @@
+var activeShape = 'table';
+
+function changeShape(shape, duration) {
+	activeShape = shape;
+	jQuery('.group-shape').removeClass('active');
+	jQuery('#' + shape).addClass('active');
+	transform( targets[shape], duration );
+}
+
 function transform( targets, duration ) {
 
 	TWEEN.removeAll();
@@ -21,7 +30,7 @@ function transform( targets, duration ) {
 
 	new TWEEN.Tween( this )
 		.to( {}, duration * 2 )
-		.onUpdate( render )
+		.onUpdate( updateRenderer )
 		.start();
 
 }
@@ -33,6 +42,6 @@ function onWindowResize() {
 
 	renderer.setSize( window.innerWidth, window.innerHeight );
 
-	render();
+	updateRenderer();
 
 }

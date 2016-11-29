@@ -2,24 +2,24 @@ var trackpadControls;
 var leapController, leapControls;
 var accelerometerControls;
 
-var controllers = {};
-controllers['trackpadControls'] = ["../../node_modules/three/examples/js/controls/TrackballControls.js"];
-controllers['accelerometerControls'] = ["../../node_modules/three/examples/js/controls/DeviceOrientationControls.js"];
-controllers['leapControls'] = [
+var controls = {};
+controls['trackpadControls'] = ["../../node_modules/three/examples/js/controls/TrackballControls.js"];
+controls['accelerometerControls'] = ["../../node_modules/three/examples/js/controls/DeviceOrientationControls.js"];
+controls['leapControls'] = [
 	//"../../node_modules/leapjs/leap-0.6.4.min.js",
 	"../../node_modules/leap_three/controls/LeapTwoHandControls.js",
 	"../themes/3D/js/leap-plugins-0.1.11pre.js"
 ];
 
 var enabledControllers = {};
-for ( var i = 0; i < controllers.length; i ++ ) {
-	var type = controllers[i][0];
+for ( var i = 0; i < controls.length; i ++ ) {
+	var type = controls[i][0];
 	enabledControllers[type] =  false;
 }
 
 function loadController(type) {
-	for ( var i = 0; i < controllers[type].length; i ++ ) {
-		loadJS(controllers[type][i], updateControllers, document.body);
+	for ( var i = 0; i < controls[type].length; i ++ ) {
+		loadJS(controls[type][i], updateControllers, document.body);
 	}
 }
 
@@ -29,14 +29,14 @@ function initController( type ) {
 			if ( typeof(THREE.TrackballControls) !== 'function' ) {
 				loadController( type );
 			} else {
-				if ( typeof(trackpadControls) != 'object' ) {
+				if (trackpadControls instanceof THREE.TrackballControls) {
+					trackpadControls.update();
+				} else {
 					trackpadControls = new THREE.TrackballControls( camera, renderer.domElement );
 					trackpadControls.rotateSpeed = 0.5;
 					trackpadControls.minDistance = 500;
 					trackpadControls.maxDistance = 6000;
-					trackpadControls.addEventListener( 'change', render );
-				} else {
-					trackpadControls.update();
+					trackpadControls.addEventListener( 'change', updateRenderer );
 				}
 			}
 			break;
@@ -45,7 +45,9 @@ function initController( type ) {
 			if ( typeof(THREE.LeapTwoHandControls) !== 'function' ) {
 				loadController( type );
 			} else {
-				if ( typeof(leapControls) != 'object' ) {
+				if (leapControls instanceof THREE.LeapTwoHandControls) {
+					leapControls.update();
+				} else {
 					leapController = new Leap.Controller();
 					leapController.connect();
 					leapControls = new THREE.LeapTwoHandControls( camera, leapController );
@@ -57,8 +59,6 @@ function initController( type ) {
 					leapControls['pinchThreshold'] = 0.5;
 					leapControls['transSmoothing'] = 0.5;
 					leapControls['rotationSmoothing'] = 0.2;
-				} else {
-					leapControls.update();
 				}
 			}
 			break;
@@ -67,12 +67,12 @@ function initController( type ) {
 			if ( typeof(THREE.DeviceOrientationControls) !== 'function' ) {
 				loadController( type );
 			} else {
-				if ( typeof(accelerometerControls) != 'object' ) {
+				if (accelerometerControls instanceof THREE.DeviceOrientationControls) {
+					accelerometerControls.update();
+				} else {
 					accelerometerControls = new THREE.DeviceOrientationControls( camera );
 					//accelerometerControls.connect();
-				  //camera.position.z = 1;
-				} else {
-					accelerometerControls.update();
+					//camera.position.z = 1;
 				}
 			}
 			break;

@@ -52,15 +52,11 @@
 </div>
 
 <script>
-  var camera, scene, renderer;
+  var camera, scene;
 
   var objects = [];
   var targets = { table: [], sphere: [], helix: [], tube: [], grid: [] };
   var offsetX, offsetY;
-
-  var renderers = [];
-  renderers['3d'] = "../../node_modules/three/examples/js/renderers/CSS3DRenderer.js";
-  renderers['vr'] = "./themes/VR/js/CSS3DStereoRenderer2.js";
 
   var scale = 1.5; //@todo get from object.
 
@@ -78,31 +74,46 @@
   var offsetX = (plot.x2 - plot.x1) * scale / 2;
   var offsetY = (plot.y2 - plot.y1) * scale / 2;
 
+  activeRenderer = '3d';
+
+  updateRenderer();
+  updateControllers();
+
   (function () {
     "use strict";
     window.addEventListener( 'load', function () {
-      setRenderer( '3d' );
 
       var animate = function () {
+        updateRenderer();
         updateControllers();
         window.requestAnimationFrame( animate );
         TWEEN.update();
-        render();
       };
+
+      vrPannel();
+
+      // Enable trackball controls.
+      jQuery( '#trackpadControls' ).click();
+
+      // Default style.
+      jQuery( '#tube' ).click();
 
       animate();
 
     }, false );
 
+    window.addEventListener( 'resize', onWindowResize, false );
+
   })();
 
-  function init() {
-    scene = new THREE.Scene();
-    renderer = getRenderer();
-    addCSSObjToScene( table );
+  function reset() {
+    jQuery('#container').html('');
 
-    camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-    camera.position.z = 3000;
+    trackpadControls = {};
+    leapControls = {};
+    accelerometerControls = {};
+
+    addCSSObjToScene( table );
 
     // sphere
     vrShapeSphere();
@@ -113,35 +124,12 @@
     // grid
     vrShapeGrid();
 
-    renderer.domElement.style.position = 'absolute';
-    container = document.getElementById( 'container' );
-    container.appendChild( renderer.domElement );
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+    camera.position.z = 3000;
 
-    vrPannel();
-
-    // Enable trackball controls.
-    jQuery( '#trackpadControls' ).click();
-
-    // Default style.
-    jQuery( '#tube' ).click();
-
-    window.addEventListener( 'resize', onWindowResize, false );
-
-    //animate();
-  }
-
-  function render() {
-    if (typeof(renderer.render) == 'function') {
-      renderer.render( scene, camera );
-    }
+    changeShape(activeShape, 200);
   }
 
 </script>
-
-<!--    <iframe id="tunnel">-->
-<?php //require_once ('../xhprof_lib/socks_server.php'); ?>
-<!--    </iframe>-->
-
 </body>
 </html>

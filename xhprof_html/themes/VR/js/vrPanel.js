@@ -1,59 +1,45 @@
 function vrPannel() {
 	var button = document.getElementById( 'table' );
 	button.addEventListener( 'click', function ( event ) {
-		jQuery('.group-shape').removeClass('active');
-		jQuery('#table').addClass('active');
-		transform( targets.table, 2000 );
+		changeShape('table', 1000);
 
 	}, false );
 
 	var button = document.getElementById( 'sphere' );
 	button.addEventListener( 'click', function ( event ) {
-		jQuery('.group-shape').removeClass('active');
-		jQuery('#sphere').addClass('active');
-		transform( targets.sphere, 2000 );
+		changeShape('sphere', 1000);
 
 	}, false );
 
 	var button = document.getElementById( 'helix' );
 	button.addEventListener( 'click', function ( event ) {
-		jQuery('.group-shape').removeClass('active');
-		jQuery('#helix').addClass('active');
-		transform( targets.helix, 2000 );
+		changeShape('helix', 1000);
 
 	}, false );
 
 	var button = document.getElementById( 'tube' );
 	button.addEventListener( 'click', function ( event ) {
-		jQuery('.group-shape').removeClass('active');
-		jQuery('#tube').addClass('active');
-		transform( targets.tube, 2000 );
+		changeShape('tube', 1000);
 
 	}, false );
 
 	var button = document.getElementById( 'grid' );
 	button.addEventListener( 'click', function ( event ) {
-		jQuery('.group-shape').removeClass('active');
-		jQuery('#grid').addClass('active');
-		transform( targets.grid, 2000 );
+		changeShape('grid', 1000);
 
 	}, false );
 
 	var button = document.getElementById( '3d' );
 	button.addEventListener( 'click', function ( event ) {
 		if (jQuery('#3d.active').length == 0) {
-			jQuery('.group-renderer').removeClass('active');
-			jQuery('#3d').addClass('active');
-			setRenderer('3d');
+			changeRenderer('3d');
 		}
 	}, false );
 
 	var button = document.getElementById( 'vr' );
 	button.addEventListener( 'click', function ( event ) {
 		if (jQuery('#vr.active').length == 0) {
-			jQuery('.group-renderer').removeClass('active');
-			jQuery('#vr').addClass('active');
-			setRenderer('vr');
+			changeRenderer('vr');
 		}
 	}, false );
 

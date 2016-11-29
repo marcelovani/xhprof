@@ -1,25 +1,64 @@
-function getRenderer() {
-	if (typeof(THREE.CSS3DRenderer) == 'function') {
-		return new THREE.CSS3DRenderer();
-	}
-	if (typeof(THREE.CSS3DStereoRenderer) == 'function') {
-		return new THREE.CSS3DStereoRenderer();
+var renderer;
+var renderers = {};
+renderers['3d'] = ["../../node_modules/three/examples/js/renderers/CSS3DRenderer.js"];
+renderers['vr'] = ["./themes/VR/js/CSS3DStereoRenderer2.js"];
+
+var activeRenderer = null;
+
+function changeRenderer(renderer) {
+	activeRenderer = renderer;
+	jQuery('.group-renderer').removeClass('active');
+	jQuery('#' + renderer).addClass('active');
+}
+
+function loadRenderer(type) {
+	delete THREE.CSS3DRenderer;
+	delete THREE.CSS3DStereoRenderer;
+	for ( var i = 0; i < renderers[type].length; i ++ ) {
+		loadJS(renderers[type][i], updateRenderer, document.body);
 	}
 }
 
-function setRenderer(type) {
-	// Clean everything.
-	camera = {};
-	scene = {};
-	renderer = {};
-	delete THREE.CSS3DRenderer;
-	delete THREE.CSS3DStereoRenderer;
-	jQuery('#container').html('');
+function initRenderer( type ) {
+	switch ( type ) {
+		case '3d':
+			if ( typeof(THREE.CSS3DRenderer) !== 'function' ) {
+				loadRenderer( type );
+			} else {
+				if (renderer instanceof THREE.CSS3DRenderer) {
+					renderer.render( scene, camera );
+				}
+				else {
+					renderer = new THREE.CSS3DRenderer();
+					reset();
+					renderer.domElement.style.position = 'absolute';
+					container = document.getElementById( 'container' );
+					container.appendChild( renderer.domElement );
+					renderer.setSize( window.innerWidth, window.innerHeight );
+				}
+			}
+			break;
 
-	// Remove js. @Todo loop renderers
-	removeJS(renderers['3d']);
-	removeJS(renderers['vr']);
+		case 'vr':
+			if ( typeof(THREE.CSS3DStereoRenderer) !== 'function' ) {
+				loadRenderer( type );
+			} else {
+				if (renderer instanceof THREE.CSS3DStereoRenderer) {
+					renderer.render( scene, camera );
+				}
+				else {
+					renderer = new THREE.CSS3DStereoRenderer();
+					reset();
+					renderer.domElement.style.position = 'absolute';
+					container = document.getElementById( 'container' );
+					container.appendChild( renderer.domElement );
+					renderer.setSize( window.innerWidth, window.innerHeight );
+				}
+			}
+			break;
+	}
+}
 
-	// Load js
-	loadJS(renderers[type], init, document.body);
+function updateRenderer() {
+	initRenderer(activeRenderer);
 }
