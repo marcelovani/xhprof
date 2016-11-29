@@ -117,13 +117,14 @@
     <div id="container"></div>
 		<div id="info"><a href="http://threejs.org" target="_blank">three.js css3d</a> - periodic table. <a href="https://plus.google.com/113862800338869870683/posts/QcFk5HrWran" target="_blank">info</a>.</div>
 		<div id="menu">
-			<button id="table">TABLE</button>
-			<button id="sphere">SPHERE</button>
-			<button id="helix">HELIX</button>
-			<button id="grid">GRID</button>
+			<button id="table" class="group_style">TABLE</button>
+			<button id="sphere" class="group_style">SPHERE</button>
+			<button id="tube" class="group_style active">TUBE</button>
+			<button id="helix" class="group_style">HELIX</button>
+			<button id="grid" class="group_style">GRID</button>
 
-      <button id="3d" class="group_3d active">3D</button>
-      <button id="vr" class="group_3d">VR</button>
+      <button id="3d" class="group_viewer active">3D</button>
+      <button id="vr" class="group_viewer">VR</button>
 		</div>
 
 		<script>
@@ -256,20 +257,47 @@
       var leapControls;
 
 			var objects = [];
-			var targets = { table: [], sphere: [], helix: [], grid: [] };
+			var targets = { table: [], sphere: [], helix: [], tube: [], grid: [] };
 
-      scene = new THREE.Scene();
+      var renderers = [];
+      renderers['3d'] = "../../node_modules/three/examples/js/renderers/CSS3DRenderer.js";
+      renderers['vr'] = "./themes/VR/js/CSS3DStereoRenderer2.js";
+
+    scene = new THREE.Scene();
       ////////////////////////////////////////////////////////////////////////
       // DotGraph include                                                   //
       ////////////////////////////////////////////////////////////////////////
       <?php
         print getDotGraph($script);
       ?>
+      // Position objects.
       var dotObjects = dotToObject2( dotPlain(dotGraph) );
-      var table = [];
-      if (dotObjects.length > 0) {
-        for (var i = 0; i < dotObjects.length; i++) {
-          if (dotObjects[i].shape == 'box') {
+      var total = dotObjects.length;
+      if (total> 0) {
+        var table = [];
+        var scale = 1.5; //@todo get from object.
+        var x1 = 0;
+        var x2 = 0;
+        var y1 = 0;
+        var y2 = 0;
+        for (var i = 0; i < total; i++) {
+          if (dotObjects[i].shape == 'box' || dotObjects[i].shape == 'octagon') {
+            // Store the smallest x
+            if (dotObjects[i].position.x < x1) {
+              x1 = dotObjects[i].position.x;
+            }
+            // Store the greatest x
+            if (dotObjects[i].position.x > x2) {
+              x2 = dotObjects[i].position.x;
+            }
+            // Store the smallest y
+            if (dotObjects[i].position.y < y1) {
+              y1 = dotObjects[i].position.y;
+            }
+            // Store the greatest y
+            if (dotObjects[i].position.x > y2) {
+              y2 = dotObjects[i].position.y;
+            }
             label = dotObjects[i].label.split("\n");
             position = dotObjects[i].position;
 
@@ -289,14 +317,11 @@
             }
             table[i][2] = color;
             table[i][3] = position.x;
-            table[i][4] = position.z;
+            table[i][4] = position.y;
           }
         }
       }
 
-      var renderers = [];
-      renderers['3d'] = "../../node_modules/three/examples/js/renderers/CSS3DRenderer.js";
-      renderers['vr'] = "./themes/VR/js/CSS3DStereoRenderer2.js";
 
       setRenderer('3d');
 
@@ -361,22 +386,27 @@
           // Used with WegGl renderer
           var cube = new THREE.BoxGeometry( 50, 50, 50 );
           var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
+
+          // Calculate offset to center graph on the screen.
+          var offsetX = (x2 - x1) * scale / 2;
+          var offsetY = (y2 - y1) * scale / 2;
+
           var object = new THREE.Mesh( cube , material );
-
           // Used with CSS renderer
-					var object = new THREE.CSS3DObject( element );
-					object.position.x = Math.random() * 4000 - 2000;
-					object.position.y = Math.random() * 4000 - 2000;
-					object.position.z = Math.random() * 4000 - 2000;
-					scene.add( object );
+					var cssObj = new THREE.CSS3DObject( element );
+          cssObj.position.x = table[i][3] * scale - offsetX;
+          cssObj.position.y = table[i][4] * scale - offsetY;
+          cssObj.position.z = Math.random() * scale * 500 - 1000;
+					scene.add( cssObj );
 
-					objects.push( object );
+					objects.push( cssObj );
 
 					//
 
 					var object = new THREE.Object3D();
-					object.position.x = ( table[i][3] * 140 ) - 1330;
-					object.position.y = - ( table[i][4] * 180 ) + 990;
+					object.position.x = cssObj.position.x;
+					object.position.y = cssObj.position.y;
+					object.position.z = cssObj.position.z;
 
 					targets.table.push( object );
 
@@ -420,13 +450,46 @@
 					object.position.z = 900 * Math.cos( phi );
 
           // Look at the camera.
-					vector.x = camera.position.x;
-					vector.y = camera.position.y;
-					vector.z = camera.position.z;
+//					vector.x = camera.position.x;
+//					vector.y = camera.position.y;
+//					vector.z = camera.position.z;
+          vector.x = object.position.x * 2;
+          vector.y = object.position.y;
+          vector.z = object.position.z * 2;
 
 					object.lookAt( vector );
 
 					targets.helix.push( object );
+
+				}
+
+				// tube
+
+				var vector = new THREE.Vector3();
+
+				for ( var i = 0, l = objects.length; i < l; i ++ ) {
+
+					var phi = i * 0.175 + Math.PI;
+
+					var object = new THREE.Object3D();
+
+					//object.position.x = 900 * Math.sin( phi );
+          object.position.x = objects[i].position.x;
+          object.position.y = objects[i].position.y;
+					//object.position.y = - ( i * 8 ) + 450;
+					object.position.z = 900 * Math.cos( phi );
+
+          // Look at the camera.
+//					vector.x = camera.position.x;
+//					vector.y = camera.position.y;
+//					vector.z = camera.position.z;
+          vector.x = object.position.x * 2;
+          vector.y = object.position.y;
+          vector.z = object.position.z * 2;
+
+					object.lookAt( vector );
+
+					targets.tube.push( object );
 
 				}
 
@@ -474,28 +537,40 @@
 
 				var button = document.getElementById( 'table' );
 				button.addEventListener( 'click', function ( event ) {
-
+          jQuery('.group_style').removeClass('active');
+          jQuery('#table').addClass('active');
 					transform( targets.table, 2000 );
 
 				}, false );
 
 				var button = document.getElementById( 'sphere' );
 				button.addEventListener( 'click', function ( event ) {
-
+          jQuery('.group_style').removeClass('active');
+          jQuery('#sphere').addClass('active');
 					transform( targets.sphere, 2000 );
 
 				}, false );
 
 				var button = document.getElementById( 'helix' );
 				button.addEventListener( 'click', function ( event ) {
-
+          jQuery('.group_style').removeClass('active');
+          jQuery('#helix').addClass('active');
 					transform( targets.helix, 2000 );
+
+				}, false );
+
+        var button = document.getElementById( 'tube' );
+				button.addEventListener( 'click', function ( event ) {
+          jQuery('.group_style').removeClass('active');
+          jQuery('#tube').addClass('active');
+					transform( targets.tube, 2000 );
 
 				}, false );
 
 				var button = document.getElementById( 'grid' );
 				button.addEventListener( 'click', function ( event ) {
-
+          jQuery('.group_style').removeClass('active');
+          jQuery('#grid').addClass('active');
 					transform( targets.grid, 2000 );
 
 				}, false );
@@ -503,7 +578,7 @@
         var button = document.getElementById( '3d' );
         button.addEventListener( 'click', function ( event ) {
           if (jQuery('#3d.active').length == 0) {
-            jQuery('.group_3d').removeClass('active');
+            jQuery('.group_viewer').removeClass('active');
             jQuery('#3d').addClass('active');
             setRenderer('3d');
           }
@@ -512,13 +587,14 @@
         var button = document.getElementById( 'vr' );
         button.addEventListener( 'click', function ( event ) {
           if (jQuery('#vr.active').length == 0) {
-            jQuery('.group_3d').removeClass('active');
+            jQuery('.group_viewer').removeClass('active');
             jQuery('#vr').addClass('active');
             setRenderer('vr');
           }
         }, false );
 
-				transform( targets.table, 2000 );
+        // Default style.
+        jQuery('#tube').click();
 
 				//
 
