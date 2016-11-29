@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" >
 <head>
   <title>three.js css3d - periodic table</title>
   <meta charset="utf-8">
@@ -12,7 +12,9 @@
 <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
 <script src="../../node_modules/three/examples/js/libs/tween.min.js"></script>
 <script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
+<script src="../../node_modules/viz.js/viz.js"></script>
 
+<script src="../themes/VR/js/main.js"></script>
 <script src="../themes/3D/js/utils.js"></script>
 <script src="../themes/VR/js/vrPanel.js"></script>
 <script src="../themes/VR/js/vrControllers.js"></script>
@@ -23,7 +25,6 @@
 <script src="../themes/VR/js/vrShapeHelix.js"></script>
 <script src="../themes/VR/js/vrShapeSphere.js"></script>
 <script src="../themes/VR/js/vrShapeGrid.js"></script>
-<script src="../../node_modules/viz.js/viz.js"></script>
 
 <div id="container"></div>
 <div id="info"><a href="http://threejs.org" target="_blank">three.js css3d</a> - periodic table.
@@ -75,6 +76,7 @@
 
   var plot = plotObj( dotObjects );
   var table = plot.table;
+
   // Calculate offset to center graph on the screen.
   var offsetX = (plot.x2 - plot.x1) * scale / 2;
   var offsetY = (plot.y2 - plot.y1) * scale / 2;
@@ -86,11 +88,8 @@
     renderer = getRenderer();
     addCSSObjToScene( table );
 
-    //camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100);
     camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-//        if (controller != accelerometer)
     camera.position.z = 3000;
-//        }
 
     // sphere
     vrShapeSphere();
@@ -101,20 +100,15 @@
     // grid
     vrShapeGrid();
 
-    //
-
     renderer.domElement.style.position = 'absolute';
     container = document.getElementById( 'container' );
     container.appendChild( renderer.domElement );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
-    //
     vrPannel();
 
     // Enable trackball controls.
     jQuery( '#trackpadControls' ).click();
-
-    //updateControllers();
 
     // Default style.
     jQuery( '#tube' ).click();
@@ -122,45 +116,6 @@
     window.addEventListener( 'resize', onWindowResize, false );
 
     animate();
-  }
-
-  function transform( targets, duration ) {
-
-    TWEEN.removeAll();
-
-    for ( var i = 0; i < objects.length; i++ ) {
-
-      var object = objects[ i ];
-      var target = targets[ i ];
-
-      new TWEEN.Tween( object.position )
-        .to( { x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration )
-        .easing( TWEEN.Easing.Exponential.InOut )
-        .start();
-
-      new TWEEN.Tween( object.rotation )
-        .to( { x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration )
-        .easing( TWEEN.Easing.Exponential.InOut )
-        .start();
-
-    }
-
-    new TWEEN.Tween( this )
-      .to( {}, duration * 2 )
-      .onUpdate( render )
-      .start();
-
-  }
-
-  function onWindowResize() {
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize( window.innerWidth, window.innerHeight );
-
-    render();
-
   }
 
   function animate() {
