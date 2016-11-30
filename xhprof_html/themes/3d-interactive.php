@@ -28,7 +28,7 @@
 <?php include(getcwd() . '/themes/templates/graph_filter_options.php'); ?>
 
 <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
-<script src="../../node_modules/three/build/three.min.js"></script>
+<script src="../../node_modules/three/build/three.js"></script>
 <script src="../../node_modules/three/examples/js/controls/TrackballControls.js"></script>
 <script src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
 <script src="../../node_modules/viz.js/viz.js"></script>

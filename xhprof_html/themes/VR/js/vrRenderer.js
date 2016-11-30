@@ -53,6 +53,7 @@ function initRenderer( type ) {
 					container = document.getElementById( 'container' );
 					container.appendChild( renderer.domElement );
 					renderer.setSize( window.innerWidth, window.innerHeight );
+					console.log(camera.fov);// = 500;
 				}
 			}
 			break;

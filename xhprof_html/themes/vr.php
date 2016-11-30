@@ -32,6 +32,19 @@
 </div>
 <div id="menu">
       <span class="group">
+        <button id="fovMinus" class="group-renderer active">-</button>
+        <button id="fovPlus" class="group-renderer">+</button>
+      </span>
+      <span class="group">
+        <button id="aspectMinus" class="group-renderer active">-</button>
+        <button id="aspectPlus" class="group-renderer">+</button>
+      </span>
+      <span class="group">
+        <button id="focusMinus" class="group-renderer active">-</button>
+        <button id="focusPlus" class="group-renderer">+</button>
+      </span>
+
+      <span class="group">
         <button id="table" class="group-shape">CALLGRAPH</button>
         <button id="sphere" class="group-shape">SPHERE</button>
         <button id="tube" class="group-shape active">TUBE</button>
@@ -40,8 +53,8 @@
       </span>
 
       <span class="group">
-        <button id="3d" class="group-renderer active">3D</button>
-        <button id="vr" class="group-renderer">VR</button>
+        <button id="3d" class="group-renderer">3D</button>
+        <button id="vr" class="group-renderer active">VR</button>
       </span>
 
       <span class="group">
@@ -74,7 +87,7 @@
   var offsetX = (plot.x2 - plot.x1) * scale / 2;
   var offsetY = (plot.y2 - plot.y1) * scale / 2;
 
-  activeRenderer = '3d';
+  activeRenderer = 'vr';
 
   updateRenderer();
   updateControllers();
