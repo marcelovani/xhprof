@@ -1,35 +1,4 @@
 function vrPannel() {
-	var button = document.getElementById( 'fovMinus' );
-	button.addEventListener( 'click', function ( event ) {
-		camera.fov = camera.fov - 10;
-		console.log(camera.fov);
-	}, false );
-	var button = document.getElementById( 'fovPlus' );
-	button.addEventListener( 'click', function ( event ) {
-		camera.fov = camera.fov + 10;
-		console.log(camera.fov);
-	}, false );
-	var button = document.getElementById( 'focusMinus' );
-	button.addEventListener( 'click', function ( event ) {
-		camera.focus = camera.focus - 1;
-		console.log(camera.focus);
-	}, false );
-	var button = document.getElementById( 'focusPlus' );
-	button.addEventListener( 'click', function ( event ) {
-		camera.focus = camera.focus + 1;
-		console.log(camera.focus);
-	}, false );
-	var button = document.getElementById( 'aspectMinus' );
-	button.addEventListener( 'click', function ( event ) {
-		camera.aspect = camera.aspect - 1;
-		console.log(camera.aspect);
-	}, false );
-	var button = document.getElementById( 'aspectPlus' );
-	button.addEventListener( 'click', function ( event ) {
-		camera.aspect = camera.aspect + 1;
-		console.log(camera.aspect);
-	}, false );
-
 	var button = document.getElementById( 'table' );
 	button.addEventListener( 'click', function ( event ) {
 		changeShape('table', 1000);

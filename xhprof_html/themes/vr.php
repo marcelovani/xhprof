@@ -13,6 +13,7 @@
 <script src="../../node_modules/three/examples/js/libs/tween.min.js"></script>
 <script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
 <script src="../../node_modules/viz.js/viz.js"></script>
+<script src="../../node_modules/dat.gui/build/dat.gui.js"></script>
 
 <script src="../themes/VR/js/main.js"></script>
 <script src="../themes/3D/js/utils.js"></script>
@@ -31,19 +32,6 @@
   <a href="https://plus.google.com/113862800338869870683/posts/QcFk5HrWran" target="_blank">info</a>.
 </div>
 <div id="menu">
-      <span class="group">
-        <button id="fovMinus" class="group-renderer active">-</button>
-        <button id="fovPlus" class="group-renderer">+</button>
-      </span>
-      <span class="group">
-        <button id="aspectMinus" class="group-renderer active">-</button>
-        <button id="aspectPlus" class="group-renderer">+</button>
-      </span>
-      <span class="group">
-        <button id="focusMinus" class="group-renderer active">-</button>
-        <button id="focusPlus" class="group-renderer">+</button>
-      </span>
-
       <span class="group">
         <button id="table" class="group-shape">CALLGRAPH</button>
         <button id="sphere" class="group-shape">SPHERE</button>
@@ -101,6 +89,7 @@
         updateControllers();
         window.requestAnimationFrame( animate );
         TWEEN.update();
+        console.log(camera.position.y);
       };
 
       vrPannel();
@@ -113,11 +102,19 @@
 
       animate();
 
+      cameraGui();
+      var UC = function ( change ,  value ){
+        camera[change.property] = value;
+      }
     }, false );
 
     window.addEventListener( 'resize', onWindowResize, false );
 
   })();
+
+//  function UC( change ,  value ){
+//    camera[change.property] = value;
+//  }
 
   function reset() {
     jQuery('#container').html('');
