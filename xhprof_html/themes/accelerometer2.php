@@ -29,7 +29,7 @@
       <span class="group">
         <button id="accelerometerControls" class="group-controls">Accelerometer</button>
         <button id="leapControls" class="group-controls">LeapMotion</button>
-        <button id="trackpadControls" class="group-controls">Trackpad</button>
+        <button id="trackballControls" class="group-controls">Trackpad</button>
       </span>
 </div>
 <div id="info">
@@ -132,7 +132,7 @@
     vrPannel();
 
     // Enable trackball controls.
-    jQuery( '#trackpadControls' ).click();
+    jQuery( '#trackballControls' ).click();
 
     // Default style.
     jQuery( '#tube' ).click();

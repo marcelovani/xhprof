@@ -47,7 +47,7 @@
       <span class="group">
         <button id="accelerometerControls" class="group-controls">Accelerometer</button>
         <button id="leapControls" class="group-controls">LeapMotion</button>
-        <button id="trackpadControls" class="group-controls">Trackpad</button>
+        <button id="trackballControls" class="group-controls">Trackpad</button>
       </span>
 </div>
 
@@ -90,13 +90,14 @@
         TWEEN.update();
 
         updateCamera();
-        //updateGui();
+
+        //updateGui(); //enabling gui breaks trackball controls
       };
 
       vrPannel();
 
       // Enable trackball controls.
-      jQuery( '#trackpadControls' ).click();
+      jQuery( '#trackballControls' ).click();
 
       // Default style.
       jQuery( '#tube' ).click();
@@ -112,7 +113,7 @@
   function reset() {
     jQuery('#container').html('');
 
-    trackpadControls = {};
+    trackballControls = {};
     leapControls = {};
     accelerometerControls = {};
 

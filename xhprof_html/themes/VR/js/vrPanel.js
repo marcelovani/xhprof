@@ -55,15 +55,15 @@ function vrPannel() {
 		}
 	}, false );
 
-	var button = document.getElementById( 'trackpadControls' );
+	var button = document.getElementById( 'trackballControls' );
 	button.addEventListener( 'click', function ( event ) {
-		if (jQuery('#trackpadControls.active').length == 0) {
-			jQuery('#trackpadControls').addClass('active');
-			enabledControllers.trackpadControls = true;
+		if (jQuery('#trackballControls.active').length == 0) {
+			jQuery('#trackballControls').addClass('active');
+			enabledControllers.trackballControls = true;
 		}
 		else {
-			jQuery('#trackpadControls').removeClass('active');
-			enabledControllers.trackpadControls = false;
+			jQuery('#trackballControls').removeClass('active');
+			enabledControllers.trackballControls = false;
 		}
 	}, false );
 

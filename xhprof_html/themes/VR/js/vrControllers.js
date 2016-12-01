@@ -1,9 +1,9 @@
-var trackpadControls;
+var trackballControls;
 var leapController, leapControls;
 var accelerometerControls;
 
 var controls = {};
-controls['trackpadControls'] = ["../../node_modules/three/examples/js/controls/TrackballControls.js"];
+controls['trackballControls'] = ["../../node_modules/three/examples/js/controls/TrackballControls.js"];
 controls['accelerometerControls'] = ["../../node_modules/three/examples/js/controls/DeviceOrientationControls.js"];
 controls['leapControls'] = [
 	//"../../node_modules/leapjs/leap-0.6.4.min.js",
@@ -25,18 +25,18 @@ function loadController(type) {
 
 function initController( type ) {
 	switch ( type ) {
-		case 'trackpadControls':
+		case 'trackballControls':
 			if ( typeof(THREE.TrackballControls) !== 'function' ) {
 				loadController( type );
 			} else {
-				if (trackpadControls instanceof THREE.TrackballControls) {
-					trackpadControls.update();
+				if (trackballControls instanceof THREE.TrackballControls) {
+					trackballControls.update();
 				} else {
-					trackpadControls = new THREE.TrackballControls( camera, renderer.domElement );
-					trackpadControls.rotateSpeed = 0.5;
-					trackpadControls.minDistance = 500;
-					trackpadControls.maxDistance = 6000;
-					trackpadControls.addEventListener( 'change', updateRenderer );
+					trackballControls = new THREE.TrackballControls( camera, renderer.domElement );
+					trackballControls.rotateSpeed = 0.5;
+					trackballControls.minDistance = 500;
+					trackballControls.maxDistance = 6000;
+					trackballControls.addEventListener( 'change', updateRenderer );
 				}
 			}
 			break;

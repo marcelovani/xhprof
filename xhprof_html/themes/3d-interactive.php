@@ -57,7 +57,7 @@ var camera, scene, renderer;
 var container, stats;
 var leapController;
 var leapControls;
-var trackpadControls;
+var trackballControls;
 var transformPlugin;
 var objects = [];
 var plane = new THREE.Plane(); //@todo delete this
@@ -149,14 +149,14 @@ function init() {
   leapControls['transSmoothing'] = 0.5;
   leapControls['rotationSmoothing'] = 0.2;
 
-  trackpadControls = new THREE.TrackballControls( camera );
-  trackpadControls.rotateSpeed = 1.0;
-  trackpadControls.zoomSpeed = 1.2;
-  trackpadControls.panSpeed = 0.8;
-  trackpadControls.noZoom = false;
-  trackpadControls.noPan = false;
-  trackpadControls.staticMoving = true;
-  trackpadControls.dynamicDampingFactor = 0.3;
+  trackballControls = new THREE.TrackballControls( camera );
+  trackballControls.rotateSpeed = 1.0;
+  trackballControls.zoomSpeed = 1.2;
+  trackballControls.panSpeed = 0.8;
+  trackballControls.noZoom = false;
+  trackballControls.noPan = false;
+  trackballControls.staticMoving = true;
+  trackballControls.dynamicDampingFactor = 0.3;
 
   //
 
@@ -178,7 +178,7 @@ function animate() {
 
 function render() {
   renderer.render( scene, camera );
-  trackpadControls.update();
+  trackballControls.update();
   //leapControls.update();
 }
 
@@ -253,7 +253,7 @@ function onDocumentMouseDown( event ) {
 
   if ( intersects.length > 0 ) {
 
-    trackpadControls.enabled = false;
+    trackballControls.enabled = false;
 
     SELECTED = intersects[ 0 ].object;
 
@@ -273,7 +273,7 @@ function onDocumentMouseUp( event ) {
 
   event.preventDefault();
 
-  trackpadControls.enabled = true;
+  trackballControls.enabled = true;
 
   if ( INTERSECTED ) {
 
