@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" >
 <head>
-  <title>three.js css3d - periodic table</title>
+  <title>VR xhprof</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <link rel="stylesheet" href="./themes/VR/css/main.css">
@@ -28,9 +28,7 @@
 <script src="../themes/VR/js/vrShapeGrid.js"></script>
 
 <div id="container"></div>
-<div id="info"><a href="http://threejs.org" target="_blank">three.js css3d</a> - periodic table.
-  <a href="https://plus.google.com/113862800338869870683/posts/QcFk5HrWran" target="_blank">info</a>.
-</div>
+<div id="info"><?php echo $run; ?></div>
 <div id="menu">
       <span class="group">
         <button id="table" class="group-shape">CALLGRAPH</button>
@@ -89,7 +87,8 @@
         updateControllers();
         window.requestAnimationFrame( animate );
         TWEEN.update();
-        console.log(camera.position.y);
+
+        updateCamera();
       };
 
       vrPannel();
@@ -103,18 +102,12 @@
       animate();
 
       cameraGui();
-      var UC = function ( change ,  value ){
-        camera[change.property] = value;
-      }
+
     }, false );
 
     window.addEventListener( 'resize', onWindowResize, false );
 
   })();
-
-//  function UC( change ,  value ){
-//    camera[change.property] = value;
-//  }
 
   function reset() {
     jQuery('#container').html('');
