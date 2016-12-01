@@ -17,6 +17,7 @@
 
 <script src="../themes/VR/js/main.js"></script>
 <script src="../themes/3D/js/utils.js"></script>
+<script src="../themes/VR/js/vrGui.js"></script>
 <script src="../themes/VR/js/vrPanel.js"></script>
 <script src="../themes/VR/js/vrControllers.js"></script>
 <script src="../themes/VR/js/vrRenderer.js"></script>
@@ -89,6 +90,7 @@
         TWEEN.update();
 
         updateCamera();
+        //updateGui();
       };
 
       vrPannel();
@@ -100,8 +102,6 @@
       jQuery( '#tube' ).click();
 
       animate();
-
-      cameraGui();
 
     }, false );
 
