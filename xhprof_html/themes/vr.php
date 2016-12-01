@@ -91,7 +91,7 @@
 
         updateCamera();
 
-        //updateGui(); //enabling gui breaks trackball controls
+        updateGui(); //enabling gui breaks trackball controls
       };
 
       vrPannel();

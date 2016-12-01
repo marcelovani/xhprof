@@ -23,7 +23,7 @@ function loadControl(type) {
 	}
 }
 
-function initControl( type ) {
+function updateControl( type ) {
 	switch ( type ) {
 		case 'trackballControls':
 			if ( typeof(THREE.TrackballControls) !== 'function' ) {
@@ -83,7 +83,7 @@ function updateControls() {
 	for ( var i = 0; i < Object.keys(enabledControls).length; i ++ ) {
 		var type = Object.keys(enabledControls)[i];
 		if (enabledControls[type] == true) {
-			initControl(type);
+			updateControl(type);
 		}
 	}
 }
