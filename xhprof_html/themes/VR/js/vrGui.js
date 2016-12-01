@@ -2,87 +2,96 @@ var guiData = null;
 var guiDataChanged = false;
 var gui;
 
-function createCameraGui() {
-	obj = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 10000 );
-	guiData = obj;
+function initGui() {
+	//obj = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 10000 );
+	// @Todo: make it work with enabled controllers, not sure which one should come first
+	if (typeof(trackballControls.object) != 'object') {
+		return;
+	}
+	var object = trackballControls.object;
+	guiData = object;
 	gui = new dat.gui.GUI();
 
-	gui.remember(obj);
-	gui.remember(obj.position);
-	gui.remember(obj.rotation);
-	gui.remember(obj.quaternion);
-	gui.remember(obj.scale);
+	gui.remember(object);
+	gui.remember(object.position);
+	gui.remember(object.rotation);
+	gui.remember(object.quaternion);
+	gui.remember(object.scale);
 
-	gui.add( obj , 'aspect' , 1 , 10       ).onChange(function(v){updateGuiData( this,v )});
-	gui.add( obj , 'fov' , 1 , 1000        ).onChange(function(v){updateGuiData( this,v )});
-	gui.add( obj , 'filmGauge' , 1 , 60    ).onChange(function(v){updateGuiData( this,v )});
-	gui.add( obj , 'filmOffset' , 0 , 10   ).onChange(function(v){updateGuiData( this,v )});
-	gui.add( obj , 'near' , 1 , 20         ).onChange(function(v){updateGuiData( this,v )});
-	gui.add( obj , 'far' , 1 , 20000       ).onChange(function(v){updateGuiData( this,v )});
-	gui.add( obj , 'focus' , 1 , 20        ).onChange(function(v){updateGuiData( this,v )});
-	gui.add( obj , 'zoom' , 0 , 10         ).onChange(function(v){updateGuiData( this,v )});
+	gui.add( object , 'aspect' , 1 , 10       ).onChange(function(v){updateGuiData( this,v )});
+	gui.add( object , 'fov' , 1 , 1000        ).onChange(function(v){updateGuiData( this,v )});
+	gui.add( object , 'filmGauge' , 1 , 60    ).onChange(function(v){updateGuiData( this,v )});
+	gui.add( object , 'filmOffset' , 0 , 10   ).onChange(function(v){updateGuiData( this,v )});
+	gui.add( object , 'near' , 1 , 20         ).onChange(function(v){updateGuiData( this,v )});
+	gui.add( object , 'far' , 1 , 20000       ).onChange(function(v){updateGuiData( this,v )});
+	gui.add( object , 'focus' , 1 , 20        ).onChange(function(v){updateGuiData( this,v )});
+	gui.add( object , 'zoom' , 0 , 10         ).onChange(function(v){updateGuiData( this,v )});
 	var position = gui.addFolder('Position');
-	position.add( obj.position , 'x', -1000, 1000).onChange(function(v){updateGuiDataPosition( this,v )});
-	position.add( obj.position , 'y', -1000, 1000).onChange(function(v){updateGuiDataPosition( this,v )});
-	position.add( obj.position , 'z', -1000, 1000).onChange(function(v){updateGuiDataPosition( this,v )});
+	position.add( object.position , 'x', -10000, 10000).onChange(function(v){updateGuiDataPosition( this,v )});
+	position.add( object.position , 'y', -10000, 10000).onChange(function(v){updateGuiDataPosition( this,v )});
+	position.add( object.position , 'z', -10000, 10000).onChange(function(v){updateGuiDataPosition( this,v )});
 	var rotation = gui.addFolder('Rotation');
-	rotation.add( obj.rotation , 'x', 0, 100).onChange(function(v){updateGuiDataRotation( this,v )});
-	rotation.add( obj.rotation , 'y', 0, 100).onChange(function(v){updateGuiDataRotation( this,v )});
-	rotation.add( obj.rotation , 'z', 0, 100).onChange(function(v){updateGuiDataRotation( this,v )});
+	rotation.add( object.rotation , 'x', 0, 100).onChange(function(v){updateGuiDataRotation( this,v )});
+	rotation.add( object.rotation , 'y', 0, 100).onChange(function(v){updateGuiDataRotation( this,v )});
+	rotation.add( object.rotation , 'z', 0, 100).onChange(function(v){updateGuiDataRotation( this,v )});
 	var up = gui.addFolder('Up');
-	up.add( obj.up , 'x', 0, 10).onChange(function(v){updateGuiDataUp( this,v )});
-	up.add( obj.up , 'y', 0, 10).onChange(function(v){updateGuiDataUp( this,v )});
-	up.add( obj.up , 'z', 0, 10).onChange(function(v){updateGuiDataUp( this,v )});
+	up.add( object.up , 'x', 0, 10).onChange(function(v){updateGuiDataUp( this,v )});
+	up.add( object.up , 'y', 0, 10).onChange(function(v){updateGuiDataUp( this,v )});
+	up.add( object.up , 'z', 0, 10).onChange(function(v){updateGuiDataUp( this,v )});
 	var quaternion = gui.addFolder('Quaternion');
-	quaternion.add( obj.quaternion , '_w', 0, 10).onChange(function(v){updateGuiDataQuaternion( this,v )});
-	quaternion.add( obj.quaternion , '_x', 0, 10).onChange(function(v){updateGuiDataQuaternion( this,v )});
-	quaternion.add( obj.quaternion , '_y', 0, 10).onChange(function(v){updateGuiDataQuaternion( this,v )});
-	quaternion.add( obj.quaternion , '_z', 0, 10).onChange(function(v){updateGuiDataQuaternion( this,v )});
+	quaternion.add( object.quaternion , '_w', 0, 10).onChange(function(v){updateGuiDataQuaternion( this,v )});
+	quaternion.add( object.quaternion , '_x', 0, 10).onChange(function(v){updateGuiDataQuaternion( this,v )});
+	quaternion.add( object.quaternion , '_y', 0, 10).onChange(function(v){updateGuiDataQuaternion( this,v )});
+	quaternion.add( object.quaternion , '_z', 0, 10).onChange(function(v){updateGuiDataQuaternion( this,v )});
 	var scale = gui.addFolder('Scale');
-	scale.add( obj.scale , 'x', 1, 1000).onChange(function(v){updateGuiDataScale( this,v )});
-	scale.add( obj.scale , 'y', 1, 1000).onChange(function(v){updateGuiDataScale( this,v )});
-	scale.add( obj.scale , 'z', 1, 1000).onChange(function(v){updateGuiDataScale( this,v )});
+	scale.add( object.scale , 'x', 1, 1000).onChange(function(v){updateGuiDataScale( this,v )});
+	scale.add( object.scale , 'y', 1, 1000).onChange(function(v){updateGuiDataScale( this,v )});
+	scale.add( object.scale , 'z', 1, 1000).onChange(function(v){updateGuiDataScale( this,v )});
 }
 
-function updateCamera() {
+function updateGuiControl() {
 	if (guiData && guiDataChanged) {
-		camera.aspect = guiData.aspect;
-		camera.fov = guiData.fov;
-		camera.filmGauge = guiData.filmGauge;
-		camera.filmOffset = guiData.filmOffset;
-		camera.far = guiData.far;
-		camera.near = guiData.near;
-		camera.focus = guiData.focus;
-		camera.zoom = guiData.zoom;
-		camera.position.x = guiData.position.x;
-		camera.position.z = guiData.position.z;
-		camera.position.y = guiData.position.y;
-		camera.up.x = guiData.up.x;
-		camera.up.z = guiData.up.z;
-		camera.up.y = guiData.up.y;
-		camera.rotation.x = guiData.rotation.x;
-		camera.rotation.z = guiData.rotation.z;
-		camera.rotation.y = guiData.rotation.y;
-		camera.quaternion._w = guiData.quaternion._w;
-		camera.quaternion._x = guiData.quaternion._x;
-		camera.quaternion._z = guiData.quaternion._z;
-		camera.quaternion._y = guiData.quaternion._y;
-		camera.scale.x = guiData.scale.x;
-		camera.scale.z = guiData.scale.z;
-		camera.scale.y = guiData.scale.y;
+		//@todo make it work with other controllers
+		var guiTarget = trackballControls.object;
+		guiTarget.aspect = guiData.aspect;
+		guiTarget.fov = guiData.fov;
+		guiTarget.filmGauge = guiData.filmGauge;
+		guiTarget.filmOffset = guiData.filmOffset;
+		guiTarget.far = guiData.far;
+		guiTarget.near = guiData.near;
+		guiTarget.focus = guiData.focus;
+		guiTarget.zoom = guiData.zoom;
+		guiTarget.position.x = guiData.position.x;
+		guiTarget.position.z = guiData.position.z;
+		guiTarget.position.y = guiData.position.y;
+		guiTarget.up.x = guiData.up.x;
+		guiTarget.up.z = guiData.up.z;
+		guiTarget.up.y = guiData.up.y;
+		guiTarget.rotation.x = guiData.rotation.x;
+		guiTarget.rotation.z = guiData.rotation.z;
+		guiTarget.rotation.y = guiData.rotation.y;
+		guiTarget.quaternion._w = guiData.quaternion._w;
+		guiTarget.quaternion._x = guiData.quaternion._x;
+		guiTarget.quaternion._z = guiData.quaternion._z;
+		guiTarget.quaternion._y = guiData.quaternion._y;
+		guiTarget.scale.x = guiData.scale.x;
+		guiTarget.scale.z = guiData.scale.z;
+		guiTarget.scale.y = guiData.scale.y;
 		guiDataChanged = false;
 	}
 }
 
 function updateGui() {
 	if (typeof(gui) != 'object') {
-		createCameraGui();
+		initGui();
 	} else {
 		jQuery.each( gui.__controllers, function ( i, controller ) {
 			var property = controller.property;
 			var value = controller.getValue();
-			if (camera[property] != value) {
-				controller.setValue(camera[property]);
+			if (trackballControls.object[property] != value) {
+				guiDataChanged = false;
+				//@todo make it work with other controls
+				controller.setValue(trackballControls.object[property]);
 			}
 		});
 	}

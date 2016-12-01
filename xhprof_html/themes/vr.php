@@ -89,7 +89,7 @@
         window.requestAnimationFrame( animate );
         TWEEN.update();
 
-        updateCamera();
+        updateGuiControl();
 
         updateGui(); //enabling gui breaks trackball controls
       };
