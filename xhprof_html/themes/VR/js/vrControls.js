@@ -11,23 +11,23 @@ controls['leapControls'] = [
 	"../themes/3D/js/leap-plugins-0.1.11pre.js"
 ];
 
-var enabledControllers = {};
+var enabledControls = {};
 for ( var i = 0; i < controls.length; i ++ ) {
 	var type = controls[i][0];
-	enabledControllers[type] =  false;
+	enabledControls[type] =  false;
 }
 
-function loadController(type) {
+function loadControl(type) {
 	for ( var i = 0; i < controls[type].length; i ++ ) {
-		loadJS(controls[type][i], updateControllers, document.body);
+		loadJS(controls[type][i], updateControls, document.body);
 	}
 }
 
-function initController( type ) {
+function initControl( type ) {
 	switch ( type ) {
 		case 'trackballControls':
 			if ( typeof(THREE.TrackballControls) !== 'function' ) {
-				loadController( type );
+				loadControl( type );
 			} else {
 				if (trackballControls instanceof THREE.TrackballControls) {
 					trackballControls.update();
@@ -43,7 +43,7 @@ function initController( type ) {
 
 		case 'leapControls':
 			if ( typeof(THREE.LeapTwoHandControls) !== 'function' ) {
-				loadController( type );
+				loadControl( type );
 			} else {
 				if (leapControls instanceof THREE.LeapTwoHandControls) {
 					leapControls.update();
@@ -65,7 +65,7 @@ function initController( type ) {
 
 		case 'accelerometerControls':
 			if ( typeof(THREE.DeviceOrientationControls) !== 'function' ) {
-				loadController( type );
+				loadControl( type );
 			} else {
 				if (accelerometerControls instanceof THREE.DeviceOrientationControls) {
 					accelerometerControls.update();
@@ -79,11 +79,11 @@ function initController( type ) {
 	}
 }
 
-function updateControllers() {
-	for ( var i = 0; i < Object.keys(enabledControllers).length; i ++ ) {
-		var type = Object.keys(enabledControllers)[i];
-		if (enabledControllers[type] == true) {
-			initController(type);
+function updateControls() {
+	for ( var i = 0; i < Object.keys(enabledControls).length; i ++ ) {
+		var type = Object.keys(enabledControls)[i];
+		if (enabledControls[type] == true) {
+			initControl(type);
 		}
 	}
 }

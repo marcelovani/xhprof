@@ -47,11 +47,11 @@ function vrPannel() {
 	button.addEventListener( 'click', function ( event ) {
 		if (jQuery('#accelerometerControls.active').length == 0) {
 			jQuery('#accelerometerControls').addClass('active');
-			enabledControllers.accelerometerControls = true;
+			enabledControls.accelerometerControls = true;
 		}
 		else {
 			jQuery('#accelerometerControls').removeClass('active');
-			enabledControllers.accelerometerControls = false;
+			enabledControls.accelerometerControls = false;
 		}
 	}, false );
 
@@ -59,11 +59,11 @@ function vrPannel() {
 	button.addEventListener( 'click', function ( event ) {
 		if (jQuery('#trackballControls.active').length == 0) {
 			jQuery('#trackballControls').addClass('active');
-			enabledControllers.trackballControls = true;
+			enabledControls.trackballControls = true;
 		}
 		else {
 			jQuery('#trackballControls').removeClass('active');
-			enabledControllers.trackballControls = false;
+			enabledControls.trackballControls = false;
 		}
 	}, false );
 
@@ -71,11 +71,11 @@ function vrPannel() {
 	button.addEventListener( 'click', function ( event ) {
 		if (jQuery('#leapControls.active').length == 0) {
 			jQuery('#leapControls').addClass('active');
-			enabledControllers.leapControls = true;
+			enabledControls.leapControls = true;
 		}
 		else {
 			jQuery('#leapControls').removeClass('active');
-			enabledControllers.leapControls = false;
+			enabledControls.leapControls = false;
 		}
 	}, false );
 }
