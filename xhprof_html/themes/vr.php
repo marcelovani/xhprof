@@ -89,9 +89,7 @@
         window.requestAnimationFrame( animate );
         TWEEN.update();
 
-        updateGuiControl();
-
-        updateGui(); //enabling gui breaks trackball controls
+        updateObjectProperties();
       };
 
       vrPannel();
