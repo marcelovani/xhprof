@@ -46,7 +46,16 @@
   <script src="./themes/transform/leap-0.6.3.min.js"></script>
   <script src="./themes/transform/leap-plugins-0.1.11pre.js"></script>
   <script src="./themes/transform/leap.rigged-hand-0.1.5.min.js"></script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
+    ga('create', 'UA-87733842-1', 'auto');
+    ga('send', 'pageview', 'transfor');
+
+  </script>
 </head>
 <body>
 

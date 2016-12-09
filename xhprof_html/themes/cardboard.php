@@ -17,6 +17,16 @@
         bottom: 0;
       }
     </style>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-87733842-1', 'auto');
+      ga('send', 'pageview', 'cardboard');
+
+    </script>
   </head>
   <body>
     <div id="example"></div>
@@ -102,14 +112,15 @@
       scene.add(mesh);
 
       var cube = new THREE.BoxGeometry( 50, 50, 50 );
-      var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
-      for( var i = 0; i < 5; i++ ) {
-        material.color.setRGB( Math.random() + 0.1, Math.random() + 0.1, Math.random() + 0.1 );
+      var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
+      for( var i = 0; i < 20; i++ ) {
+        m = material.clone();
+        m.color.setRGB( Math.random() + 0.1, Math.random() + 0.1, Math.random() + 0.1 );
 
-        var mesh = new THREE.Mesh( cube , material );
+        var mesh = new THREE.Mesh( cube , m );
         mesh.position.x = (Math.random() - .5 ) * 500;
         mesh.position.y = (Math.random() - .5 ) * 500;
-        mesh.position.z = (Math.random() - .5 ) * 500;
+        mesh.position.z = (Math.random() - .5 ) * 50;
         scene.add( mesh );
       }
 
