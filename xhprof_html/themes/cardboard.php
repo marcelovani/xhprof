@@ -47,17 +47,17 @@
       scene = new THREE.Scene();
 
       camera = new THREE.PerspectiveCamera(90, 1, 0.001, 700);
-      camera.position.set(0, 10, 0);
+      camera.position.set(0, 10, 300);
       scene.add(camera);
 
       controls = new THREE.OrbitControls(camera, element);
       controls.rotateUp(Math.PI / 4);
       controls.target.set(
         camera.position.x + 0.1,
-        camera.position.y,
-        camera.position.z
+        camera.position.y + 2,
+        camera.position.z - 3
       );
-      controls.noZoom = true;
+      //controls.noZoom = true;
       controls.noPan = true;
 
       function setOrientationControls(e) {
@@ -100,6 +100,18 @@
       var mesh = new THREE.Mesh(geometry, material);
       mesh.rotation.x = -Math.PI / 2;
       scene.add(mesh);
+
+      var cube = new THREE.BoxGeometry( 50, 50, 50 );
+      var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+      for( var i = 0; i < 5; i++ ) {
+        material.color.setRGB( Math.random() + 0.1, Math.random() + 0.1, Math.random() + 0.1 );
+
+        var mesh = new THREE.Mesh( cube , material );
+        mesh.position.x = (Math.random() - .5 ) * 500;
+        mesh.position.y = (Math.random() - .5 ) * 500;
+        mesh.position.z = (Math.random() - .5 ) * 500;
+        scene.add( mesh );
+      }
 
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
