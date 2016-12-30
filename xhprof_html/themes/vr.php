@@ -138,6 +138,7 @@
     vrShapeGrid();
 
     camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+    camera.name = "Main";
     camera.position.z = 3000;
 
     changeShape(activeShape, 200);

@@ -1,7 +1,8 @@
 var renderer;
 var renderers = {};
+var effect;
 renderers['3d'] = ["../../node_modules/three/examples/js/renderers/CSS3DRenderer.js"];
-renderers['vr'] = ["./themes/VR/js/CSS3DStereoRenderer2.js"];
+renderers['vr'] = ["../../node_modules/three/examples/js/renderers/CSS3DStereoRenderer.js"];
 
 var activeRenderer = null;
 
@@ -44,15 +45,19 @@ function initRenderer( type ) {
 				loadRenderer( type );
 			} else {
 				if (renderer instanceof THREE.CSS3DStereoRenderer) {
-					renderer.render( scene, camera );
+					effect.render( scene, camera );
 				}
 				else {
 					renderer = new THREE.CSS3DStereoRenderer();
 					reset();
-					renderer.domElement.style.position = 'absolute';
-					container = document.getElementById( 'container' );
-					container.appendChild( renderer.domElement );
 					renderer.setSize( window.innerWidth, window.innerHeight );
+					element = renderer.domElement;
+					container = document.getElementById('container');
+					container.appendChild(element);
+
+					effect = new THREE.StereoEffect( renderer );
+					effect.setSize( window.innerWidth, window.innerHeight );
+					effect.setEyeSeparation(3);
 				}
 			}
 			break;

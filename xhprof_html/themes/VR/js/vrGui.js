@@ -18,6 +18,9 @@ function initGui() {
 	gui.remember(object.quaternion);
 	gui.remember(object.scale);
 
+	object.separation = 6;
+
+	gui.add( object , 'separation' , -10 , 10 ).onFinishChange(function(v){updateGuiData( this,v )});
 	gui.add( object , 'aspect' , 1 , 10       ).onFinishChange(function(v){updateGuiData( this,v )});
 	gui.add( object , 'fov' , 1 , 1000        ).onFinishChange(function(v){updateGuiData( this,v )});
 	gui.add( object , 'filmGauge' , 1 , 60    ).onFinishChange(function(v){updateGuiData( this,v )});
