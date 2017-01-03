@@ -1,3 +1,20 @@
+require.config({
+	paths: {
+		'jQuery': '../../../node_modules/jquery/dist/jquery.min',
+		'Viz': '../../../node_modules/viz.js/viz',
+		'utils': '../../VR/js/utils',
+		'vrPlot': '../../VR/js/vrPlot'
+	},
+	shim: {
+		'jQuery': {
+			exports: 'jQuery'
+		},
+		'Viz': {
+			exports: 'Viz'
+		}
+	}
+});
+
 var activeShape = 'table';
 
 function changeShape(shape, duration) {

@@ -18,21 +18,23 @@
   </script>
 </head>
 <body>
-<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+<!--<script src="../../node_modules/jquery/dist/jquery.min.js"></script>-->
 <script src="../../node_modules/three/build/three.min.js"></script>
 <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
 <script src="../../node_modules/three/examples/js/libs/tween.min.js"></script>
 <script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
-<script src="../../node_modules/viz.js/viz.js"></script>
+<!--<script src="../../node_modules/viz.js/viz.js"></script>-->
 <script src="../../node_modules/dat.gui/build/dat.gui.js"></script>
 
-<script src="../themes/VR/js/main.js"></script>
-<script src="../themes/3D/js/utils.js"></script>
+<script data-main="/themes/VR/js/main" src="../../node_modules/requirejs/require.js"></script>
+
+<!--<script src="../themes/VR/js/main.js"></script>-->
+<!--<script src="../themes/3D/js/utils.js"></script>-->
 <script src="../themes/VR/js/vrGui.js"></script>
 <script src="../themes/VR/js/vrPanel.js"></script>
 <script src="../themes/VR/js/vrControls.js"></script>
 <script src="../themes/VR/js/vrRenderer.js"></script>
-<script src="../themes/VR/js/vrPlot.js"></script>
+<!--<script src="../themes/VR/js/vrPlot.js"></script>-->
 <script src="../themes/VR/js/vrShapeTable.js"></script>
 <script src="../themes/VR/js/vrShapeTube.js"></script>
 <script src="../themes/VR/js/vrShapeHelix.js"></script>
@@ -71,53 +73,77 @@
 
   var scale = 1.5; //@todo get from object.
 
+  var table; //@todo remove this global
+
   scene = new THREE.Scene();
 
   <?php print getDotGraph($script); ?>
 
   // Position objects.
-  var dotObjects = dotToObject2( dotPlain( dotGraph ) );
+  var dotObjects;
 
-  var plot = plotObj( dotObjects );
-  var table = plot.table;
+  require(['utils', 'vrPlot'], function (_utils, _vrPlot) {
+    var utils = new _utils();
+    var vrPlot = new _vrPlot();
 
-  // Calculate offset to center graph on the screen.
-  var offsetX = (plot.x2 - plot.x1) * scale / 2;
-  var offsetY = (plot.y2 - plot.y1) * scale / 2;
+    var dotObjects = utils.dotToObject2( utils.dotPlain( dotGraph ) );
+    var plot = vrPlot.plotObj( dotObjects );
+    table = plot.table;
 
-  activeRenderer = 'vr';
+    // Calculate offset to center graph on the screen.
+    var offsetX = (plot.x2 - plot.x1) * scale / 2;
+    var offsetY = (plot.y2 - plot.y1) * scale / 2;
 
-  updateRenderer();
-  updateControls();
+    activeRenderer = 'vr';
 
-  (function () {
-    "use strict";
-    window.addEventListener( 'load', function () {
 
-      var animate = function () {
-        updateRenderer();
-        updateControls();
-        window.requestAnimationFrame( animate );
-        TWEEN.update();
+    updateRenderer(); //@todo use require / mediator start
+    updateControls(); //@todo use require / mediator start
 
-        updateObjectProperties();
-      };
+    (function () {
+      "use strict";
+      //window.addEventListener( 'load', function () {
 
-      vrPannel();
+        var animate = function () {
+          updateRenderer(); //@todo use require / mediator update
+          updateControls();
+          window.requestAnimationFrame( animate );
+          TWEEN.update();
 
-      // Enable trackball controls.
-      jQuery( '#trackballControls' ).click();
+          //updateObjectProperties(); //@todo use require
+        };
 
-      // Default style.
-      jQuery( '#tube' ).click();
+        vrPannel();
 
-      animate();
+        // Enable trackball controls.
+        jQuery( '#trackballControls' ).click();
 
-    }, false );
+        // Default style.
+        jQuery( '#tube' ).click();
 
-    window.addEventListener( 'resize', onWindowResize, false );
+        animate();
 
-  })();
+      //}, false );
+
+      window.addEventListener( 'resize', onWindowResize, false );
+
+    })();
+
+  });
+
+
+//@todo implement this
+//  var Mediator = require("mediator-js").Mediator,
+//    mediator = new Mediator();
+//
+//  mediator.subscribe("wat", function(){
+//    console.log(arguments);
+//  });
+//  mediator.publish("wat", 7, "hi", { one: 1 });
+
+
+
+
 
   function reset() {
     jQuery('#container').html('');
