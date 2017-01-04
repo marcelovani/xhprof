@@ -3,7 +3,9 @@ require.config({
 		'jQuery': '../../../node_modules/jquery/dist/jquery.min',
 		'Viz': '../../../node_modules/viz.js/viz',
 		'utils': '../../VR/js/utils',
-		'vrPlot': '../../VR/js/vrPlot'
+		'vrPlot': '../../VR/js/vrPlot',
+		'CSS3DRenderer': '../../../node_modules/three/examples/js/renderers/CSS3DRenderer',
+		'CSS3DStereoRenderer': '../../../node_modules/three/examples/js/renderers/CSS3DStereoRenderer'
 	},
 	shim: {
 		'jQuery': {
