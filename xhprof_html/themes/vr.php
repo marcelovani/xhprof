@@ -24,30 +24,17 @@ var dotObjects;
 <?php print getDotGraph($script); ?>
 </script>
 
-<!--<script src="../../node_modules/jquery/dist/jquery.min.js"></script>-->
 <script src="../../node_modules/three/build/three.min.js"></script>
 <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
 <script src="../../node_modules/three/examples/js/libs/tween.min.js"></script>
 <script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
-<!--<script src="../../node_modules/viz.js/viz.js"></script>-->
 <script src="../../node_modules/dat.gui/build/dat.gui.js"></script>
 <script src="../../node_modules/mediator-js/mediator.min.js"></script>
 
 <script data-main="/themes/VR/js/main" src="/node_modules/requirejs/require.js"></script>
 
-<!--<script src="../themes/VR/js/main.js"></script>-->
-<!--<script src="../themes/3D/js/utils.js"></script>-->
 <script src="../themes/VR/js/vrGui.js"></script>
 <script src="../themes/VR/js/vrPanel.js"></script>
-<!--<script src="../themes/VR/js/vrControls.js"></script>-->
-<!--<script src="../themes/VR/js/vrRenderer.js"></script> <!--@todo move to mediator-->-->
-<!--<script src="../themes/VR/js/vrPlot.js"></script>-->
-<!--<script src="../themes/VR/js/vrShapeTable.js"></script>-->
-<!--<script src="../themes/VR/js/vrShapeTube.js"></script>
-<script src="../themes/VR/js/vrShapeHelix.js"></script>
-<script src="../themes/VR/js/vrShapeSphere.js"></script>
-<script src="../themes/VR/js/vrShapeGrid.js"></script>-->
-
 
 <div id="container"></div>
 <div id="info"><?php echo $run; ?></div>

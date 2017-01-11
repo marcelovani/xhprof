@@ -36,43 +36,11 @@ var objects = [];
 var targets = { sphere: [], helix: [], tube: [], grid: [], callgraph: [] };
 var needsUpdate = false;
 
-//var table; //@todo remove these global
-//var offsetX, offsetY;
-
-//var mediator;
 var mediator = new Mediator();
 
 scene = new THREE.Scene();
 
 var activeShape = 'tube';
-
-//todo: remove. moved to vtTargets
-function changeShape( shape, duration ) {
-	console.log('change shape ' + shape);
-	activeShape = shape;
-	jQuery( '.group-shape' ).removeClass( 'active' );
-	jQuery( '#' + shape ).addClass( 'active' );
-	transform2( targets[shape], duration );
-}
-
-//todo: remove. moved to vtTargets
-/**
- * Temporary solution until transform() is fixed.
- * @param targets
- */
-function transform2( targets ) {
-
-	for ( var i = 0; i < objects.length; i++ ) {
-
-		var object = objects[ i ];
-		var target = targets[ i ];
-		object.position.copy( target.position );
-		object.rotation.copy( target.rotation );
-		renderer.render();
-
-	}
-
-}
 
 function onWindowResize() {
 
@@ -116,13 +84,6 @@ require( [
 		vrPlot.addCSSObjToScene( 'callgraph' );
 
 		vrTargets.init(vrPlot.objects);
-//		vrTargets.callgraph(vrPlot.objects);
-//		vrTargets.tube(vrPlot.objects);
-//		vrTargets.helix(vrPlot.objects);
-//		vrTargets.sphere(vrPlot.objects);
-//		vrTargets.grid(vrPlot.objects);
-
-		//vrPlot.changeShape( targets, activeShape, 200 );//temporarily commented out
 
 		renderer = new Renderer();
 		renderer.setType( '3d' );
@@ -142,12 +103,8 @@ require( [
 
 		//updateRenderer(); //@todo use require / mediator start
 		//mediator.publish( "wat", 7, "update", { one: 1 } );
-//updateControls(); //@todo use require / mediator start
+		//updateControls(); //@todo use require / mediator start
 		//controls.update();
-
-		//(function () {
-		//	"use strict";
-		//window.addEventListener( 'load', function () {
 
 		var animate = function () {
 			if (needsUpdate) renderer.render();
@@ -165,21 +122,14 @@ require( [
 
 		vrPannel();
 
-// Enable trackball controls.
+		// Enable trackball controls.
 		//jQuery( '#trackballControls' ).click();//@todo temporary disabled
-
-// Default style.
-		//jQuery( '#tube' ).click();
 
 		animate();
 
 		mediator.publish( "wat", 7, "init", { one: 1 } );
 
-//}, false );
-
 		window.addEventListener( 'resize', onWindowResize, false );
-
-		//})();
 
 	} );
 
@@ -187,26 +137,9 @@ require( [
 function reset() {
 	jQuery( '#container' ).html( '' );//@todo reinstate
 
-	//trackballControls = {};
-	//leapControls = {};
-	//accelerometerControls = {};
-
-// @todo: bug: when we switch render, the size of objects doubles
-	//addCSSObjToScene( table ); //@todo moving this to main(), need to move whole reset() to main()
-
-// sphere
-	//vrShapeSphere();
-// helix
-	//vrShapeHelix();
-// tube
-	//vrShapeTube();
-// grid
-	//vrShapeGrid();
-
 	camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
 	camera.name = "Main";
 	camera.position.z = 3000;
 
 	//changeShape( activeShape, 200 );
 }
-

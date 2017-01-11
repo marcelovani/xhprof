@@ -58,19 +58,6 @@ define( [], function () {
 			return renderType;
 		};
 
-/*		this.resetShapes = function ( _table ) {
-			vrCallgraph.addCSSObjToScene( _table );
-
-			// sphere
-			//vrShapeSphere();
-			// helix
-			//vrShapeHelix();
-			// tube
-			//vrShapeTube();
-			// grid
-			//vrShapeGrid();
-		};*/
-
 		this.active = function () {
 			return renderer;
 		};
