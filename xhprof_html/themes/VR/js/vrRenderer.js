@@ -1,53 +1,86 @@
-var renderer;
-var effect;
-var activeRenderer = null;
+define( [], function () {
 
-function changeRenderer(_renderer) {
-	activeRenderer = _renderer;
-	jQuery('.group-renderer').removeClass('active');
-	jQuery('#' + _renderer).addClass('active');
-}
+	var f = function () {
+		var scope = this;
 
-function updateRenderer() {
-	render(activeRenderer);
-}
+		var renderer;
+		var effect;
+		var renderType;
 
-function render( type ) {
-	switch ( type ) {
-		case '3d':
-			require(['CSS3DRenderer'], function () {
-				if (renderer instanceof THREE.CSS3DRenderer) {
-					renderer.render( scene, camera );
-				}
-				else {
-					renderer = new THREE.CSS3DRenderer();
-					reset();
-					renderer.domElement.style.position = 'absolute';
-					container = document.getElementById( 'container' );
-					container.appendChild( renderer.domElement );
-					renderer.setSize( window.innerWidth, window.innerHeight );
-				}
-			});
-			break;
+		this.render = function () {
+			switch ( renderType ) {
+				case '3d':
+					require( ['CSS3DRenderer'], function () {
+						if ( renderer instanceof THREE.CSS3DRenderer ) {
+							renderer.render( scene, camera );
+						}
+						else {
+							renderer = new THREE.CSS3DRenderer();
+							reset();
+							renderer.domElement.style.position = 'absolute';
+							var container = document.getElementById( 'container' );
+							container.appendChild( renderer.domElement );
+							renderer.setSize( window.innerWidth, window.innerHeight );
+						}
+					} );
+					break;
 
-		case 'vr':
-			require(['CSS3DStereoRenderer'], function () {
-				if (renderer instanceof THREE.CSS3DStereoRenderer) {
-					effect.render( scene, camera );
-				}
-				else {
-					renderer = new THREE.CSS3DStereoRenderer();
-					reset();
-					renderer.setSize( window.innerWidth, window.innerHeight );
-					element = renderer.domElement;
-					container = document.getElementById('container');
-					container.appendChild(element);
+				case 'vr':
+				default:
+					require( ['CSS3DStereoRenderer'], function ( Renderer ) {
+						if ( renderer instanceof THREE.CSS3DStereoRenderer ) {
+							effect.render( scene, camera );
+						}
+						else {
+							renderer = new THREE.CSS3DStereoRenderer();
+							reset();
+							var container = document.getElementById( 'container' );
+							container.appendChild( renderer.domElement );
+							renderer.setSize( window.innerWidth, window.innerHeight );
 
-					effect = new THREE.StereoEffect( renderer );
-					effect.setSize( window.innerWidth, window.innerHeight );
-					effect.setEyeSeparation(3);
-				}
-			});
-			break;
-	}
-}
+							effect = new THREE.StereoEffect( renderer );
+							effect.setSize( window.innerWidth, window.innerHeight );
+							effect.setEyeSeparation( 3 );
+						}
+					} );
+					break;
+			}
+		}
+
+		this.setType = function ( type ) {
+			renderType = type;
+			jQuery( '.group-renderer' ).removeClass( 'active' );
+			jQuery( '#' + this.renderType ).addClass( 'active' );
+			this.render();
+		};
+
+		this.getType = function () {
+			return renderType;
+		};
+
+/*		this.resetShapes = function ( _table ) {
+			vrCallgraph.addCSSObjToScene( _table );
+
+			// sphere
+			//vrShapeSphere();
+			// helix
+			//vrShapeHelix();
+			// tube
+			//vrShapeTube();
+			// grid
+			//vrShapeGrid();
+		};*/
+
+		this.active = function () {
+			return renderer;
+		};
+	};
+
+	window.mediator.subscribe( "wat", function () {
+		if ( arguments[1] == 'update' ) {
+			//f.render( renderType ); //@todo this is not having access to the scope
+		}
+	} );
+
+	return f;
+} );

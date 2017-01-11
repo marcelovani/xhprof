@@ -1,14 +1,19 @@
-define( [], function () {
-	var vrPlot = function () {
+define( ['CSS3DRenderer'], function () {
+	var f = function () {
+		var scope = this;
+		var scale = 1.5; //@todo get from object
+		var offsetX, offsetY;
+		var table = [];
+		var objects = [];
+
 		this.plotObj = function ( dotObjects ) {
 			var total = dotObjects.length;
 			if ( total > 0 ) {
-				var table = [];
-				var plot = {};
 				var x1 = 0;
 				var x2 = 0;
 				var y1 = 0;
 				var y2 = 0;
+				var table = [];
 				for ( var i = 0; i < total; i++ ) {
 					if ( dotObjects[i].shape == 'box' || dotObjects[i].shape == 'octagon' ) {
 						// Store the smallest x
@@ -49,15 +54,66 @@ define( [], function () {
 						table[i][4] = position.y;
 					}
 				}
-				plot.table = table;
-				plot.x1 = x1;
-				plot.x2 = x2;
-				plot.y1 = y1;
-				plot.y2 = y2;
-				return plot;
+				this.table = table;
+
+				// Calculate offset to center graph on the screen.
+				offsetX = (x2 - x1) * scale / 2;
+				offsetY = (y2 - y1) * scale / 2;
+			}
+		}
+
+		this.addCSSObjToScene = function ( _target ) {
+			// Used with WegGl renderer
+			var cube = new THREE.BoxGeometry( 50, 50, 50 );
+			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
+
+			for ( var i = 0; i < this.table.length; i++ ) {
+
+				var element = document.createElement( 'div' );
+				element.className = 'element';
+
+				var color = 'rgba(' + this.table[i][2] + ', 0.8)';
+				element.style.backgroundColor = color;
+
+				var number = document.createElement( 'div' );
+				number.className = 'number';
+				number.textContent = (i) + 1;
+				element.appendChild( number );
+
+				var symbol = document.createElement( 'div' );
+				symbol.className = 'symbol';
+				symbol.textContent = this.table[i][0];
+				element.appendChild( symbol );
+
+				var details = document.createElement( 'div' );
+				details.className = 'details';
+				details.innerHTML = this.table[i][1];
+				element.appendChild( details );
+
+				// Used by webgl only
+				// var object = new THREE.Mesh( cube , material );
+
+				// Used with CSS renderer
+				var cssObj = new THREE.CSS3DObject( element );
+				cssObj.position.x = this.table[i][3] * scale - offsetX;
+				cssObj.position.y = this.table[i][4] * scale - offsetY;
+				cssObj.position.z = Math.random() * scale * 500 - 1000;
+				scene.add( cssObj );
+
+				objects.push( cssObj ); //todo change to this.objects
+				this.objects = objects; //todo remove line
+
+				// Push to default target;
+				var object = new THREE.Object3D();
+				object.position.x = cssObj.position.x;
+				object.position.y = cssObj.position.y;
+				object.position.z = cssObj.position.z;
+
+				targets[_target].push( object ); //todo move to vrtargets
+
 			}
 		}
 	};
+	return f;
 
-	return vrPlot;
 } );

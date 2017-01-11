@@ -1,33 +1,5 @@
 function vrPannel() {
-	var button = document.getElementById( 'table' );
-	button.addEventListener( 'click', function ( event ) {
-		changeShape('table', 1000);
-
-	}, false );
-
-	var button = document.getElementById( 'sphere' );
-	button.addEventListener( 'click', function ( event ) {
-		changeShape('sphere', 1000);
-
-	}, false );
-
-	var button = document.getElementById( 'helix' );
-	button.addEventListener( 'click', function ( event ) {
-		changeShape('helix', 1000);
-
-	}, false );
-
-	var button = document.getElementById( 'tube' );
-	button.addEventListener( 'click', function ( event ) {
-		changeShape('tube', 1000);
-
-	}, false );
-
-	var button = document.getElementById( 'grid' );
-	button.addEventListener( 'click', function ( event ) {
-		changeShape('grid', 1000);
-
-	}, false );
+//@todo move all of these bits into their modules
 
 	var button = document.getElementById( '3d' );
 	button.addEventListener( 'click', function ( event ) {

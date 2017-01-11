@@ -1,42 +1,93 @@
-var trackballControls;
-var leapController, leapControls;
-var accelerometerControls;
+define( [], function () {
 
-var controls = {};
-controls['trackballControls'] = ["../../node_modules/three/examples/js/controls/TrackballControls.js"];
-controls['accelerometerControls'] = ["../../node_modules/three/examples/js/controls/DeviceOrientationControls.js"];
-controls['leapControls'] = [
-	//"../../node_modules/leapjs/leap-0.6.4.min.js",
-	"../../node_modules/leap_three/controls/LeapTwoHandControls.js",
-	"../themes/3D/js/leap-plugins-0.1.11pre.js"
-];
+	var f = function () {
+		var trackballControls;
+		var leapController, leapControls;
+		var accelerometerControls;
 
-var enabledControls = {};
-for ( var i = 0; i < controls.length; i ++ ) {
-	var type = controls[i][0];
-	enabledControls[type] =  false;
-}
+		var enabledControls = ['trackballControls'];
 
-function loadControl(type) {
-	for ( var i = 0; i < controls[type].length; i ++ ) {
-		loadJS(controls[type][i], updateControls, document.body);
-	}
-}
+		this.enableControl = function ( name ) {
+			if (enabledControls[name].length == 0) {
+				enabledControls.push(name);
+			}
+		};
 
-function updateControl( type ) {
+		this.disableControl = function ( name ) {
+			if (enabledControls[name].length > 0) {
+				delete enabledControls[name];
+			}
+		};
+
+		this.getEnabled = function () {
+			return enabledControls;
+		};
+
+		this.update = function () {
+			var clock = new THREE.Clock();
+			for ( var i = 0; i < Object.keys( enabledControls ).length; i++ ) {
+				switch ( enabledControls[i] ) {
+					case 'trackballControls':
+						require( ['trackballControls'], function () {
+							if ( trackballControls instanceof THREE.TrackballControls ) {
+								trackballControls.update(clock);
+							}
+							else {
+								trackballControls = new THREE.TrackballControls( camera, renderer.active().domElement );
+								trackballControls.rotateSpeed = 0.5;
+								trackballControls.minDistance = 500;
+								trackballControls.maxDistance = 6000;
+								trackballControls.addEventListener( 'change', renderer.render);
+							}
+						} );
+						break;
+
+					case 'vr':
+					default:
+						require( ['CSS3DStereoRenderer'], function ( Renderer ) {
+							if ( renderer instanceof THREE.CSS3DStereoRenderer ) {
+								effect.render( scene, camera );
+							}
+							else {
+								renderer = new THREE.CSS3DStereoRenderer();
+								reset();
+								var container = document.getElementById( 'container' );
+								container.appendChild( renderer.domElement );
+								renderer.setSize( window.innerWidth, window.innerHeight );
+
+								effect = new THREE.StereoEffect( renderer );
+								effect.setSize( window.innerWidth, window.innerHeight );
+								effect.setEyeSeparation( 3 );
+							}
+						} );
+						break;
+				}
+			}
+		}
+
+	};
+
+	return f;
+} );
+
+/*
+
+function xxxx( type ) {
 	switch ( type ) {
 		case 'trackballControls':
 			if ( typeof(THREE.TrackballControls) !== 'function' ) {
 				loadControl( type );
 			} else {
-				if (trackballControls instanceof THREE.TrackballControls) {
+				if ( trackballControls instanceof THREE.TrackballControls ) {
 					trackballControls.update();
 				} else {
 					trackballControls = new THREE.TrackballControls( camera, renderer.domElement );
 					trackballControls.rotateSpeed = 0.5;
 					trackballControls.minDistance = 500;
 					trackballControls.maxDistance = 6000;
-					trackballControls.addEventListener( 'change', updateRenderer );
+					trackballControls.addEventListener( 'change',
+						mediator.publish( "wat", 7, "update", { one: 1 } )
+					)
 				}
 			}
 			break;
@@ -45,7 +96,7 @@ function updateControl( type ) {
 			if ( typeof(THREE.LeapTwoHandControls) !== 'function' ) {
 				loadControl( type );
 			} else {
-				if (leapControls instanceof THREE.LeapTwoHandControls) {
+				if ( leapControls instanceof THREE.LeapTwoHandControls ) {
 					leapControls.update();
 				} else {
 					leapController = new Leap.Controller();
@@ -67,7 +118,7 @@ function updateControl( type ) {
 			if ( typeof(THREE.DeviceOrientationControls) !== 'function' ) {
 				loadControl( type );
 			} else {
-				if (accelerometerControls instanceof THREE.DeviceOrientationControls) {
+				if ( accelerometerControls instanceof THREE.DeviceOrientationControls ) {
 					accelerometerControls.update();
 				} else {
 					accelerometerControls = new THREE.DeviceOrientationControls( camera );
@@ -78,12 +129,4 @@ function updateControl( type ) {
 			break;
 	}
 }
-
-function updateControls() {
-	for ( var i = 0; i < Object.keys(enabledControls).length; i ++ ) {
-		var type = Object.keys(enabledControls)[i];
-		if (enabledControls[type] == true) {
-			updateControl(type);
-		}
-	}
-}
+*/
