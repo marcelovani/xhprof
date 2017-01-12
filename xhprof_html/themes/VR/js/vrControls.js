@@ -1,21 +1,46 @@
 define( [], function () {
 
 	var f = function () {
+		var scope = this;
+		var controls = [ 'trackballControls', 'leapControls', 'accelerometerControls' ];
+
 		var trackballControls;
 		var leapController, leapControls;
 		var accelerometerControls;
 
-		var enabledControls = ['trackballControls'];
+		var enabledControls = [];
 
-		this.enableControl = function ( name ) {
-			if (enabledControls[name].length == 0) {
+		this.init = function(_objects) {
+			for ( var i = 0; i < controls.length; i ++ ) {
+				var controlName = controls[i];
+
+				//@todo: create the buttons markup here, not in the html of main page.
+
+				// Add click event on each button.
+				$( "#" + controlName ).click(function() {
+					buttonName = this.id;
+					if (jQuery('#' + buttonName + '.active').length == 0) {
+						scope.enable(buttonName);
+					}
+					else {
+						scope.disable(buttonName);
+					}
+				});
+			}
+		}
+
+		this.enable = function ( name ) {
+			if (enabledControls.indexOf(name) == -1) {
+				jQuery('#' + name).addClass('active');
 				enabledControls.push(name);
 			}
 		};
 
-		this.disableControl = function ( name ) {
-			if (enabledControls[name].length > 0) {
-				delete enabledControls[name];
+		this.disable = function ( name ) {
+			var pos = enabledControls.indexOf(name);
+			if (pos != -1) {
+				jQuery('#' + name).removeClass('active');
+				enabledControls.splice(pos, 1);
 			}
 		};
 
@@ -43,23 +68,6 @@ define( [], function () {
 						break;
 
 					case 'vr':
-					default:
-						require( ['CSS3DStereoRenderer'], function ( Renderer ) {
-							if ( renderer instanceof THREE.CSS3DStereoRenderer ) {
-								effect.render( scene, camera );
-							}
-							else {
-								renderer = new THREE.CSS3DStereoRenderer();
-								reset();
-								var container = document.getElementById( 'container' );
-								container.appendChild( renderer.domElement );
-								renderer.setSize( window.innerWidth, window.innerHeight );
-
-								effect = new THREE.StereoEffect( renderer );
-								effect.setSize( window.innerWidth, window.innerHeight );
-								effect.setEyeSeparation( 3 );
-							}
-						} );
 						break;
 				}
 			}

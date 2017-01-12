@@ -90,6 +90,8 @@ require( [
 		renderer.render();
 
 		var controls = new Controls();
+		controls.init();
+		controls.enable('trackballControls');
 
 		if ( typeof(window.mediator) == 'undefined' ) {
 			window.mediator = new Mediator();

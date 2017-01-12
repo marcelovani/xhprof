@@ -15,7 +15,7 @@ function vrPannel() {
 		}
 	}, false );
 
-	var button = document.getElementById( 'accelerometerControls' );
+/*	var button = document.getElementById( 'accelerometerControls' );
 	button.addEventListener( 'click', function ( event ) {
 		if (jQuery('#accelerometerControls.active').length == 0) {
 			jQuery('#accelerometerControls').addClass('active');
@@ -49,5 +49,5 @@ function vrPannel() {
 			jQuery('#leapControls').removeClass('active');
 			enabledControls.leapControls = false;
 		}
-	}, false );
+	}, false );*/
 }

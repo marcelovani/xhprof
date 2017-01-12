@@ -1,3 +1,4 @@
+//@todo cleanup
 
 function CSVToArray( strData, strDelimiter ){
 	// Check to see if the delimiter is defined. If not,
