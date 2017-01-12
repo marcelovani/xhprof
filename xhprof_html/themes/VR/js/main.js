@@ -89,9 +89,14 @@ require( [
 		renderer.setType( '3d' );
 		renderer.render();
 
+		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+		camera.name = "Main";
+		camera.position.z = 3000;
+
 		var controls = new Controls();
 		controls.init();
-		controls.enable('trackballControls');
+		//controls.enable('trackballControls');
+		controls.enable('accelerometerControls');
 
 		if ( typeof(window.mediator) == 'undefined' ) {
 			window.mediator = new Mediator();
@@ -137,6 +142,7 @@ require( [
 
 // @todo: do we need to call reset when changing renderers?
 function reset() {
+	return;
 	jQuery( '#container' ).html( '' );//@todo reinstate
 
 	camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );

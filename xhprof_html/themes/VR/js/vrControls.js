@@ -67,7 +67,16 @@ define( [], function () {
 						} );
 						break;
 
-					case 'vr':
+					case 'accelerometerControls':
+						require( ['accelerometerControls'], function () {
+							if ( accelerometerControls instanceof THREE.DeviceOrientationControls ) {
+								//accelerometerControls.update();
+							}
+							else {
+								accelerometerControls = new THREE.DeviceOrientationControls( camera );
+								accelerometerControls.addEventListener( 'change', renderer.render);
+							}
+						} );
 						break;
 				}
 			}
@@ -82,23 +91,7 @@ define( [], function () {
 
 function xxxx( type ) {
 	switch ( type ) {
-		case 'trackballControls':
-			if ( typeof(THREE.TrackballControls) !== 'function' ) {
-				loadControl( type );
-			} else {
-				if ( trackballControls instanceof THREE.TrackballControls ) {
-					trackballControls.update();
-				} else {
-					trackballControls = new THREE.TrackballControls( camera, renderer.domElement );
-					trackballControls.rotateSpeed = 0.5;
-					trackballControls.minDistance = 500;
-					trackballControls.maxDistance = 6000;
-					trackballControls.addEventListener( 'change',
-						mediator.publish( "wat", 7, "update", { one: 1 } )
-					)
-				}
-			}
-			break;
+
 
 		case 'leapControls':
 			if ( typeof(THREE.LeapTwoHandControls) !== 'function' ) {
