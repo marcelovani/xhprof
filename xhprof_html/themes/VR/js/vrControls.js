@@ -2,11 +2,12 @@ define( [], function () {
 
 	var f = function () {
 		var scope = this;
-		var controls = [ 'trackballControls', 'leapControls', 'accelerometerControls' ];
+		var controls = [ 'trackballControls', 'leapControls', 'accelerometerControls', 'firstPersonControls' ];
 
 		var trackballControls;
 		var leapController, leapControls;
 		var accelerometerControls;
+		var firstPersonControls;
 
 		var enabledControls = [];
 
@@ -55,13 +56,27 @@ define( [], function () {
 					case 'trackballControls':
 						require( ['trackballControls'], function () {
 							if ( trackballControls instanceof THREE.TrackballControls ) {
-								trackballControls.update(clock);
+								trackballControls.update(clock.getDelta());
 							}
 							else {
 								trackballControls = new THREE.TrackballControls( camera, renderer.active().domElement );
-								trackballControls.rotateSpeed = 0.5;
-								trackballControls.minDistance = 500;
-								trackballControls.maxDistance = 6000;
+								trackballControls.rotateSpeed = 4.5;
+								trackballControls.zoomSpeed = 1.2;
+								trackballControls.panSpeed = 0.3;
+
+								trackballControls.staticMoving = false;
+								trackballControls.dynamicDampingFactor = 0.2;
+
+								trackballControls.minDistance = 0;
+								trackballControls.maxDistance = Infinity;
+
+								// Rotate / Zoom / Pan
+								this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
+
+								trackballControls.noRotate = false;
+								trackballControls.noZoom = false;
+								trackballControls.noPan = false;
+
 								trackballControls.addEventListener( 'change', renderer.render);
 							}
 						} );
@@ -75,6 +90,19 @@ define( [], function () {
 							else {
 								accelerometerControls = new THREE.DeviceOrientationControls( camera );
 								accelerometerControls.addEventListener( 'change', renderer.render);
+							}
+						} );
+						break;
+
+					case 'firstPersonControls':
+						require( ['firstPersonControls'], function () {
+							if ( firstPersonControls instanceof THREE.FirstPersonControls ) {
+								firstPersonControls.update( clock.getDelta() );
+							}
+							else {
+								firstPersonControls = new THREE.FirstPersonControls( camera );
+								firstPersonControls.movementSpeed = 1000;
+								firstPersonControls.lookSpeed = 0.06;
 							}
 						} );
 						break;

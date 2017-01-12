@@ -8,6 +8,7 @@ require.config( {
 		'CSS3DStereoRenderer': '/node_modules/three/examples/js/renderers/CSS3DStereoRenderer',
 		'trackballControls': '/node_modules/three/examples/js/controls/TrackballControls',
 		'accelerometerControls': '/node_modules/three/examples/js/controls/DeviceOrientationControls',
+		'firstPersonControls': '/node_modules/three/examples/js/controls/FirstPersonControls',
 		'leapControls': '/node_modules/leap_three/controls/LeapTwoHandControls',
 		'leapPlugins': '/themes/3D/js/leap-plugins-0.1.11pre',
 		'utils': '/themes/VR/js/utils',
@@ -40,7 +41,7 @@ var mediator = new Mediator();
 
 scene = new THREE.Scene();
 
-var activeShape = 'tube';
+var activeShape = 'callgraph';
 
 function onWindowResize() {
 
@@ -95,8 +96,7 @@ require( [
 
 		var controls = new Controls();
 		controls.init();
-		//controls.enable('trackballControls');
-		controls.enable('accelerometerControls');
+		controls.enable('trackballControls');
 
 		if ( typeof(window.mediator) == 'undefined' ) {
 			window.mediator = new Mediator();
@@ -122,7 +122,7 @@ require( [
 			//renderer.render();
 			mediator.publish( "wat", 7, "update", { one: 1 } );
 			window.requestAnimationFrame( animate );
-			TWEEN.update();//@todo reinstate
+			//TWEEN.update();//@todo reinstate
 
 			//updateObjectProperties(); //@todo use require
 		};

@@ -40,22 +40,23 @@ var dotObjects;
 <div id="info"><?php echo $run; ?></div>
 <div id="menu">
       <span class="group">
-        <button id="callgraph" class="group-shape">CALLGRAPH</button>
+        <button id="callgraph" class="group-shape active">CALLGRAPH</button>
         <button id="sphere" class="group-shape">SPHERE</button>
-        <button id="tube" class="group-shape active">TUBE</button>
+        <button id="tube" class="group-shape">TUBE</button>
         <button id="helix" class="group-shape">HELIX</button>
         <button id="grid" class="group-shape">GRID</button>
       </span>
 
       <span class="group">
-        <button id="3d" class="group-renderer">3D</button>
-        <button id="vr" class="group-renderer active">VR</button>
+        <button id="3d" class="group-renderer active">3D</button>
+        <button id="vr" class="group-renderer">VR</button>
       </span>
 
       <span class="group">
         <button id="accelerometerControls" class="group-controls">Accelerometer</button>
         <button id="leapControls" class="group-controls">LeapMotion</button>
         <button id="trackballControls" class="group-controls">Trackpad</button>
+        <button id="firstPersonControls" class="group-controls">1st Person</button>
       </span>
 </div>
 
