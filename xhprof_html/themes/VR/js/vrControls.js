@@ -2,11 +2,11 @@ define( [], function () {
 
 	var f = function () {
 		var scope = this;
-		var controls = [ 'trackballControls', 'leapControls', 'accelerometerControls', 'firstPersonControls' ];
+		var controls = [ 'trackballControls', 'leapControls', 'deviceOrientationControls', 'firstPersonControls' ];
 
 		var trackballControls;
 		var leapController, leapControls;
-		var accelerometerControls;
+		var deviceOrientationControls;
 		var firstPersonControls;
 
 		var enabledControls = [];
@@ -71,9 +71,10 @@ define( [], function () {
 								trackballControls.maxDistance = Infinity;
 
 								// Rotate / Zoom / Pan
+								//@todo use click and drag to pan without having to press D
 								this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
 
-								trackballControls.noRotate = false;
+								trackballControls.noRotate = true;
 								trackballControls.noZoom = false;
 								trackballControls.noPan = false;
 
@@ -82,19 +83,26 @@ define( [], function () {
 						} );
 						break;
 
-					case 'accelerometerControls':
-						require( ['accelerometerControls'], function () {
-							if ( accelerometerControls instanceof THREE.DeviceOrientationControls ) {
-								//accelerometerControls.update();
+					case 'deviceOrientationControls':
+						require( ['deviceOrientationControls'], function () {
+							if ( deviceOrientationControls instanceof DeviceOrientationController ) {
+								deviceOrientationControls.update();
+								//@todo use .addEventListener( 'change', renderer.render) instead of render() below
+								renderer.render();
 							}
 							else {
-								accelerometerControls = new THREE.DeviceOrientationControls( camera );
-								accelerometerControls.addEventListener( 'change', renderer.render);
+								deviceOrientationControls = new DeviceOrientationController( camera, renderer.active().domElement );
+								deviceOrientationControls.connect();
+								deviceOrientationControls.freeze = false;
+								deviceOrientationControls.enableManualDrag = true;
+								deviceOrientationControls.enableManualZoom = false;
+								deviceOrientationControls.useQuaternions = false;
+								scope.setupAccelerometerControlHandlers( deviceOrientationControls, renderer.active() );
 							}
 						} );
 						break;
 
-					case 'firstPersonControls':
+					case 'firstPersonControls': //@todo try https://github.com/mathisonian/three-first-person-controls
 						require( ['firstPersonControls'], function () {
 							if ( firstPersonControls instanceof THREE.FirstPersonControls ) {
 								firstPersonControls.update( clock.getDelta() );
@@ -108,7 +116,55 @@ define( [], function () {
 						break;
 				}
 			}
-		}
+		};
+
+		this.setupAccelerometerControlHandlers = function( _controls, _renderer ) {
+
+			_controls.addEventListener( 'onScreenOrientationChange', function () {
+				console.log('render');
+			});
+
+			// Listen for manual interaction (zoom OR rotate)
+
+
+			_controls.addEventListener( 'userinteractionstart', function () {
+				_renderer.domElement.style.cursor = 'move';
+				console.log('move');
+			});
+
+			_controls.addEventListener( 'userinteractionend', function () {
+				_renderer.domElement.style.cursor = 'default';
+				console.log('default');
+			});
+
+			// Listen for manual rotate interaction
+
+			_controls.addEventListener( 'rotatestart', function () {
+				console.log('rotate');
+			});
+
+			_controls.addEventListener( 'rotateend', function () {
+
+			});
+
+			// Listen for manual zoom interaction
+
+			_controls.addEventListener( 'zoomstart', function () {
+				console.log('zoom');
+			});
+
+			_controls.addEventListener( 'zoomend', function () {
+
+			});
+
+			//
+
+			// Show a simple 'canvas calibration required' dialog to user
+			_controls.addEventListener( 'compassneedscalibration', function () {
+				alert('Compass needs calibration');
+			});
+
+		};
 
 	};
 

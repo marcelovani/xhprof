@@ -13,6 +13,7 @@ define( [], function () {
 					require( ['CSS3DRenderer'], function () {
 						if ( renderer instanceof THREE.CSS3DRenderer ) {
 							renderer.render( scene, camera );
+							console.log(renderType);
 						}
 						else {
 							renderer = new THREE.CSS3DRenderer();

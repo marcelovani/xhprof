@@ -7,7 +7,7 @@ require.config( {
 		'CSS3DRenderer': '/node_modules/three/examples/js/renderers/CSS3DRenderer',
 		'CSS3DStereoRenderer': '/node_modules/three/examples/js/renderers/CSS3DStereoRenderer',
 		'trackballControls': '/node_modules/three/examples/js/controls/TrackballControls',
-		'accelerometerControls': '/node_modules/three/examples/js/controls/DeviceOrientationControls',
+		'deviceOrientationControls': '/node_modules/threeVR/js/DeviceOrientationController',
 		'firstPersonControls': '/node_modules/three/examples/js/controls/FirstPersonControls',
 		'leapControls': '/node_modules/leap_three/controls/LeapTwoHandControls',
 		'leapPlugins': '/themes/3D/js/leap-plugins-0.1.11pre',
@@ -97,6 +97,7 @@ require( [
 		var controls = new Controls();
 		controls.init();
 		controls.enable('trackballControls');
+		controls.enable('deviceOrientationControls');
 
 		if ( typeof(window.mediator) == 'undefined' ) {
 			window.mediator = new Mediator();
@@ -136,6 +137,7 @@ require( [
 
 		mediator.publish( "wat", 7, "init", { one: 1 } );
 
+		//@todo fix this
 		window.addEventListener( 'resize', onWindowResize, false );
 
 	} );

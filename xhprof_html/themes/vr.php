@@ -53,7 +53,7 @@ var dotObjects;
       </span>
 
       <span class="group">
-        <button id="accelerometerControls" class="group-controls">Accelerometer</button>
+        <button id="deviceOrientationControls" class="group-controls">Accelerometer</button>
         <button id="leapControls" class="group-controls">LeapMotion</button>
         <button id="trackballControls" class="group-controls">Trackpad</button>
         <button id="firstPersonControls" class="group-controls">1st Person</button>
