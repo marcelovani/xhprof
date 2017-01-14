@@ -71,14 +71,18 @@ define( [], function () {
 								trackballControls.maxDistance = Infinity;
 
 								// Rotate / Zoom / Pan
-								//@todo use click and drag to pan without having to press D
-								this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
+								//@todo use click and drag to pan without having to press P
+								trackballControls.keys = [ 82 /*R*/, 90 /*Z*/, 80 /*P*/ ];
+								trackballControls.keyPersistentMode = true;
 
-								trackballControls.noRotate = true;
+								trackballControls.noRotate = false;
 								trackballControls.noZoom = false;
 								trackballControls.noPan = false;
 
 								trackballControls.addEventListener( 'change', renderer.render);
+								trackballControls.addEventListener( 'keypress', function() {
+									jQuery('#' + this.keyPressed).toggleClass( "active" );
+								});
 							}
 						} );
 						break;
@@ -94,7 +98,7 @@ define( [], function () {
 								deviceOrientationControls = new DeviceOrientationController( camera, renderer.active().domElement );
 								deviceOrientationControls.connect();
 								deviceOrientationControls.freeze = false;
-								deviceOrientationControls.enableManualDrag = true;
+								deviceOrientationControls.enableManualDrag = false;
 								deviceOrientationControls.enableManualZoom = false;
 								deviceOrientationControls.useQuaternions = false;
 								scope.setupAccelerometerControlHandlers( deviceOrientationControls, renderer.active() );

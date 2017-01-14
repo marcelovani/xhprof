@@ -58,6 +58,12 @@ var dotObjects;
         <button id="trackballControls" class="group-controls">Trackpad</button>
         <button id="firstPersonControls" class="group-controls">1st Person</button>
       </span>
+
+      <span class="group">
+        <button id="R" class="group-trackball-controls">R</button>
+        <button id="P" class="group-trackball-controls">P</button>
+        <button id="Z" class="group-trackball-controls">Z</button>
+      </span>
 </div>
 
 </body>
