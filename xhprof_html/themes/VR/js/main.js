@@ -10,6 +10,8 @@ require.config( {
 		'deviceOrientationControls': '/node_modules/threeVR/js/DeviceOrientationController',
 		'firstPersonControls': '/node_modules/three/examples/js/controls/FirstPersonControls',
 		'leapControls': '/node_modules/leap_three/controls/LeapTwoHandControls',
+		//'leapControls': '/node_modules/leap_three/controls/LeapSpringControls',
+		//'leapControls': '/node_modules/leap_three/controls/LeapEyeLookControls',
 		'leapPlugins': '/themes/3D/js/leap-plugins-0.1.11pre',
 		'utils': '/themes/VR/js/utils',
 		'vrRenderer': '/themes/VR/js/vrRenderer',

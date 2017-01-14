@@ -24,40 +24,4 @@ function vrPannel() {
 			changeRenderer('vr');
 		}
 	}, false );
-
-/*	var button = document.getElementById( 'accelerometerControls' );
-	button.addEventListener( 'click', function ( event ) {
-		if (jQuery('#accelerometerControls.active').length == 0) {
-			jQuery('#accelerometerControls').addClass('active');
-			enabledControls.accelerometerControls = true;
-		}
-		else {
-			jQuery('#accelerometerControls').removeClass('active');
-			enabledControls.accelerometerControls = false;
-		}
-	}, false );
-
-	var button = document.getElementById( 'trackballControls' );
-	button.addEventListener( 'click', function ( event ) {
-		if (jQuery('#trackballControls.active').length == 0) {
-			jQuery('#trackballControls').addClass('active');
-			enabledControls.trackballControls = true;
-		}
-		else {
-			jQuery('#trackballControls').removeClass('active');
-			enabledControls.trackballControls = false;
-		}
-	}, false );
-
-	var button = document.getElementById( 'leapControls' );
-	button.addEventListener( 'click', function ( event ) {
-		if (jQuery('#leapControls.active').length == 0) {
-			jQuery('#leapControls').addClass('active');
-			enabledControls.leapControls = true;
-		}
-		else {
-			jQuery('#leapControls').removeClass('active');
-			enabledControls.leapControls = false;
-		}
-	}, false );*/
 }

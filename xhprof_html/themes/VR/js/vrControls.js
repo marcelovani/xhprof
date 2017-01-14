@@ -118,6 +118,51 @@ define( [], function () {
 							}
 						} );
 						break;
+
+					case 'leapControls':
+						require( ['leapControls', 'leapPlugins'], function () {
+							if ( leapControls instanceof THREE.LeapTwoHandControls ) {
+								leapControls.update();
+								//@todo use .addEventListener( 'change', renderer.render) instead of render() below
+								renderer.render();
+							}
+							else {
+								leapController = new Leap.Controller();
+
+								leapControls = new THREE.LeapTwoHandControls( camera, leapController );
+								leapControls['translationSpeed'] = 10;
+								leapControls['translationDecay'] = 0.3;
+								leapControls['scaleDecay'] = 0.5;
+								leapControls['rotationSlerp'] = 0.8;
+								leapControls['rotationSpeed'] = 4;
+								leapControls['pinchThreshold'] = 0.5;
+								leapControls['transSmoothing'] = 0.5;
+								leapControls['rotationSmoothing'] = 0.2;
+//
+//								leapControls = new THREE.LeapSpringControls( camera , leapController , scene );
+//
+//								leapControls.dampening      = .75;
+//								leapControls.size           = 120;
+//								leapControls.springConstant =   1;
+//								leapControls.mass           = 100;
+//								leapControls.anchorSpeed    =  .1;
+//								leapControls.staticLength   = 100;
+//
+//								var geo = new THREE.IcosahedronGeometry( 5, 2 );
+//								var mat = new THREE.MeshNormalMaterial();
+//
+//								var targetMesh  = new THREE.Mesh( geo , mat );
+//								var anchorMesh  = new THREE.Mesh( geo , mat );
+//								var handMesh    = new THREE.Mesh( geo , mat );
+//
+//								leapControls.addTargetMarker( targetMesh );
+//								leapControls.addAnchorMarker( anchorMesh );
+//								leapControls.addHandMarker(     handMesh );
+
+								leapController.connect();
+							}
+						} );
+						break;
 				}
 			}
 		};
@@ -174,48 +219,3 @@ define( [], function () {
 
 	return f;
 } );
-
-/*
-
-function xxxx( type ) {
-	switch ( type ) {
-
-
-		case 'leapControls':
-			if ( typeof(THREE.LeapTwoHandControls) !== 'function' ) {
-				loadControl( type );
-			} else {
-				if ( leapControls instanceof THREE.LeapTwoHandControls ) {
-					leapControls.update();
-				} else {
-					leapController = new Leap.Controller();
-					leapController.connect();
-					leapControls = new THREE.LeapTwoHandControls( camera, leapController );
-					leapControls['translationSpeed'] = 10;
-					leapControls['translationDecay'] = 0.3;
-					leapControls['scaleDecay'] = 0.5;
-					leapControls['rotationSlerp'] = 0.8;
-					leapControls['rotationSpeed'] = 4;
-					leapControls['pinchThreshold'] = 0.5;
-					leapControls['transSmoothing'] = 0.5;
-					leapControls['rotationSmoothing'] = 0.2;
-				}
-			}
-			break;
-
-		case 'accelerometerControls':
-			if ( typeof(THREE.DeviceOrientationControls) !== 'function' ) {
-				loadControl( type );
-			} else {
-				if ( accelerometerControls instanceof THREE.DeviceOrientationControls ) {
-					accelerometerControls.update();
-				} else {
-					accelerometerControls = new THREE.DeviceOrientationControls( camera );
-					//accelerometerControls.connect();
-					//camera.position.z = 1;
-				}
-			}
-			break;
-	}
-}
-*/
