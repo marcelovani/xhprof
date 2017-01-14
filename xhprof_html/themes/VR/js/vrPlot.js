@@ -101,7 +101,6 @@ define( ['CSS3DRenderer'], function () {
 				scene.add( cssObj );
 
 				objects.push( cssObj ); //todo change to this.objects
-				this.objects = objects; //todo remove line
 
 				// Push to default target;
 				var object = new THREE.Object3D();
@@ -112,6 +111,7 @@ define( ['CSS3DRenderer'], function () {
 				targets[_target].push( object ); //todo move to vrtargets
 
 			}
+			this.objects = objects; //todo remove line
 		}
 	};
 	return f;
