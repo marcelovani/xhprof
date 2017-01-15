@@ -13,15 +13,11 @@ define( [], function () {
 					require( ['CSS3DRenderer'], function () {
 						if ( renderer instanceof THREE.CSS3DRenderer ) {
 							renderer.render( scene, camera );
-							console.log(renderType);
+							renderer2.render( scene2, camera );
 						}
 						else {
-							renderer = new THREE.CSS3DRenderer();
-							reset();
-							renderer.domElement.style.position = 'absolute';
-							var container = document.getElementById( 'container' );
-							container.appendChild( renderer.domElement );
-							renderer.setSize( window.innerWidth, window.innerHeight );
+							scope.addRendererCss3D();
+							scope.addRendererGl();
 						}
 					} );
 					break;
@@ -31,21 +27,50 @@ define( [], function () {
 					require( ['CSS3DStereoRenderer'], function ( Renderer ) {
 						if ( renderer instanceof THREE.CSS3DStereoRenderer ) {
 							effect.render( scene, camera );
+							renderer2.render( scene2, camera );
 						}
 						else {
-							renderer = new THREE.CSS3DStereoRenderer();
-							reset();
-							var container = document.getElementById( 'container' );
-							container.appendChild( renderer.domElement );
-							renderer.setSize( window.innerWidth, window.innerHeight );
-
-							effect = new THREE.StereoEffect( renderer );
-							effect.setSize( window.innerWidth, window.innerHeight );
-							effect.setEyeSeparation( 3 );
+							scope.addRendererCss3DStereo();
+							scope.addRendererGl();
 						}
 					} );
 					break;
 			}
+		}
+
+		this.addRendererCss3D = function () {
+			renderer = new THREE.CSS3DRenderer();
+			reset();
+			renderer.domElement.style.position = 'absolute';
+			var container = document.getElementById( 'container' );
+			container.appendChild( renderer.domElement );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+		}
+
+		this.addRendererCss3DStereo = function () {
+			renderer = new THREE.CSS3DStereoRenderer();
+			reset();
+			var container = document.getElementById( 'container' );
+			container.appendChild( renderer.domElement );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+
+			effect = new THREE.StereoEffect( renderer );
+			effect.setSize( window.innerWidth, window.innerHeight );
+			effect.setEyeSeparation( 3 );
+		}
+
+		this.addRendererGl = function () {
+			// Used for Camera helper, leap marker and maybe for arrows too.
+			renderer2 = new THREE.WebGLRenderer({alpha:true});
+			renderer2.setClearColor(0x00ff00, 0.0);
+			renderer2.setSize( window.innerWidth, window.innerHeight );
+			renderer2.domElement.style.position = 'absolute';
+			renderer2.domElement.style.zIndex = 1;
+			renderer2.domElement.style.top = 0;
+			renderer.domElement.appendChild(renderer2.domElement);
+
+			var helper = new THREE.CameraHelper( camera );
+			scene2.add( helper );
 		}
 
 		this.setType = function ( type ) {

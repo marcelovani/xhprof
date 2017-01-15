@@ -9,9 +9,9 @@ require.config( {
 		'trackballControls': '/node_modules/three/examples/js/controls/TrackballControls',
 		'deviceOrientationControls': '/node_modules/threeVR/js/DeviceOrientationController',
 		'firstPersonControls': '/node_modules/three/examples/js/controls/FirstPersonControls',
-		'leapControls': '/node_modules/leap_three/controls/LeapTwoHandControls',
-		//'leapControls': '/node_modules/leap_three/controls/LeapSpringControls',
-		//'leapControls': '/node_modules/leap_three/controls/LeapEyeLookControls',
+		'LeapTwoHandControls': '/node_modules/leap_three/controls/LeapTwoHandControls',
+		'LeapSpringControls': '/node_modules/leap_three/controls/LeapSpringControls',
+		'LeapEyeLookControls': '/node_modules/leap_three/controls/LeapEyeLookControls',
 		'leapPlugins': '/themes/3D/js/leap-plugins-0.1.11pre',
 		'utils': '/themes/VR/js/utils',
 		'vrRenderer': '/themes/VR/js/vrRenderer',
@@ -33,7 +33,7 @@ require.config( {
 	waitSeconds: 1
 } );
 
-var camera, scene, renderer;
+var camera, scene2, renderer, renderer2;
 
 var objects = [];
 var targets = { sphere: [], helix: [], tube: [], grid: [], callgraph: [] };
@@ -41,7 +41,10 @@ var needsUpdate = false;
 
 var mediator = new Mediator();
 
+// Main scene used for CSS renderer.
 scene = new THREE.Scene();
+// Secondary scene used to render WebGL elements such as: Camera helper, Arrows, Leap target.
+scene2 = new THREE.Scene();
 
 var activeShape = 'callgraph';
 
