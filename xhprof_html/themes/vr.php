@@ -68,7 +68,7 @@ var dotObjects;
       </span>
 
       <span class="group">
-        <button id="3d" class="group-renderer active">3D</button><span class="3dled"></span>
+        <button id="3d" class="group-renderer">3D</button><span class="3dled"></span>
         <button id="vr" class="group-renderer">VR</button><span class="vrled"></span>
       </span>
 

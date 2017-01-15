@@ -83,7 +83,7 @@ require( [
 		jQuery('#container' ).html('');
 
 		renderer = new Renderer();
-		renderer.setType( 'vr' );
+		renderer.setType( '3d' );
 		renderer.render();
 
 		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -93,7 +93,9 @@ require( [
 		var controls = new Controls();
 		controls.init();
 		controls.enable('trackballControls');
-		controls.enable('deviceOrientationControls');
+		if (window.DeviceOrientationEvent && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+			controls.enable('deviceOrientationControls');
+		}
 
 		if ( typeof(window.mediator) == 'undefined' ) {
 			window.mediator = new Mediator();
