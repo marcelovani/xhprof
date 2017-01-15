@@ -14,6 +14,10 @@ define( [], function () {
 						if ( renderer instanceof THREE.CSS3DRenderer ) {
 							renderer.render( scene, camera );
 							renderer2.render( scene2, camera );
+
+							//@todo move the target to where the camera is looking at
+							//camTarget.rotation.setFromRotationMatrix(camera.matrix);
+							//camTarget.position.copy(camera.position);
 						}
 						else {
 							scope.addRendererCss3D();
@@ -71,6 +75,12 @@ define( [], function () {
 
 			var helper = new THREE.CameraHelper( camera );
 			scene2.add( helper );
+
+			var geo = new THREE.IcosahedronGeometry( 5, 2 );
+			var mat = new THREE.MeshNormalMaterial();
+			camTarget = new THREE.Mesh( geo, mat );
+			scene2.add( camTarget );
+
 		}
 
 		this.setType = function ( type ) {

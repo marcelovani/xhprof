@@ -37,6 +37,7 @@ var camera, scene2, renderer, renderer2;
 
 var objects = [];
 var targets = { sphere: [], helix: [], tube: [], grid: [], callgraph: [] };
+var camTarget;
 var needsUpdate = false;
 
 var mediator = new Mediator();

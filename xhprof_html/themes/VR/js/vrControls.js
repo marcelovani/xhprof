@@ -120,7 +120,7 @@ define( [], function () {
 						break;
 
 					case 'leapControls':
-						var leapType = 'LeapSpringControls';
+						var leapType = 'LeapTwoHandControls';
 						switch ( leapType ) {
 							case 'LeapTwoHandControls':
 								require( ['LeapTwoHandControls', 'leapPlugins'], function () {
