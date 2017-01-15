@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <link rel="stylesheet" href="./themes/VR/css/main.css">
   <link rel="stylesheet" href="./themes/VR/css/gui.css">
+  <link rel="stylesheet" href="./themes/VR/css/loader.css">
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -36,7 +37,25 @@ var dotObjects;
 <script src="../themes/VR/js/vrGui.js"></script>
 <script src="../themes/VR/js/vrPanel.js"></script>
 
-<div id="container"></div>
+<div id="container">
+  <!-- Loader -->
+  <div class="loader wrapper">
+    <div class="cube">
+      <b class="front">Loading</b>
+      <b class="back">Loading</b>
+      <b class="top">Xhprof</b>
+      <b class="bottom">3D</b>
+      <b class="left">Objects</b>
+      <b class="right">Objects</b>
+      <i class="front"></i>
+      <i class="back"></i>
+      <i class="top"></i>
+      <i class="bottom"></i>
+      <i class="left"></i>
+      <i class="right"></i>
+    </div>
+  </div>
+</div>
 <div id="info"><?php echo $run; ?></div>
 <div id="menu">
       <span class="group">

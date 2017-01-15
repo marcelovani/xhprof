@@ -10,7 +10,7 @@ define( [], function () {
 		this.render = function () {
 			switch ( renderType ) {
 				case '3d':
-					require( ['CSS3DRenderer'], function () {
+					require( ['CSS3DRenderer', 'led'], function (_renderer, _led) {
 						if ( renderer instanceof THREE.CSS3DRenderer ) {
 							renderer.render( scene, camera );
 							renderer2.render( scene2, camera );

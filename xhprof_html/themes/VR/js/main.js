@@ -17,7 +17,8 @@ require.config( {
 		'vrRenderer': '/themes/VR/js/vrRenderer',
 		'vrControls': '/themes/VR/js/vrControls',
 		'vrPlot': '/themes/VR/js/vrPlot',
-		'vrTargets': '/themes/VR/js/vrTargets'
+		'vrTargets': '/themes/VR/js/vrTargets',
+		'led': '/themes/VR/js/led'
 	},
 	shim: {
 		'jQuery': {
@@ -80,7 +81,7 @@ require( [
 	'vrRenderer',
 	'vrControls'
 	],
-	function ( _utils, _vrPlot, _vrTargets, Renderer, Controls ) {
+	function (_utils, _vrPlot, _vrTargets, Renderer, Controls ) {
 		var utils = new _utils();
 		var vrPlot = new _vrPlot();
 		var vrTargets = new _vrTargets();
@@ -91,6 +92,8 @@ require( [
 		vrPlot.addCSSObjToScene( 'callgraph' );
 
 		vrTargets.init(vrPlot.objects);
+
+		jQuery('#container' ).html('');
 
 		renderer = new Renderer();
 		renderer.setType( '3d' );
