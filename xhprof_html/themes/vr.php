@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="./themes/VR/css/main.css">
   <link rel="stylesheet" href="./themes/VR/css/gui.css">
   <link rel="stylesheet" href="./themes/VR/css/loader.css">
+  <link rel="stylesheet" href="./themes/VR/css/led.css">
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -67,8 +68,8 @@ var dotObjects;
       </span>
 
       <span class="group">
-        <button id="3d" class="group-renderer active">3D</button>
-        <button id="vr" class="group-renderer">VR</button>
+        <button id="3d" class="group-renderer active">3D</button><span class="3dled"></span>
+        <button id="vr" class="group-renderer">VR</button><span class="vrled"></span>
       </span>
 
       <span class="group">

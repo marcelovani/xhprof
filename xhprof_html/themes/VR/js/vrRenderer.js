@@ -7,6 +7,9 @@ define( [], function () {
 		var effect;
 		var renderType;
 
+		var led3DRenderGreen;
+		var ledVRRenderYellow;
+
 		this.render = function () {
 			switch ( renderType ) {
 				case '3d':
@@ -15,11 +18,17 @@ define( [], function () {
 							renderer.render( scene, camera );
 							renderer2.render( scene2, camera );
 
+							led3DRenderGreen.on();
+							setTimeout(function(){
+								led3DRenderGreen.off();
+							}, 500);
+
 							//@todo move the target to where the camera is looking at
 							//camTarget.rotation.setFromRotationMatrix(camera.matrix);
 							//camTarget.position.copy(camera.position);
 						}
 						else {
+							led3DRenderGreen = new _led('.3dled', 'green' );
 							scope.addRendererCss3D();
 							scope.addRendererGl();
 						}
@@ -32,8 +41,14 @@ define( [], function () {
 						if ( renderer instanceof THREE.CSS3DStereoRenderer ) {
 							effect.render( scene, camera );
 							renderer2.render( scene2, camera );
+
+							ledVRRenderYellow.on();
+							setTimeout(function(){
+								ledVRRenderYellow.off();
+							}, 500);
 						}
 						else {
+							ledVRRenderYellow = new _led('.vrled', 'yellow' );
 							scope.addRendererCss3DStereo();
 							scope.addRendererGl();
 						}
