@@ -121,6 +121,7 @@ define( [], function () {
 
 					case 'leapControls':
 						var leapType = 'LeapTwoHandControls';
+
 						switch ( leapType ) {
 							case 'LeapTwoHandControls':
 								require( ['LeapTwoHandControls', 'leapPlugins'], function () {
@@ -131,7 +132,7 @@ define( [], function () {
 									}
 									else {
 										leapController = new Leap.Controller();
-										leapControls = new THREE.LeapTwoHandControls( camera, leapController );
+										leapControls = new THREE.LeapTwoHandControls( camera, leapController);
 										leapControls['translationSpeed'] = 10;
 										leapControls['translationDecay'] = 0.3;
 										leapControls['scaleDecay'] = 0.5;
@@ -173,6 +174,62 @@ define( [], function () {
 										leapControls.addTargetMarker( targetMesh );
 										leapControls.addAnchorMarker( anchorMesh );
 										leapControls.addHandMarker( handMesh );
+										leapController.connect();
+									}
+									;
+								} );
+								break;
+
+							case 'LeapEyeLookControls':
+								require( ['LeapEyeLookControls', 'leapPlugins'], function () {
+									if ( leapControls instanceof THREE.LeapEyeLookControls ) {
+										leapControls.update();
+										renderer.render();
+									}
+									else {
+										leapController = new Leap.Controller();
+										leapControls = new THREE.LeapEyeLookControls( camera, leapController, scene2 );
+
+										leapControls.eyeSize        = 10;
+										leapControls.eyeMass        = 10;
+										leapControls.eyeSpeed       = 1000;
+										leapControls.eyeDampening   = 10.9
+
+										var lookVertShader = [
+
+											"varying vec3 vPos;",
+											"void main(){",
+											" vPos = (position + 1. ) * .25 +.5;",
+											" vec4 mvPos = modelViewMatrix * vec4( position , 1.0 );",
+											" gl_Position = projectionMatrix * mvPos;",
+											"}"
+
+										].join("\n");
+
+										var lookFragShader = [
+											"varying vec3 vPos;",
+											"void main(){",
+											" vec3 nPos = normalize( vPos );",
+											" gl_FragColor = vec4( nPos , .5 );",
+											"}"
+										].join("\n");
+
+										var lookUniforms = {
+											color:{type:"c",value: new THREE.Color( 1. , .3 , .3 ) },
+											map:{type:"t",value:null }
+										}
+										var lookGeometry = new THREE.IcosahedronGeometry( 10 , 3 );
+										var lookMaterial = new THREE.ShaderMaterial({
+											uniforms:       lookUniforms,
+											fragmentShader: lookFragShader,
+											vertexShader:   lookVertShader,
+											transparent: true
+										});
+
+										lookMarker   = new THREE.Mesh( lookGeometry , lookMaterial );
+
+										leapControls.addLookMarker( lookMarker );
+
 										leapController.connect();
 									}
 									;
