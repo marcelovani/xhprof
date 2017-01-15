@@ -50,19 +50,6 @@ scene2 = new THREE.Scene();
 
 var activeShape = 'callgraph';
 
-function onWindowResize() {
-
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-
-	effect.setSize( window.innerWidth, window.innerHeight );
-
-	mediator.publish( "wat", 7, "update", { one: 1 } );
-
-	//updateRenderer();
-
-}
-
 //@testing
 //require(['utils', 'vrPlot', 'mediator-js'], function (_utils, _vrPlot, Mediator) {
 //	//var Mediator = require("mediator-js").Mediator,
@@ -96,7 +83,7 @@ require( [
 		jQuery('#container' ).html('');
 
 		renderer = new Renderer();
-		renderer.setType( '3d' );
+		renderer.setType( 'vr' );
 		renderer.render();
 
 		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -139,15 +126,12 @@ require( [
 
 		vrPannel();
 
-		// Enable trackball controls.
-		//jQuery( '#trackballControls' ).click();//@todo temporary disabled
-
 		animate();
 
 		mediator.publish( "wat", 7, "init", { one: 1 } );
 
 		//@todo fix this
-		window.addEventListener( 'resize', onWindowResize, false );
+		//window.addEventListener( 'resize', onWindowResize, false );
 
 	} );
 

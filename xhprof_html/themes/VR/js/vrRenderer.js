@@ -13,7 +13,7 @@ define( [], function () {
 		this.render = function () {
 			switch ( renderType ) {
 				case '3d':
-					require( ['CSS3DRenderer', 'led'], function (_renderer, _led) {
+					require( ['CSS3DRenderer', 'led'], function (_renderer, _led ) {
 						if ( renderer instanceof THREE.CSS3DRenderer ) {
 							renderer.render( scene, camera );
 							renderer2.render( scene2, camera );
@@ -37,7 +37,7 @@ define( [], function () {
 
 				case 'vr':
 				default:
-					require( ['CSS3DStereoRenderer'], function ( Renderer ) {
+					require( ['CSS3DStereoRenderer', 'led'], function ( Renderer, _led ) {
 						if ( renderer instanceof THREE.CSS3DStereoRenderer ) {
 							effect.render( scene, camera );
 							renderer2.render( scene2, camera );
@@ -64,6 +64,13 @@ define( [], function () {
 			var container = document.getElementById( 'container' );
 			container.appendChild( renderer.domElement );
 			renderer.setSize( window.innerWidth, window.innerHeight );
+
+			window.addEventListener( 'resize', function() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}, false );
+
 		}
 
 		this.addRendererCss3DStereo = function () {
@@ -76,6 +83,13 @@ define( [], function () {
 			effect = new THREE.StereoEffect( renderer );
 			effect.setSize( window.innerWidth, window.innerHeight );
 			effect.setEyeSeparation( 3 );
+
+			window.addEventListener( 'resize', function() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				effect.setSize( window.innerWidth, window.innerHeight );
+			}, false );
 		}
 
 		this.addRendererGl = function () {
