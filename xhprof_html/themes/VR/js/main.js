@@ -73,22 +73,21 @@ require( [
 		var vrPlot = new _vrPlot();
 		var vrTargets = new _vrTargets();
 
+		renderer = new Renderer();
+		renderer.setType( 'vr' );
+		renderer.render();
+		jQuery('#container').html('');
+
+		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+		camera.name = "Main";
+		camera.position.z = 3000;
+
 		var dotObjects = utils.dotToObject2( utils.dotPlain( dotGraph ) );
 
 		vrPlot.plotObj( dotObjects );
 		vrPlot.addCSSObjToScene( 'callgraph' );
 
 		vrTargets.init(vrPlot.objects);
-
-		jQuery('#container' ).html('');
-
-		renderer = new Renderer();
-		renderer.setType( '3d' );
-		renderer.render();
-
-		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-		camera.name = "Main";
-		camera.position.z = 3000;
 
 		var controls = new Controls();
 		controls.init();
