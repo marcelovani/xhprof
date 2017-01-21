@@ -153,7 +153,7 @@ define( ['jQuery', 'Viz'], function ( jQuery, Viz ) {
 		this.dotToObject2 = function ( dotGraph ) {
 			//console.log(dotGraph);
 			var graph = {};
-			var objects = [];
+			var _objects = [];
 			var lines = (CSVToArray( dotGraph, ' ' ));
 			jQuery.each( lines, function ( i, c ) {
 				var o = {};
@@ -244,11 +244,11 @@ define( ['jQuery', 'Viz'], function ( jQuery, Viz ) {
 						break;
 				}
 				if ( typeof (o.position) != 'undefined' ) {
-					objects.push( o );
+					_objects.push( o );
 				}
 			} );
-			return objects;
-		},
+			return _objects;
+		};
 
 		// Convert to dot plain.
 		this.dotPlain = function ( dotGraph ) {
@@ -273,7 +273,7 @@ function dotToObject( dotGraph ) {
 	//console.log(dotGraph);
 
 	var graph = {};
-	var objects = [];
+	var _objects = [];
 	var lines = (CSVToArray(dotGraph, ' '));
 	//console.log(lines);
 
@@ -340,13 +340,13 @@ function dotToObject( dotGraph ) {
 		o.position.y = y * graph.scale;
 		o.position.z = z * graph.scale;
 		//o.castShadow = o.receiveShadow = true;
-		objects.push(o);
+		_objects.push(o);
 	});
 
-	return objects;
+	return _objects;
 }
 
-function dotToScene(dotGraph, scene, objects) {
+function dotToScene(dotGraph, scene, _objects) {
 	var cube = new THREE.BoxGeometry( 50, 50, 50 );
 	var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
 
@@ -409,7 +409,7 @@ function dotToScene(dotGraph, scene, objects) {
 				mesh.castShadow = true;
 				mesh.receiveShadow = true;
 				scene.add(mesh);
-				objects.push(mesh);
+				_objects.push(mesh);
 			}
 		}
 

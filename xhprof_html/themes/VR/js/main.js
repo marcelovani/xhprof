@@ -69,25 +69,11 @@ require( [
 	'vrControls'
 	],
 	function (_utils, _vrPlot, _vrTargets, Renderer, Controls ) {
-		var utils = new _utils();
-		var vrPlot = new _vrPlot();
-		var vrTargets = new _vrTargets();
 
 		renderer = new Renderer();
 		renderer.setType( 'vr' );
 		renderer.render();
 		jQuery('#container').html('');
-
-		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-		camera.name = "Main";
-		camera.position.z = 3000;
-
-		var dotObjects = utils.dotToObject2( utils.dotPlain( dotGraph ) );
-
-		vrPlot.plotObj( dotObjects );
-		vrPlot.addCSSObjToScene( 'callgraph' );
-
-		vrTargets.init(vrPlot.objects);
 
 		var controls = new Controls();
 		controls.init();
@@ -95,6 +81,35 @@ require( [
 		if (window.DeviceOrientationEvent && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 			controls.enable('deviceOrientationControls');
 		}
+
+		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+		camera.name = "Main";
+		camera.position.z = 3000;
+
+		var utils = new _utils();
+		var dotObjects = utils.dotToObject2( utils.dotPlain( dotGraph ) );
+
+		switch ( renderer.getType() ) {
+			case '3d':
+				require( [ 'vrPlot', 'CSS3DRenderer' ], function ( _vrPlot, _render) {
+					var vrPlot = new _vrPlot();
+					vrPlot.plotObj( dotObjects );
+					vrPlot.addCSSObjToScene( 'callgraph' );
+				});
+				break;
+
+			case 'vr':
+				require( [ 'vrPlot', 'CSS3DStereoRenderer' ], function ( _vrPlot, _render) {
+					var vrPlot = new _vrPlot();
+					vrPlot.plotObj( dotObjects );
+					vrPlot.addCSSObjToScene( 'callgraph' );
+				});
+				break;
+		}
+
+		var vrTargets = new _vrTargets();
+		vrTargets.init(objects);
+
 
 		if ( typeof(window.mediator) == 'undefined' ) {
 			window.mediator = new Mediator();

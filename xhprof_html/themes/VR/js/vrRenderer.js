@@ -126,6 +126,7 @@ define( [], function () {
 		this.active = function () {
 			return renderer;
 		};
+
 	};
 
 	window.mediator.subscribe( "wat", function () {

@@ -1,10 +1,10 @@
-define( ['CSS3DRenderer'], function () {
+define( [], function () {
 	var f = function () {
 		var scope = this;
 		var scale = 1.5; //@todo get from object
 		var offsetX, offsetY;
 		var table = [];
-		var objects = [];
+		var _objects = [];
 
 		this.plotObj = function ( dotObjects ) {
 			var total = dotObjects.length;
@@ -91,9 +91,8 @@ define( ['CSS3DRenderer'], function () {
 				element.appendChild( details );
 
 				// Used by webgl only
-				// var object = new THREE.Mesh( cube , material );
+				//var object = new THREE.Mesh( cube , material );
 
-				// Used with CSS renderer
 				var cssObj = new THREE.CSS3DObject( element );
 				cssObj.position.x = this.table[i][3] * scale - offsetX;
 				cssObj.position.y = this.table[i][4] * scale - offsetY;
@@ -111,7 +110,7 @@ define( ['CSS3DRenderer'], function () {
 				targets[_target].push( object ); //todo move to vrtargets
 
 			}
-			this.objects = objects; //todo remove line
+//			this.objects = _objects; //todo remove line
 		}
 	};
 	return f;

@@ -2,7 +2,7 @@ define( ['jQuery'], function ( jQuery ) {
 
 	var f = function () {
 		var scope = this;
-		var objects = [];
+		var _objects = [];
 
 		//var targets = { sphere: [], helix: [], tube: [], grid: [], callgraph: [] };
 
@@ -13,7 +13,7 @@ define( ['jQuery'], function ( jQuery ) {
 		 * @param objects
 		 */
 		this.init = function(_objects) {
-			objects = _objects;
+			//objects = __objects;
 			for ( var i = 0; i < Object.keys(targets).length; i ++ ) {
 				var targetName = Object.keys(targets)[i];
 				var callback = eval("this." + targetName);
