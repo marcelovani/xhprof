@@ -95,6 +95,8 @@ require( [
 					var vrPlot = new _vrPlot();
 					vrPlot.plotObj( dotObjects );
 					vrPlot.addCSSObjToScene( 'callgraph' );
+					var vrTargets = new _vrTargets();
+					vrTargets.init(objects);
 				});
 				break;
 
@@ -103,13 +105,11 @@ require( [
 					var vrPlot = new _vrPlot();
 					vrPlot.plotObj( dotObjects );
 					vrPlot.addCSSObjToScene( 'callgraph' );
+					var vrTargets = new _vrTargets();
+					vrTargets.init(objects);
 				});
 				break;
 		}
-
-		var vrTargets = new _vrTargets();
-		vrTargets.init(objects);
-
 
 		if ( typeof(window.mediator) == 'undefined' ) {
 			window.mediator = new Mediator();
