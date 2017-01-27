@@ -87,11 +87,12 @@ define( ['jQuery', 'Viz'], function ( jQuery, Viz ) {
 		};
 
 		// This is a copy of dotToObject. The difference is that it returns plain objects.
-		this.dotToObject2 = function ( dotGraph ) {
-			//console.log(dotGraph);
+		this.dotToObject = function ( dotGraph ) {
 			var graph = {};
 			var _objects = [];
-			var lines = (scope.CSVToArray( dotGraph, ' ' ));
+
+			var dotPlain = scope.dotPlain( dotGraph );
+			var lines = scope.CSVToArray( dotPlain, ' ' );
 
 			loaderMessage('dotPlain', 'to Object');
 

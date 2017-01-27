@@ -88,7 +88,7 @@ require( [
 		camera.position.z = 3000;
 
 		var utils = new _utils();
-		var dotObjects = utils.dotToObject2( utils.dotPlain( dotGraph ) );
+		var dotObjects = utils.dotToObject( dotGraph );
 
 		switch ( renderer.getType() ) {
 			case '3d':
