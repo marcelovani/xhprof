@@ -73,7 +73,7 @@ require( [
 		loaderMessage('Initializing', 'Rendererers');
 
 		renderer = new Renderer();
-		renderer.setType( 'vr' );
+		renderer.setType( '3d' );
 		renderer.render();
 
 		var controls = new Controls();

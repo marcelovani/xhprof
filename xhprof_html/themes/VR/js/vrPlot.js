@@ -31,7 +31,7 @@ define( [], function () {
 							y1 = dotObjects[i].position.y;
 						}
 						// Store the greatest y
-						if ( dotObjects[i].position.x > y2 ) {
+						if ( dotObjects[i].position.y > y2 ) {
 							y2 = dotObjects[i].position.y;
 						}
 						label = dotObjects[i].label.split( "\n" );
@@ -100,7 +100,7 @@ define( [], function () {
 				var cssObj = new THREE.CSS3DObject( element );
 				cssObj.position.x = this.table[i][3] * scale - offsetX;
 				cssObj.position.y = this.table[i][4] * scale - offsetY;
-				cssObj.position.z = Math.random() * scale * 500 - 1000;
+				cssObj.position.z = Math.random() * scale * 500 - 300;
 				scene.add( cssObj );
 
 				objects.push( cssObj ); //todo change to this.objects
