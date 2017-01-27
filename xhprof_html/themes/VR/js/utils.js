@@ -4,6 +4,8 @@ define( ['jQuery', 'Viz'], function ( jQuery, Viz ) {
 		var scope = this;
 
 		this.CSVToArray = function ( strData, strDelimiter ) {
+			loaderMessage('dotGraph', 'to CSV');
+
 			// Check to see if the delimiter is defined. If not,
 			// then default to comma.
 			strDelimiter = (strDelimiter || ",");
@@ -90,6 +92,9 @@ define( ['jQuery', 'Viz'], function ( jQuery, Viz ) {
 			var graph = {};
 			var _objects = [];
 			var lines = (scope.CSVToArray( dotGraph, ' ' ));
+
+			loaderMessage('dotPlain', 'to Object');
+
 			jQuery.each( lines, function ( i, c ) {
 				var o = {};
 				switch ( c[0] ) {
@@ -187,6 +192,8 @@ define( ['jQuery', 'Viz'], function ( jQuery, Viz ) {
 
 		// Convert to dot plain.
 		this.dotPlain = function ( dotGraph ) {
+			loaderMessage('Viz: dotGraph', 'to dotPlain');
+
 			// Convert to dot plain.
 			var params = {
 				src: dotGraph,

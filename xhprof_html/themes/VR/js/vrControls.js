@@ -12,6 +12,8 @@ define( [], function () {
 		var enabledControls = [];
 
 		this.init = function ( _objects ) {
+			loaderMessage('Initializing', 'Controls');
+
 			for ( var i = 0; i < controls.length; i++ ) {
 				var controlName = controls[i];
 

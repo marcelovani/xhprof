@@ -28,6 +28,8 @@ define( [], function () {
 							//camTarget.position.copy(camera.position);
 						}
 						else {
+							loaderMessage('Initializing', 'Renderer');
+
 							led3DRenderGreen = new _led('.3dled', 'green' );
 							scope.addRendererCss3D();
 							scope.addRendererGl();
@@ -48,6 +50,8 @@ define( [], function () {
 							}, 500);
 						}
 						else {
+							loaderMessage('Initializing', 'Renderer');
+
 							ledVRRenderYellow = new _led('.vrled', 'yellow' );
 							scope.addRendererCss3DStereo();
 							scope.addRendererGl();

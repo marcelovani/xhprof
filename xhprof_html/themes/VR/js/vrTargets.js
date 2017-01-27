@@ -13,6 +13,8 @@ define( ['jQuery'], function ( jQuery ) {
 		 * @param objects
 		 */
 		this.init = function(_objects) {
+			loaderMessage('Initializing', 'Targets');
+
 			//objects = __objects;
 			for ( var i = 0; i < Object.keys(targets).length; i ++ ) {
 				var targetName = Object.keys(targets)[i];

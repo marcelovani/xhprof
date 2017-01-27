@@ -70,10 +70,11 @@ require( [
 	],
 	function (_utils, _vrPlot, _vrTargets, Renderer, Controls ) {
 
+		loaderMessage('Initializing', 'Rendererers');
+
 		renderer = new Renderer();
 		renderer.setType( 'vr' );
 		renderer.render();
-		jQuery('#container').html('');
 
 		var controls = new Controls();
 		controls.init();
@@ -97,6 +98,7 @@ require( [
 					vrPlot.addCSSObjToScene( 'callgraph' );
 					var vrTargets = new _vrTargets();
 					vrTargets.init(objects);
+					jQuery('#container').html('');
 				});
 				break;
 
@@ -107,6 +109,7 @@ require( [
 					vrPlot.addCSSObjToScene( 'callgraph' );
 					var vrTargets = new _vrTargets();
 					vrTargets.init(objects);
+					jQuery('#container').html('');
 				});
 				break;
 		}
@@ -161,4 +164,10 @@ function reset() {
 	camera.position.z = 3000;
 
 	//changeShape( activeShape, 200 );
+}
+
+function loaderMessage(message1, message2) {
+	jQuery(".loader b.front, .loader b.back" ).html(message1);
+	jQuery(".loader b.left, .loader b.right" ).html(message2);
+	console.log(message1 + ' ' + message2);
 }

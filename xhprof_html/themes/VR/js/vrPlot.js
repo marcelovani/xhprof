@@ -7,6 +7,8 @@ define( [], function () {
 		var _objects = [];
 
 		this.plotObj = function ( dotObjects ) {
+			loaderMessage('Plotting', 'objects');
+
 			var total = dotObjects.length;
 			if ( total > 0 ) {
 				var x1 = 0;
@@ -63,6 +65,8 @@ define( [], function () {
 		}
 
 		this.addCSSObjToScene = function ( _target ) {
+			loaderMessage('Objects', 'to scene');
+
 			// Used with WegGl renderer
 			var cube = new THREE.BoxGeometry( 50, 50, 50 );
 			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
