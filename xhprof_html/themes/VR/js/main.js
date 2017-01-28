@@ -38,7 +38,7 @@ var camera, scene2, renderer, renderer2;
 
 var objects = [];
 var targets = { sphere: [], helix: [], tube: [], grid: [], callgraph: [] };
-var camTarget;
+var camTarget = false;
 var needsUpdate = false;
 
 var mediator = new Mediator();
@@ -70,49 +70,87 @@ require( [
 	],
 	function (_utils, _vrPlot, _vrTargets, Renderer, Controls ) {
 
-		loaderMessage('Initializing', 'Rendererers');
-
-		renderer = new Renderer();
-		renderer.setType( '3d' );
-		renderer.render();
-
-		var controls = new Controls();
-		controls.init();
-		controls.enable('trackballControls');
-		if (window.DeviceOrientationEvent && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-			controls.enable('deviceOrientationControls');
-		}
-
-		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-		camera.name = "Main";
-		camera.position.z = 3000;
+		loaderMessage('Initializing', 'Renderers');
 
 		var utils = new _utils();
 		var dotObjects = utils.dotToObject( dotGraph );
+		var vrPlot = new _vrPlot();
+		var vrTargets = new _vrTargets();
+		var controls = new Controls();
 
-		switch ( renderer.getType() ) {
-			case '3d':
-				require( [ 'vrPlot', 'CSS3DRenderer' ], function ( _vrPlot, _render) {
-					var vrPlot = new _vrPlot();
-					vrPlot.plotObj( dotObjects );
-					vrPlot.addCSSObjToScene( 'callgraph' );
-					var vrTargets = new _vrTargets();
-					vrTargets.init(objects);
-					jQuery('#container').html('');
-				});
-				break;
+		var initRenderer = function (type) {
 
-			case 'vr':
-				require( [ 'vrPlot', 'CSS3DStereoRenderer' ], function ( _vrPlot, _render) {
-					var vrPlot = new _vrPlot();
-					vrPlot.plotObj( dotObjects );
-					vrPlot.addCSSObjToScene( 'callgraph' );
-					var vrTargets = new _vrTargets();
-					vrTargets.init(objects);
-					jQuery('#container').html('');
-				});
-				break;
-		}
+			var initControls = function (type) {
+				controls.init();
+				controls.enable('trackballControls');
+				if (window.DeviceOrientationEvent && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+					controls.enable('deviceOrientationControls');
+				}
+			};
+
+			if (typeof(renderer) != 'object') {
+
+				renderer = new Renderer();
+				renderer.setType( type );
+				renderer.render();
+
+			} else {
+				if (renderer.getType() != type) {
+
+					controls.destroy();
+
+					renderer.destroy();
+
+					renderer = new Renderer();
+					renderer.setType( type );
+					renderer.render();
+
+					objects = [];
+					targets = { sphere: [], helix: [], tube: [], grid: [], callgraph: [] };
+					needsUpdate = true;
+				}
+			}
+
+			initControls();
+
+			camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+			camera.name = "Main";
+			camera.position.z = 3000;
+
+			switch ( type ) {
+				case '3d':
+					require( [ 'CSS3DRenderer' ], function () {
+						vrPlot.plotObj( dotObjects );
+						vrPlot.addCSSObjToScene( 'callgraph' );
+						vrTargets.init(objects);
+					});
+					break;
+
+				case 'vr':
+					require( [ 'CSS3DStereoRenderer' ], function () {
+						vrPlot.plotObj( dotObjects );
+						vrPlot.addCSSObjToScene( 'callgraph' );
+						vrTargets.init(objects);
+					});
+					break;
+			}
+
+
+			var animate = function () {
+				if (needsUpdate) renderer.render();
+				//@todo only call animate when controls have changed
+				//updateRenderer(); //@todo use require / mediator update
+				//updateControls();//@todo use require / mediator update
+				controls.update();
+				//renderer.render();
+				mediator.publish( "wat", 7, "update", { one: 1 } );
+				window.requestAnimationFrame( animate );
+				//TWEEN.update();//@todo reinstate
+
+				//updateObjectProperties(); //@todo use require
+			};
+			animate();
+		};
 
 		if ( typeof(window.mediator) == 'undefined' ) {
 			window.mediator = new Mediator();
@@ -129,23 +167,27 @@ require( [
 		//updateControls(); //@todo use require / mediator start
 		//controls.update();
 
-		var animate = function () {
-			if (needsUpdate) renderer.render();
-			//@todo only call animate when controls have changed
-			//updateRenderer(); //@todo use require / mediator update
-			//updateControls();//@todo use require / mediator update
-			controls.update();
-			//renderer.render();
-			mediator.publish( "wat", 7, "update", { one: 1 } );
-			window.requestAnimationFrame( animate );
-			//TWEEN.update();//@todo reinstate
 
-			//updateObjectProperties(); //@todo use require
-		};
+
+		initRenderer('3d');
+
+		var button = document.getElementById( '3d' );
+		button.addEventListener( 'click', function ( event ) {
+			if (jQuery('#3d.active').length == 0) {
+				initRenderer('3d');
+			}
+		}, false );
+
+		var button = document.getElementById( 'vr' );
+		button.addEventListener( 'click', function ( event ) {
+			if (jQuery('#vr.active').length == 0) {
+				initRenderer('vr');
+			}
+		}, false );
 
 		vrPannel();
 
-		animate();
+
 
 		mediator.publish( "wat", 7, "init", { one: 1 } );
 

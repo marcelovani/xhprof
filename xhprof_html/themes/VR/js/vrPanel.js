@@ -10,18 +10,18 @@ function vrPannel() {
 	$( "#Z" ).click(function() {
 		alert('Click isn\'t implemented yet. Use the keyboard.');
 	});
-
+return;
 	var button = document.getElementById( '3d' );
 	button.addEventListener( 'click', function ( event ) {
 		if (jQuery('#3d.active').length == 0) {
-			changeRenderer('3d');
+			initRenderer('3d');
 		}
 	}, false );
 
 	var button = document.getElementById( 'vr' );
 	button.addEventListener( 'click', function ( event ) {
 		if (jQuery('#vr.active').length == 0) {
-			changeRenderer('vr');
+			initRenderer('vr');
 		}
 	}, false );
 }

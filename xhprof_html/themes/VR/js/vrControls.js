@@ -52,6 +52,11 @@ define( [], function () {
 		};
 
 		this.update = function () {
+			if (!renderer.active()) {
+				return;
+			}
+
+			var domElement = renderer.active().domElement;
 			var clock = new THREE.Clock();
 			for ( var i = 0; i < Object.keys( enabledControls ).length; i++ ) {
 				switch ( enabledControls[i] ) {
@@ -61,7 +66,7 @@ define( [], function () {
 								trackballControls.update( clock.getDelta() );
 							}
 							else {
-								trackballControls = new THREE.TrackballControls( camera, renderer.active().domElement );
+								trackballControls = new THREE.TrackballControls( camera, domElement );
 								trackballControls.rotateSpeed = 4.5;
 								trackballControls.zoomSpeed = 1.2;
 								trackballControls.panSpeed = 0.3;
@@ -97,7 +102,7 @@ define( [], function () {
 								renderer.render();
 							}
 							else {
-								deviceOrientationControls = new DeviceOrientationController( camera, renderer.active().domElement );
+								deviceOrientationControls = new DeviceOrientationController( camera, domElement );
 								deviceOrientationControls.connect();
 								deviceOrientationControls.freeze = false;
 								deviceOrientationControls.enableManualDrag = false;
@@ -290,6 +295,14 @@ define( [], function () {
 				alert( 'Compass needs calibration' );
 			} );
 
+		};
+
+		this.destroy = function () {
+			for ( var i = 0; i < Object.keys( enabledControls ).length; i++ ) {
+				eval(enabledControls[i] + " = null;");
+				eval("delete " + enabledControls[i] + ";");
+			}
+			enabledControls = [];
 		};
 
 	};

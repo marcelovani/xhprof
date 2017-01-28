@@ -21,6 +21,10 @@ define( ['jQuery'], function () {
 			jQuery( container ).find('.led.' + color ).removeClass('on');
 		};
 
+		this.destroy = function () {
+			jQuery( container ).find('.led.' + color ).remove();
+		};
+
 		this.led();
 
 	};

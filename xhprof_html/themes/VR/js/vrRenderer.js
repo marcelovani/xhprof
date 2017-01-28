@@ -1,4 +1,4 @@
-define( [], function () {
+define( ['jQuery'], function ( jQuery ) {
 
 	var f = function () {
 		var scope = this;
@@ -64,6 +64,7 @@ define( [], function () {
 		this.addRendererCss3D = function () {
 			renderer = new THREE.CSS3DRenderer();
 			reset();
+			jQuery('#container').html('');
 			renderer.domElement.style.position = 'absolute';
 			var container = document.getElementById( 'container' );
 			container.appendChild( renderer.domElement );
@@ -80,6 +81,7 @@ define( [], function () {
 		this.addRendererCss3DStereo = function () {
 			renderer = new THREE.CSS3DStereoRenderer();
 			reset();
+			jQuery('#container').html('');
 			var container = document.getElementById( 'container' );
 			container.appendChild( renderer.domElement );
 			renderer.setSize( window.innerWidth, window.innerHeight );
@@ -106,13 +108,15 @@ define( [], function () {
 			renderer2.domElement.style.top = 0;
 			renderer.domElement.appendChild(renderer2.domElement);
 
-			var helper = new THREE.CameraHelper( camera );
-			scene2.add( helper );
+			if (camTarget) {
+				var helper = new THREE.CameraHelper( camera );
+				scene2.add( helper );
 
-			var geo = new THREE.IcosahedronGeometry( 5, 2 );
-			var mat = new THREE.MeshNormalMaterial();
-			camTarget = new THREE.Mesh( geo, mat );
-			scene2.add( camTarget );
+				var geo = new THREE.IcosahedronGeometry( 5, 2 );
+				var mat = new THREE.MeshNormalMaterial();
+				camTarget = new THREE.Mesh( geo, mat );
+				scene2.add( camTarget );
+			}
 
 		}
 
@@ -129,6 +133,22 @@ define( [], function () {
 
 		this.active = function () {
 			return renderer;
+		};
+
+		this.destroy = function () {
+			if (typeof(ledVRRenderYellow) != 'undefined') {
+				ledVRRenderYellow.destroy();
+			}
+
+			if (typeof(led3DRenderGreen) != 'undefined') {
+				led3DRenderGreen.destroy();
+			}
+
+			jQuery('#container').html('');
+
+			renderer = null;
+			delete renderer;
+
 		};
 
 	};
