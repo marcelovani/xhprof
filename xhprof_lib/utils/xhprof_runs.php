@@ -439,12 +439,20 @@ CREATE TABLE `details` (
 			$sql['data'] = $this->db->escape(gzcompress(json_encode($xhprof_data), 2));
 		}
 
+		$sname = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
 
-	$url   = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF'];
- 	$sname = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
+    if (isCommandLineInterface()) {
+      $url = implode(' ', $_SERVER['argv']);
+      $c_url = '';
+    }
+    else {
+      $url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF'];
+      $this->db->escape($url);
+      $c_url = $this->db->escape(_urlSimilartor($_SERVER['REQUEST_URI']));
+    }
 
-        $sql['url'] = $this->db->escape($url);
-        $sql['c_url'] = $this->db->escape(_urlSimilartor((isCommandLineInterface()) ?  $url : $_SERVER['REQUEST_URI']));
+        $sql['url'] = $url;
+        $sql['c_url'] = $c_url;
         $sql['servername'] = $this->db->escape($sname);
         $sql['type']  = (int) (isset($xhprof_details['type']) ? $xhprof_details['type'] : 0);
         $sql['timestamp'] = $this->db->escape($_SERVER['REQUEST_TIME']);
