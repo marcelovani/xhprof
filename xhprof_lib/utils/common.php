@@ -36,47 +36,47 @@ function printSeconds($time)
     {
         $time = $time / 1000;
         $suffix = "ms";
-        
+
     }
-    
+
     if ($time > 1000)
     {
         $time = $time / 1000;
         $suffix = "s";
     }
-    
+
     if ($time > 60 && $suffix == "s")
     {
         $time = $time / 60;
         $suffix = "minutes!";
     }
     return sprintf("%.4f {$suffix}", $time);
-    
+
 }
- 
+
 
 
 function showChart($rs, $flip = false)
 {
 
         $dataPoints = "";
-        $ids = array(); 
+        $ids = array();
         $arCPU = array();
         $arWT = array();
         $arPEAK = array();
         $arIDS = array();
         $arDateIDs = array();
-    
+
          while($row = XHProfRuns_Default::getNextAssoc($rs))
         {
-            $date[] = "'" . date("Y-m-d", $row['timestamp']) . "'" ;  
-           
+            $date[] = "'" . date("Y-m-d", $row['timestamp']) . "'" ;
+
             $arCPU[] = $row['cpu'];
             $arWT[] = $row['wt'];
-            $arPEAK[] = $row['pmu'];  
-            $arIDS[] = $row['id']; 
-            
-            $arDateIDs[] =  "'" . date("Y-m-d", $row['timestamp']) . " <br/> " . $row['id'] . "'"; 
+            $arPEAK[] = $row['pmu'];
+            $arIDS[] = $row['id'];
+
+            $arDateIDs[] =  "'" . date("Y-m-d", $row['timestamp']) . " <br/> " . $row['id'] . "'";
         }
 
         $date = $flip ? array_reverse($date) : $date;
@@ -85,22 +85,22 @@ function showChart($rs, $flip = false)
         $arPEAK = $flip ? array_reverse($arPEAK) : $arPEAK;
         $arIDS = $flip ? array_reverse($arIDS) : $arIDS;
         $arDateIDs = $flip ? array_reverse($arDateIDs) : $arDateIDs;
-        
+
        $dateJS = implode(", ", $date);
        $cpuJS = implode(", ", $arCPU);
        $wtJS = implode(", ", $arWT);
        $pmuJS = implode(", ", $arPEAK);
        $idsJS = implode(", ", $arIDS);
        $dateidsJS = implode(", ", $arDateIDs);
-  
-   
+
+
     ob_start();
       require ("themes/templates/chart.tpl.php");
       $stuff = ob_get_contents();
     ob_end_clean();
    return array($stuff, "<div id=\"container\" style=\"width: 1000px; height: 500px; margin: 0 auto\"></div>");
 }
- 
+
 
 
 function getFilter($filterName)
@@ -118,7 +118,7 @@ function getFilter($filterName)
       }
     }elseif(isset($_COOKIE[$filterName]))
     {
-        $serverFilter = $_COOKIE[$filterName];  
+        $serverFilter = $_COOKIE[$filterName];
     }else
     {
       $serverFilter = null;
@@ -136,9 +136,8 @@ function get_home_button()  {
   foreach (parse_qs() as $k => $v) {
     $qs .= sprintf('%s=%s&', $k, $v);
   }
-  $folder = explode('/', $_SERVER['REQUEST_URI']);
   $url = HOME . '?' . trim($qs, '&');
-  $button = '<span class="button"><a href="' . $url . '">Home</a></span>';
+  $button  = '<span class="button"><a href="' . HOME . '">XH GUI</a></span>';
 
   return $button;
 }

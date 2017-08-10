@@ -1,16 +1,19 @@
 <?php
-if (!isCommandLineInterface() && $_SERVER['SERVER_NAME'] == '127.0.0.1') {
-  define('HOME', '/');
+
+if (!isCommandLineInterface()) {
+  $url = parse_url($_SERVER['REQUEST_URI']);
+  $parts = explode('/', trim($url['path'], '/'));
+  define('HOME', '/' . $parts[0]);
 }
 else {
-  define('HOME', '/3d_debugger/');
+  define('HOME', '/');
 }
 
 $_xhprof = array();
 
 // Change these:
-$_xhprof['dbtype'] = 'mysql'; // Only relevant for PDO
-$_xhprof['dbhost'] = '127.0.0.1';
+$_xhprof['dbtype'] = 'mysql';
+$_xhprof['dbhost'] = 'localhost';
 $_xhprof['dbport'] = '3306';
 $_xhprof['dbuser'] = 'root';
 $_xhprof['dbpass'] = '';
@@ -18,7 +21,8 @@ $_xhprof['dbname'] = 'xhprof';
 $_xhprof['dbadapter'] = 'Mysqli';
 $_xhprof['servername'] = 'myserver';
 $_xhprof['namespace'] = 'myapp';
-$_xhprof['url'] = 'http://drupal-core.dd:8083/3d_debugger';
+$_xhprof['url'] = 'http://localhost' . HOME;
+
 /*
  * MySQL/MySQLi/PDO ONLY
  * Switch to JSON for better performance and support for larger profiler data sets.
