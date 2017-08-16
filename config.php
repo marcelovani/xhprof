@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', FALSE);
+ini_set('html_errors', FALSE);
 
 if (!isCommandLineInterface()) {
   $url = parse_url($_SERVER['REQUEST_URI']);
@@ -9,11 +12,12 @@ else {
   define('HOME', '/');
 }
 
+global $_xhprof;
 $_xhprof = array();
 
 // Change these:
 $_xhprof['dbtype'] = 'mysql';
-$_xhprof['dbhost'] = 'localhost';
+$_xhprof['dbhost'] = '127.0.0.1';
 $_xhprof['dbport'] = '3306';
 $_xhprof['dbuser'] = 'root';
 $_xhprof['dbpass'] = '';
@@ -24,6 +28,7 @@ $_xhprof['namespace'] = 'myapp';
 $_xhprof['url'] = 'http://localhost' . HOME;
 
 /*
+
  * MySQL/MySQLi/PDO ONLY
  * Switch to JSON for better performance and support for larger profiler data sets.
  * WARNING: Will break with existing profile data, you will need to TRUNCATE the profile data table.
