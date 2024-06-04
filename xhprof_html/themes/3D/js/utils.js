@@ -112,10 +112,17 @@ function getMaterial(color) {
 	return material;
 }
 
+function getRgbColor(color) {
+	return new THREE.Color(getHexColor(color));
+}
+
 function getHexColor(color) {
 	switch ( color ) {
 		case 'white':
 			return 0xFFFFFF;
+
+		case 'lightgrey':
+			return 0xEFEFEF;
 
 		case 'black':
 			return 0x000000;
@@ -123,19 +130,15 @@ function getHexColor(color) {
 		case 'red':
 			return 0xFF0000;
 
-			break;
 		case 'blue':
 			return 0x0000FF;
 
-			break;
 		case 'green':
 			return 0x00FF00;
 
-			break;
 		case 'yellow':
 			return 0xFFF407;
 
-			break;
 		default:
 			return 0xfafafa;
 	}
@@ -260,6 +263,7 @@ function dotToObject2( dotGraph ) {
 						break;
 				}
 
+				o.label = label;
 				o.shape = shape;
 				o.color = fillcolor;
 				o.position = {
@@ -332,4 +336,131 @@ function dotToObject2( dotGraph ) {
 	});
 
 	return objects;
+}
+
+// Convert to dot plain.
+function dotPlain(dotGraph) {
+	// Convert to dot plain.
+	var params = {
+		src: dotGraph,
+		options: {
+			engine: 'dot',
+			format: 'plain'
+		}
+	};
+
+	return Viz(params.src, params.options);
+}
+
+function dotToScene(dotGraph, scene, objects) {
+	var cube = new THREE.BoxGeometry( 50, 50, 50 );
+	var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
+
+	// Create dotObjects.
+	var dotObjects = dotToObject2( dotPlain(dotGraph) );
+	var count = dotObjects.length;
+
+	var example = false;
+	if (example) {
+		for( var i = 0; i < 300; i++ ) {
+			m = material.clone();
+			m.color.setRGB( Math.random() + 0.1, Math.random() + 0.1, Math.random() + 0.1 );
+
+			var mesh = new THREE.Mesh( cube , m );
+			mesh.position.x = (Math.random() - .5 ) * 5000;
+			mesh.position.y = (Math.random() - .5 ) * 5000;
+			mesh.position.z = (Math.random() - .5 ) * 5000;
+			scene.add( mesh );
+		}
+	}
+	else {
+		for (var i = 0; i < count; i++) {
+			var object = dotObjects[i];
+
+			switch (object.shape) {
+				case 'line':
+					//@todo implement this
+					//var geometry = line;
+					continue;
+					break;
+				case 'box':
+					var geometry = cube;
+					break;
+				case 'octagon':
+					//@todo implement this
+					//var geometry = octagon;
+					continue;
+					break;
+				default:
+			}
+
+			if (typeof(geometry) == 'object') {
+				m = material.clone();
+				m.color = getRgbColor(object.color);
+
+				var mesh = new THREE.Mesh( geometry , m );
+				// @todo calculate offsets based on screen dimensions and zoom.
+				offsetX = 500;
+				offsetY = 100;
+				offsetZ = Math.random() * 400 * Math.PI;
+				mesh.position.x = object.position.x - offsetX;
+				mesh.position.y = object.position.y - offsetY;
+				mesh.position.z = object.position.z - offsetZ;
+				//mesh.rotation.x = Math.random() * 2 * Math.PI;
+				//mesh.rotation.y = Math.random() * 2 * Math.PI;
+				//mesh.rotation.z = Math.random() * 2 * Math.PI;
+				mesh.scale.x = object.scale.x;
+				mesh.scale.y = object.scale.y;
+				mesh.scale.z = object.scale.z;
+				mesh.castShadow = true;
+				mesh.receiveShadow = true;
+				scene.add(mesh);
+				objects.push(mesh);
+			}
+		}
+
+		object = {};
+		dotObjects = {};
+		dotGraph = {};
+		dotPlain = {};
+		geometry = {};
+		params = {};
+	}
+
+}
+
+function resetCamera(){
+	window.camera.position.set( 0 , 0 , 1000 );
+	window.camera.lookAt( new THREE.Vector3());
+}
+
+function loadJS(url, implementationCode, location) {
+
+	//url is URL of external file, implementationCode is the code
+	//to be called from the file, location is the location to
+	//insert the <script> element
+
+	//usage:
+	// var loadJS = loadJS(url, implementationCode, location);
+	// var yourCodeToBeCalled = function(){
+	//   your code goes here
+	// }
+	// loadJS('yourcode.js', yourCodeToBeCalled, document.body);
+
+
+	var scriptTag = document.createElement('script');
+	scriptTag.src = url;
+
+	scriptTag.onload = implementationCode;
+	scriptTag.onreadystatechange = implementationCode;
+
+	location.appendChild(scriptTag);
+};
+
+function removeJS(filename){
+	var tags = document.getElementsByTagName('script');
+	for (var i = tags.length; i >= 0; i--){ //search backwards within nodelist for matching elements to remove
+		if (tags[i] && tags[i].getAttribute('src') != null && tags[i].getAttribute('src').indexOf(filename) != -1)
+			tags[i].parentNode.removeChild(tags[i]); //remove element by calling parentNode.removeChild()
+	}
 }

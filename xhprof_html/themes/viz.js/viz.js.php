@@ -31,7 +31,7 @@
       flex: 1 1 auto;
       -webkit-flex: 1 1 auto;
     }
-    
+
     #editor {
       flex: 1 1 50%;
       -webkit-flex: 1 1 50%;
@@ -46,20 +46,20 @@
       flex: 1 1 50%;
       -webkit-flex: 1 1 50%;
     }
-    
+
     #options {
       flex: 0 0 auto;
       -webkit-flex: 0 0 auto;
     }
-    
+
     #output {
       flex: 1 1 auto;
       -webkit-flex: 1 1 auto;
       position: relative;
       overflow: auto;
     }
-    
-    
+
+
     #editor {
       border-right: 1px solid #ccc;
     }
@@ -78,15 +78,15 @@
       border-bottom: 1px solid #ccc;
       padding: 8px;
     }
-    
+
     #options label {
       margin-right: 8px;
     }
-    
+
     #options #raw.disabled {
       opacity: 0.5;
     }
-    
+
     #output svg {
       position: absolute;
       top: 0;
@@ -94,7 +94,7 @@
       width: 100%;
       height: 100%;
     }
-    
+
     #output #text {
       font-size: 12px;
       font-family: monaco, courier, monospace;
@@ -106,22 +106,22 @@
       height: 100%;
       overflow: auto;
     }
-    
+
     #output img {
       display: block;
       margin: 0 auto;
     }
-    
+
     #output.working svg, #output.error svg,
     #output.working #text, #output.error #text,
     #output.working img, #output.error img {
       opacity: 0.4;
     }
-    
+
     #output.error #error {
       display: inherit;
     }
-    
+
     #output #error {
       display: none;
       position: absolute;
@@ -132,7 +132,7 @@
       color: white;
       z-index: 1;
     }
-    
+
     </style>
   </head>
   <body>
@@ -153,7 +153,7 @@
         </div>
       </div>
     </div>
-    
+
     <script src="./themes/viz.js/js/ace/ace.js"></script>
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/viz.js/viz.js"></script>
@@ -217,7 +217,7 @@
       worker.onmessage = function(e) {
         document.querySelector("#output").classList.remove("working");
         document.querySelector("#output").classList.remove("error");
-        
+
         result = e.data;
         if (params.options.callback == '3D') {
           startWorker3D(params);
@@ -230,16 +230,16 @@
       worker.onerror = function(e) {
         document.querySelector("#output").classList.remove("working");
         document.querySelector("#output").classList.add("error");
-        
+
         var message = e.message === undefined ? "An error occurred while processing the graph input." : e.message;
-        
+
         var error = document.querySelector("#error");
         while (error.firstChild) {
           error.removeChild(error.firstChild);
         }
-        
+
         document.querySelector("#error").appendChild(document.createTextNode(message));
-        
+
         console.error(e);
         e.preventDefault();
       }
@@ -275,7 +275,7 @@
       params.options.innerHeight = window.innerHeight;
       worker3D.postMessage( params );
     }
-    
+
     function updateOutput() {
       var format = document.querySelector("#format select").value;
       var graph = document.querySelector("#output");
@@ -294,7 +294,7 @@
       if (img) {
         graph.removeChild(img);
       }
-      
+
       if (!result) {
         return;
       }
@@ -331,7 +331,7 @@
     editor.on("change", function() {
       updateGraph();
     });
-    
+
     document.querySelector("#engine select").addEventListener("change", function() {
       updateGraph();
     });
@@ -344,14 +344,14 @@
         document.querySelector("#raw").classList.add("disabled");
         document.querySelector("#raw input").disabled = true;
       }
-      
+
       updateGraph();
     });
 
     document.querySelector("#raw input").addEventListener("change", function() {
       updateOutput();
     });
-    
+
     updateGraph();
 
     jQuery( document ).ready( function () {
@@ -361,6 +361,6 @@
       });
     });
     </script>
-    
+
   </body>
 </html>

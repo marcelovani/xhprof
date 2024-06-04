@@ -1,30 +1,39 @@
 <?php
-if ($_SERVER['SERVER_NAME'] == '127.0.0.1') {
-  define('HOME', '/');
+error_reporting(E_ALL);
+ini_set('display_errors', FALSE);
+ini_set('html_errors', FALSE);
+
+if (!isCommandLineInterface()) {
+  $url = parse_url($_SERVER['REQUEST_URI']);
+  $parts = explode('/', trim($url['path'], '/'));
+  define('HOME', '/' . $parts[0]);
 }
 else {
-  define('HOME', '/3d_debugger/');
+  define('HOME', '/');
 }
 
+global $_xhprof;
 $_xhprof = array();
 
 // Change these:
-$_xhprof['dbtype'] = 'mysql'; // Only relevant for PDO
+$_xhprof['dbtype'] = 'mysql';
 $_xhprof['dbhost'] = '127.0.0.1';
-$_xhprof['dbport'] = '33067';
+$_xhprof['dbport'] = '3306';
 $_xhprof['dbuser'] = 'root';
 $_xhprof['dbpass'] = '';
 $_xhprof['dbname'] = 'xhprof';
 $_xhprof['dbadapter'] = 'Mysqli';
 $_xhprof['servername'] = 'myserver';
 $_xhprof['namespace'] = 'myapp';
-$_xhprof['url'] = 'http://drupal-core.dd:8083/3d_debugger';
+$_xhprof['url'] = 'http://localhost' . HOME;
+
 /*
+
  * MySQL/MySQLi/PDO ONLY
  * Switch to JSON for better performance and support for larger profiler data sets.
  * WARNING: Will break with existing profile data, you will need to TRUNCATE the profile data table.
  */
-$_xhprof['serializer'] = 'php'; 
+$_xhprof['serializer'] = 'php';
 
 //Uncomment one of these, platform dependent. You may need to tune for your specific environment, but they're worth a try
 
@@ -82,24 +91,24 @@ unset($domain_weight);
   * worthwhile to consider them as identical. The script will store both the original URL and the
   * Simplified URL for display and comparison purposes. A good simplified URL would be:
   * http://example.org/stories.php?id=
-  * 
+  *
   * @param string $url The URL to be simplified
-  * @return string The simplified URL 
+  * @return string The simplified URL
   */
   function _urlSimilartor($url)
   {
-      //This is an example 
+      //This is an example
       $url = preg_replace("!\d{4}!", "", $url);
-      
+
       // For domain-specific configuration, you can use Apache setEnv xhprof_urlSimilartor_include [some_php_file]
       if($similartorinclude = getenv('xhprof_urlSimilartor_include')) {
       	require_once($similartorinclude);
       }
-      
+
       $url = preg_replace("![?&]_profile=\d!", "", $url);
       return $url;
   }
-  
+
   function _aggregateCalls($calls, $rules = null)
   {
     $rules = array(
@@ -111,8 +120,8 @@ unset($domain_weight);
   	if(isset($run_details['aggregateCalls_include']) && strlen($run_details['aggregateCalls_include']) > 1)
 		{
     	require_once($run_details['aggregateCalls_include']);
-		}        
-        
+		}
+
     $addIns = array();
     foreach($calls as $index => $call)
     {
@@ -142,3 +151,8 @@ unset($domain_weight);
     }
     return array_merge($addIns, $calls);
   }
+
+function isCommandLineInterface()
+{
+  return (php_sapi_name() === 'cli');
+}
