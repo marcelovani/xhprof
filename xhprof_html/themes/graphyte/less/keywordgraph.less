@@ -1,0 +1,53 @@
+#graphyte-arrow-def {
+    fill: @keywordgraph-edge-color;
+    fill-opacity: @keywordgraph-edge-opacity;
+}
+
+.vertex {
+    cursor: pointer;
+
+    circle {
+        fill: @keywordgraph-vertex-color;
+        stroke: @keywordgraph-link-color;
+        stroke-width: .5pt;
+    }
+
+    g.label {
+        text, .matte {
+            fill: @keywordgraph-text-color;
+            font-size: @keywordgraph-text-fontsize;
+            text-rendering: geometricPrecision; // prevent labels from causing jitter on resize
+        }
+
+        .matte {
+            stroke: @keywordgraph-text-matte;
+            stroke-width: @keywordgraph-text-matte-stroke-width;
+            opacity: @keywordgraph-text-matte-opacity;
+        }
+    }
+}
+
+.vertex.root circle {
+    fill: @keywordgraph-highlight-fill;
+    stroke: @keywordgraph-root-color;
+    stroke-width: @keywordgraph-root-width;
+}
+
+.vertex:hover circle, .vertex circle:hover {
+    stroke: @keywordgraph-highlight-stroke;
+    stroke-width: @keywordgraph-highlight-width;
+}
+
+.vertex:hover .label, .vertex .label:hover {
+    fill: @keywordgraph-highlight-stroke;
+}
+
+.satellite {
+    fill: @keywordgraph-vertex-color;
+}
+
+.edge {
+    stroke: @keywordgraph-edge-color;
+    stroke-width: @keywordgraph-edge-width;
+    stroke-opacity: @keywordgraph-edge-opacity;
+}

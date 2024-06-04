@@ -28,10 +28,9 @@
  *
  * @author Changhao Jiang (cjiang@facebook.com)
  */
-require_once ("../xhprof_lib/config.php");
+require_once("../config.php");
 
-if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs))
-{
+if (FALSE !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
   die("You do not have permission to view this page.");
 }
 
@@ -42,36 +41,30 @@ if (!defined('XHPROF_LIB_ROOT')) {
 }
 
 include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
+include(XHPROF_LIB_ROOT . "/utils/common.php");
 
 ini_set('max_execution_time', 100);
 
-$params = array(// run id param
-                'run' => array(XHPROF_STRING_PARAM, ''),
-
-                // source/namespace/type of run
-                'source' => array(XHPROF_STRING_PARAM, 'xhprof'),
-
-                // the focus function, if it is set, only directly
-                // parents/children functions of it will be shown.
-                'func' => array(XHPROF_STRING_PARAM, ''),
-
-                // image type, can be 'jpg', 'gif', 'ps', 'png'
-                'type' => array(XHPROF_STRING_PARAM, 'png'),
-
-                // only functions whose exclusive time over the total time
-                // is larger than this threshold will be shown.
-                // default is 0.01.
-                'threshold' => array(XHPROF_FLOAT_PARAM, 0.01),
-
-                // whether to show critical_path
-                'critical' => array(XHPROF_BOOL_PARAM, true),
-
-                // first run in diff mode.
-                'run1' => array(XHPROF_STRING_PARAM, ''),
-
-                // second run in diff mode.
-                'run2' => array(XHPROF_STRING_PARAM, '')
-                );
+$params = array( // run id param
+  'run' => array(XHPROF_STRING_PARAM, ''),
+  // source/namespace/type of run
+  'source' => array(XHPROF_STRING_PARAM, 'xhprof'),
+  // the focus function, if it is set, only directly
+  // parents/children functions of it will be shown.
+  'func' => array(XHPROF_STRING_PARAM, ''),
+  // image type, can be 'jpg', 'gif', 'ps', 'png'
+  'type' => array(XHPROF_STRING_PARAM, 'png'),
+  // only functions whose exclusive time over the total time
+  // is larger than this threshold will be shown.
+  // default is 0.01.
+  'threshold' => array(XHPROF_FLOAT_PARAM, 0.01),
+  // whether to show critical_path
+  'critical' => array(XHPROF_BOOL_PARAM, TRUE),
+  // first run in diff mode.
+  'run1' => array(XHPROF_STRING_PARAM, ''),
+  // second run in diff mode.
+  'run2' => array(XHPROF_STRING_PARAM, '')
+);
 
 // pull values of these params, and create named globals for each param
 xhprof_param_init($params);
@@ -89,11 +82,31 @@ if (!array_key_exists($type, $xhprof_legal_image_types)) {
 $xhprof_runs_impl = new XHProfRuns_Default();
 
 if (!empty($run)) {
+  if (!isset($_GET['theme'])) {
+    $_GET['theme'] = 'viz.js';
+  }
+  $script = xhprof_render_dot($xhprof_runs_impl, $run, $type, $threshold, $func, $source, $critical);
+
+  require_once 'themes/' . $_GET['theme'] . '.php';
+
   // single run call graph image generation
-  xhprof_render_image($xhprof_runs_impl, $run, $type,
-                      $threshold, $func, $source, $critical);
-} else {
+  // xhprof_render_image($xhprof_runs_impl, $run, $type, $threshold, $func, $source, $critical);
+}
+else {
   // diff report call graph image generation
-  xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2,
-                           $type, $threshold, $source);
+  xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2, $type, $threshold, $source);
+}
+
+/**
+ * Helper to prepage dotGraph object in js.
+ *
+ * @param $script
+ * @return string
+ */
+function getDotGraph($script) {
+  // Prepare graphlib-dot object.
+  $script = preg_replace('/(.+)/', '\'$1\' +', $script);
+  $script = preg_replace('/\}\'\s*\+/', "}'", $script);
+
+  return 'var dotGraph = ' . $script . ';';
 }

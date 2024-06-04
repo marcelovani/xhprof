@@ -331,6 +331,17 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
 
   $result = "digraph call_graph {\n";
 
+  // Show internal php functions if the button is selected (default 1).
+  if (isset($_GET['show_internal']) && (int) $_GET['show_internal'] == 0) {
+    $all_functions = get_defined_functions();
+    $internal = $all_functions['internal'];
+    foreach ($sym_table as $symbol => $info) {
+      if (in_array($symbol, $internal)) {
+        unset($sym_table[$symbol]);
+      }
+    }
+  }
+
   // Filter out functions whose exclusive time ratio is below threshold, and
   // also assign a unique integer id for each function to be generated. In the
   // meantime, find the function with the most exclusive time (potentially the
@@ -565,6 +576,25 @@ function xhprof_render_image($xhprof_runs_impl, $run_id, $type, $threshold,
 
   xhprof_generate_mime_header($type, strlen($content));
   echo $content;
+}
+
+function xhprof_render_dot($xhprof_runs_impl, $run_id, $type, $threshold,
+                           $func, $source, $critical_path) {
+
+    if (!$run_id)
+        return;
+
+    list($raw_data, $a) = $xhprof_runs_impl->get_run($run_id, $source, $description);
+    if (!$raw_data) {
+        xhprof_error("Raw data is empty");
+        return "";
+    }
+
+    //global $script;
+
+    $script = xhprof_generate_dot_script($raw_data, $threshold, $source, $description, $func, $critical_path);
+
+    return $script;
 }
 
 function xhprof_render_3d($xhprof_runs_impl, $run_id, $type, $threshold,

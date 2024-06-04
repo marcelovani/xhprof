@@ -37,7 +37,7 @@ class Db_Mysqli extends Db_Abstract
     
     public function connect()
     {
-        $this->linkID = mysqli_connect($this->config['dbhost'], $this->config['dbuser'], $this->config['dbpass'], $this->config['dbname']);
+        $this->linkID = mysqli_connect($this->config['dbhost'], $this->config['dbuser'], $this->config['dbpass'], $this->config['dbname'], $this->config['dbport']);
         if ($this->linkID === FALSE)
         {
             xhprof_error("Could not connect to db");
