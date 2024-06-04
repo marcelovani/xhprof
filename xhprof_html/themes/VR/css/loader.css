@@ -1,0 +1,114 @@
+/* keyframes for rotating animation */
+@-webkit-keyframes spin {
+  from { transform: rotateY(0); }
+  to   { transform: rotateY(360deg); }
+}
+
+.loader b,
+.loader i {
+  color: white;
+}
+
+/* scene wrapper */
+.loader.wrapper {
+  height: 300px;
+  margin-top: 100px;
+  position:relative;
+  perspective: 800;
+  perspective-origin: 50% 100px;
+}
+
+/* cube wrapper */
+.loader .cube{
+  position: relative;
+  margin: 0 auto;
+  width: 200px;
+  transform-style: preserve-3d;
+  animation: spin 4s infinite linear;
+  transition: all 1s linear;
+}
+
+/* outer cube */
+b{
+  position:absolute;
+  width:200px;
+  height:200px;
+  display:block;
+  background:rgba(255,255,255,0.1);
+  box-shadow:inset 0 0 30px rgba(0,0,0,0.2);
+  font-size:20px;
+  text-align:center;
+  line-height:200px;
+  color:rgba(0,0,0,0.5);
+  font-family:sans-serif;
+  text-transform:uppercase;
+  transition: all 1s linear;
+}
+b.back{
+  transform: translateZ(-100px) rotateY(180deg);
+}
+b.right{
+  transform:rotateY(-270deg) translateX(100px);
+  transform-origin: top right;
+}
+b.left{
+  transform:rotateY(270deg) translateX(-100px);
+  transform-origin: center left;
+}
+b.top{
+  transform:rotateX(-90deg) translateY(-100px);
+  transform-origin: top center;
+}
+b.bottom{
+  transform:rotateX(90deg) translateY(100px);
+  transform-origin: bottom center;
+}
+b.front{
+  transform: translateZ(100px);
+}
+
+/* inner cube */
+i{
+  position:absolute;
+  top:50px;
+  left:50px;
+  width:100px;
+  height:100px;
+  display:block;
+  background:url('/themes/logo-100.png');
+  transition: all 1s linear;
+}
+i.front{
+  transform: translateZ(50px);
+}
+i.back{
+  transform: translateZ(-50px) rotateY(180deg);
+}
+i.bottom{
+  transform:rotateX(-90deg) translateY(50px);
+  transform-origin: left bottom;
+}
+i.left{
+  transform:rotateY(270deg) translateX(-50px);
+  transform-origin: center left;
+}
+i.right{
+  transform:rotateY(-270deg) translateX(50px);
+  transform-origin: top right;
+}
+i.top{
+  transform:rotateX(-270deg) translateY(-50px);
+  transform-origin: left top;
+}
+
+/* hover transformations */
+.loader .cube:hover{
+  top:150px;
+}
+.loader .cube:hover b.top{
+  transform: translateZ(100px) rotateX(-210deg);
+  transform-origin: top center;
+}
+.loader .cube:hover i{
+  top:-200px;
+}

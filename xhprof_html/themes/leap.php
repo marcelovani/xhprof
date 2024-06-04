@@ -226,7 +226,18 @@ user-select: none;
         top: 51px;
         right: -20px;
       }
+
     </style>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-87733842-1', 'auto');
+  ga('send', 'pageview', 'leap');
+
+</script>
 
   </head>
 
@@ -1048,15 +1059,14 @@ controls.update();
 
   -->
 
-  <script src="./themes/leap/jquery.min.js"></script>
-  <script src="./themes/leap/three.min.js"></script>
+<!--  <script src="./themes/leap/jquery.min.js"></script>-->
+<!--  <script src="./themes/leap/three.min.js"></script>-->
+<!--  <script src="./themes/leap-hand/three.min.js"></script>-->
+  <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../../node_modules/three/build/three.min.js"></script>
+  <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
 
-  <script src="./themes/leap-hand/three.min.js"></script>
-  <script src="./themes/leap-hand/leap-0.6.3.min.js"></script>
-  <script src="./themes/leap-hand/leap-plugins-0.1.11pre.js"></script>
-  <script src="./themes/leap-hand/leap.rigged-hand-0.1.5.min.js"></script>
-
-<!--  <script src="./themes/leap/leap.min.js"></script>-->
+  <!--  <script src="./themes/leap/leap.min.js"></script>-->
 <!--  <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>-->
 <!--  <script src="../../node_modules/leapjs/examples/lib/leap-plugins-0.1.6.js"></script>-->
 
@@ -1064,10 +1074,14 @@ controls.update();
   <script src="../../node_modules/viz.js/viz.js"></script>
   <script src="../themes/3D/js/utils.js"></script>
 
+  <script src="./themes/leap-hand/leap-plugins-0.1.11pre.js"></script>
+  <script src="./themes/leap-hand/leap.rigged-hand-0.1.5.min.js"></script>
+
   <script src="./themes/leap/LeapSpringControls.js"></script>
   <script src="./themes/leap/LeapPointerControls.js"></script>
   <script src="./themes/leap/LeapEyeLookControls.js"></script>
-  <script src="./themes/leap/LeapTwoHandControls.js"></script>
+<!--  <script src="./themes/leap/LeapTwoHandControls.js"></script>-->
+  <script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
   <script src="./themes/leap/LeapPinchRotateControls.js"></script>
   <script src="./themes/leap/LeapTrackballControls.js"></script>
   <script src="./themes/leap/LeapPaddleControls.js"></script>
@@ -1244,13 +1258,6 @@ controls.update();
 
     }
 
-    function resetCamera(){
-
-      camera.position.set( 0 , 0 , 1000 );
-      camera.lookAt( new THREE.Vector3());
-
-    }
-
       function init(){
 
         var w     = window.innerWidth;
@@ -1265,23 +1272,19 @@ controls.update();
 
         document.body.appendChild( renderer.domElement );
 
-        var geometry  = new THREE.IcosahedronGeometry( 50 , 2 );
-        var material  = new THREE.MeshNormalMaterial({side:THREE.DoubleSide});
+        var cube = new THREE.BoxGeometry( 50, 50, 50 );
+        var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
 
-        skybox = new THREE.Mesh( geometry , material );
-        skybox.scale.multiplyScalar( 100 );
-        skybox.position = camera.position;
+//        skybox = new THREE.Mesh( cube , material );
+//        skybox.scale.multiplyScalar( 100 );
+//        skybox.position = camera.position;
         //scene.add( skybox );
 
         ////////////////////////////////////////////////////////////////////////
         // DotGraph include                                                   //
         ////////////////////////////////////////////////////////////////////////
-        var dotGraph = {};
         <?php
-        // Prepare graphlib-dot object.
-        $script = preg_replace('/(.+)/', '\'$1\' +', $script);
-        $script = preg_replace('/\}\'\s*\+/', "}'", $script);
-        print 'dotGraph = ' . $script . ';';
+          print getDotGraph($script);
         ?>
         // Convert to dot plain.
         var params = {
@@ -1329,57 +1332,6 @@ controls.update();
           for (var i = 0; i < count; i++) {
             var object = dotObjects[i];
 
-            switch (object.shape) {
-              case 'line':
-                //@todo implement this
-                //var geometry = geometryLine;
-                continue;
-                break;
-              case 'box':
-                //var geometry = new THREE.BoxGeometry(40, 40, 40);
-                //var geometry = geometryBox;
-                break;
-              case 'octagon':
-                //var geometry = geometryOctagon;
-                continue;
-                break;
-              default:
-            }
-
-            if (typeof(geometry) == 'object') {
-              material.color = getHexColor(object.color);//not working
-
-              //var o = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: getHexColor(object.color)}));
-              var mesh = new THREE.Mesh( geometry , material );
-              // @todo calculate offsets based on screen dimensions and zoom.
-              offsetX = 500;
-              offsetY = 1000;
-              offsetZ = Math.random() * 400 * Math.PI;
-              mesh.position.x = object.position.x - offsetX;
-              mesh.position.y = object.position.y - offsetY;
-              mesh.position.z = object.position.z - offsetZ;
-              //mesh.rotation.x = Math.random() * 2 * Math.PI;
-              //mesh.rotation.y = Math.random() * 2 * Math.PI;
-              //mesh.rotation.z = Math.random() * 2 * Math.PI;
-              mesh.scale.x = object.scale.x;
-              mesh.scale.y = object.scale.y;
-              mesh.scale.z = object.scale.z;
-              mesh.castShadow = true;
-              mesh.receiveShadow = true;
-              scene.add(mesh);
-              //objects.push( o );
-            }
-          }
-          object = {};
-          dotObjects = {};
-          dotGraph = {};
-          dotPlain = {};
-          geometry = {};
-          params = {};
-        }
-        ////////////////////////////////////////////////////////////////////////
-        // DotGraph include - end                                             //
-        ////////////////////////////////////////////////////////////////////////
 
         camera.position.z = 200;
         controller = new Leap.Controller();
@@ -1485,7 +1437,7 @@ controls.update();
         control.params = {
           size        : 120,
           dampening   :   .99,
-          speed       : .01,
+          speed       : .01
         }
 
         for( propt in control.params ){
@@ -1524,7 +1476,7 @@ controls.update();
           eyeSize        : 10,
           eyeMass        : 10,
           eyeSpeed       : 10,
-          eyeDampening   : .9,
+          eyeDampening   : .9
         }
 
         for( propt in control.params ){
@@ -1570,14 +1522,14 @@ controls.update();
         control.gui.close();
 
         control.params = {
-          translationSpeed   : 20,
+          translationSpeed   : 10,
           translationDecay   : 0.3,
           scaleDecay         : 0.5,
           rotationSlerp      : 0.8,
           rotationSpeed      : 4,
           pinchThreshold     : 0.5,
           transSmoothing     : 0.5,
-          rotationSmoothing  : 0.2,
+          rotationSmoothing  : 0.2
 
         }
 
@@ -1596,6 +1548,7 @@ controls.update();
 
 
         controls.push( control );
+        //console.log(controls);
 
         /*
 

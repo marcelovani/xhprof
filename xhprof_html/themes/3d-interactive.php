@@ -16,19 +16,31 @@
       color: white;
       text-decoration: none;
     }
+    #engine,
+    #format,
+    #raw {
+      display: none;
+    }
+
   </style>
 </head>
 <body>
 <?php include(getcwd() . '/themes/templates/graph_filter_options.php'); ?>
 
 <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
-<script src="../../node_modules/three/build/three.min.js"></script>
+<script src="../../node_modules/three/build/three.js"></script>
 <script src="../../node_modules/three/examples/js/controls/TrackballControls.js"></script>
 <script src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
 <script src="../../node_modules/viz.js/viz.js"></script>
 <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
 <script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
+<!--<script src="../themes/leap/LeapTwoHandControls.js"></script>-->
+<script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
+<script src="../../node_modules/three/examples/js/effects/VREffect.js"></script>
 <script src="../themes/3D/js/utils.js"></script>
+<script src="../themes/3D/js/leap.rigged-hand-0.1.5.min.js"></script>
+<!--<script src="../../node_modules/leapjs/examples/lib/leap-plugins-0.1.6.js"></script>-->
+<script src="../themes/3D/js/leap-plugins-0.1.11pre.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -41,10 +53,14 @@
 </script>
 <script>
 
+var camera, scene, renderer;
 var container, stats;
-var camera, controls, scene, renderer;
+var leapController;
+var leapControls;
+var trackballControls;
+var transformPlugin;
 var objects = [];
-var plane = new THREE.Plane();
+var plane = new THREE.Plane(); //@todo delete this
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2(),
   offset = new THREE.Vector3(),
@@ -52,15 +68,40 @@ var mouse = new THREE.Vector2(),
   INTERSECTED, SELECTED;
 
 init();
-animate();
 
 function init() {
 
-  container = document.createElement( 'div' );
-  document.body.appendChild( container );
+  var w     = window.innerWidth;
+  var h     = window.innerHeight;
 
-  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-  camera.position.z = 1000;
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera( 50, w / h, 1, 10000 );
+  renderer = new THREE.WebGLRenderer();
+
+  renderer.setSize( w , h );
+  renderer.domElement.id = "scene";
+  container = document.body;
+  container.appendChild( renderer.domElement );
+
+  camera.position.z = 2000;
+
+  ////////////////////////////////////////////////////////////////////////
+  // DotGraph include                                                   //
+  ////////////////////////////////////////////////////////////////////////
+  <?php
+    print getDotGraph($script);
+  ?>
+  dotToScene(dotGraph, scene, objects);
+
+  stats = new Stats();
+  stats.dom.style.top = "20px";
+  container.appendChild( stats.dom );
+
+  renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
+  renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
+  renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
+  //
 
   //@todo trackpad
   // Zoom: two fingers up and down
@@ -74,142 +115,71 @@ function init() {
   // Horizontal Rotation left<->right, up<->down: One hand in vertical waving to the direction to go
   // Pan up/down/left/right: two hands, move to the direction to go
 
-  controls = new THREE.TrackballControls( camera );
-  controls.rotateSpeed = 1.0;
-  controls.zoomSpeed = 1.2;
-  controls.panSpeed = 0.8;
-  controls.noZoom = false;
-  controls.noPan = false;
-  controls.staticMoving = true;
-  controls.dynamicDampingFactor = 0.3;
+  leapController = new Leap.Controller();
+  leapController.connect();
 
-  scene = new THREE.Scene();
+//  leapController.loop()
+//    // note that transform must be _before_ rigged hand
+//    .use('transform', {
+//      quaternion: new THREE.Quaternion,
+//      position: new THREE.Vector3,
+//      scale: 0.5
+//    })
+//    //.use('playback', {recording: 'finger-tap-54fps.json.lz'})
+//    .use('riggedHand', {
+//      dotsMode: false,
+//      parent: scene,
+//      renderFn: function() {
+//        render();
+//        // @todo make hands stay in front of the camera.
+//        stats.update();
+//      }
+//
+//    })
+//    .connect();
+//  window.transformPlugin = leapController.plugins.transform;
 
-  scene.add( new THREE.AmbientLight( 0x505050 ) );
+  leapControls = new THREE.LeapTwoHandControls( camera, leapController );
+  leapControls['translationSpeed'] = 10;
+  leapControls['translationDecay'] = 0.3;
+  leapControls['scaleDecay'] = 0.5;
+  leapControls['rotationSlerp'] = 0.8;
+  leapControls['rotationSpeed'] = 4;
+  leapControls['pinchThreshold'] = 0.5;
+  leapControls['transSmoothing'] = 0.5;
+  leapControls['rotationSmoothing'] = 0.2;
 
-  var light = new THREE.SpotLight( 0xffffff, 1.5 );
-  light.position.set( 0, 500, 2000 );
-  light.castShadow = false;
-
-  light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 200, 10000 ) );
-  light.shadow.bias = - 0.00022;
-
-  light.shadow.mapSize.width = 2048;
-  light.shadow.mapSize.height = 2048;
-
-  scene.add( light );
-
-  var dotGraph = {};
-  <?php
-  // Prepare graphlib-dot object.
-  $script = preg_replace('/(.+)/', '\'$1\' +', $script);
-  $script = preg_replace('/\}\'\s*\+/', "}'", $script);
-  print 'dotGraph = ' . $script . ';';
-  ?>
-  // Convert to dot plain.
-  var params = {
-    src: dotGraph,
-    options: {
-      engine: 'dot',
-      format: 'plain'
-    }
-  };
-  var dotPlain = Viz(params.src, params.options);
-  // Create dotObjects.
-  var dotObjects = dotToObject2( dotPlain );
-  var count = dotObjects.length;
-/*
-  for ( var i = 0; i < 20; i ++ ) {
-    var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
-    object.position.x = Math.random() * 1000 - 500;
-    object.position.y = Math.random() * 600 - 300;
-    object.position.z = Math.random() * 800 - 400;
-//    object.rotation.x = Math.random() * 2 * Math.PI;
-//    object.rotation.y = Math.random() * 2 * Math.PI;
-//    object.rotation.z = Math.random() * 2 * Math.PI;
-    object.scale.x = Math.random() * 2 + 1;
-    object.scale.y = Math.random() * 2 + 1;
-    object.scale.z = Math.random() * 2 + 1;
-    object.castShadow = true;
-    object.receiveShadow = true;
-    scene.add( object );
-    dotObjects.push( object );
-  }*/
-  for ( var i = 0; i < count; i ++ ) {
-    var object = dotObjects[i];
-
-    switch (object.shape) {
-      case 'line':
-        //@todo implement this
-        continue;
-        break;
-      case 'box':
-        var geometry = new THREE.BoxGeometry( 40, 40, 40 );
-        break;
-      case 'octagon':
-      default:
-    }
-
-    if (typeof(geometry) == 'object') {
-      var o = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color:getHexColor(object.color) } ) );
-      // @todo calculate offsets based on screen dimensions and zoom.
-      offsetX = 500;
-      offsetY = 1000;
-      offsetZ = Math.random() * 400 * Math.PI;
-      o.position.x = object.position.x - offsetX;
-      o.position.y = object.position.y - offsetY;
-      o.position.z = object.position.z - offsetZ;
-      //o.rotation.x = Math.random() * 2 * Math.PI;
-      //o.rotation.y = Math.random() * 2 * Math.PI;
-      //o.rotation.z = Math.random() * 2 * Math.PI;
-      o.scale.x = object.scale.x;
-      o.scale.y = object.scale.y;
-      o.scale.z = object.scale.z;
-      o.castShadow = true;
-      o.receiveShadow = true;
-      scene.add( o );
-      objects.push( o );
-    }
-  }
-  renderer = new THREE.WebGLRenderer( { antialias: true } );
-  renderer.setClearColor( 0xf0f0f0 );
-  renderer.setPixelRatio( window.devicePixelRatio );
-  renderer.setSize( window.innerWidth, window.innerHeight );
-  renderer.sortObjects = false;
-
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFShadowMap;
-  renderer.setClearColor( 0xffffff, 0);
-
-  container.appendChild( renderer.domElement );
-
-  var info = document.createElement( 'div' );
-  info.style.position = 'absolute';
-  info.style.top = '10px';
-  info.style.width = '100%';
-  info.style.textAlign = 'center';
-  info.innerHTML = jQuery('#options' ).val();
-  container.appendChild( info );
-
-  stats = new Stats();
-  stats.dom.style.top = "20px";
-  container.appendChild( stats.dom );
-
-  renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
-  renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
-  renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
+  trackballControls = new THREE.TrackballControls( camera );
+  trackballControls.rotateSpeed = 1.0;
+  trackballControls.zoomSpeed = 1.2;
+  trackballControls.panSpeed = 0.8;
+  trackballControls.noZoom = false;
+  trackballControls.noPan = false;
+  trackballControls.staticMoving = true;
+  trackballControls.dynamicDampingFactor = 0.3;
 
   //
 
   window.addEventListener( 'resize', onWindowResize, false );
-  object = {};
-  dotObjects = {};
-  dotGraph = {};
-  dotPlain = {};
-  geometry = {};
-  params = {};
 
+  // Add stereo effect
+  renderer = new THREE.StereoEffect( renderer );
+  // Add VR effect
+  //renderer = new THREE.VREffect( renderer );
 
+  animate();
+}
+
+function animate() {
+  render();
+  stats.update();
+  requestAnimationFrame( animate );
+}
+
+function render() {
+  renderer.render( scene, camera );
+  trackballControls.update();
+  //leapControls.update();
 }
 
 function onWindowResize() {
@@ -283,7 +253,7 @@ function onDocumentMouseDown( event ) {
 
   if ( intersects.length > 0 ) {
 
-    controls.enabled = false;
+    trackballControls.enabled = false;
 
     SELECTED = intersects[ 0 ].object;
 
@@ -303,7 +273,7 @@ function onDocumentMouseUp( event ) {
 
   event.preventDefault();
 
-  controls.enabled = true;
+  trackballControls.enabled = true;
 
   if ( INTERSECTED ) {
 
@@ -317,24 +287,9 @@ function onDocumentMouseUp( event ) {
 
 //
 
-function animate() {
-
-  requestAnimationFrame( animate );
-
-  render();
-  stats.update();
-
-}
-
-function render() {
-
-  controls.update();
-
-  renderer.render( scene, camera );
-
-}
-
 </script>
+
+<canvas width="1196" height="726" id="scene" style="width: 1196px; height: 726px;"></canvas>
 
 </body>
 </html>

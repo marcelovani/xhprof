@@ -1,0 +1,99 @@
+#menu button {
+  background-color: rgba(30, 30, 30, 0.25) !important;
+}
+
+#menu button,
+.dg .closed li.title,
+.dg .property-name {
+  color: #46bf00!important;
+}
+
+.dg li.save-row select,
+.dg li.save-row .button,
+.dg.main .close-button {
+  background-color: rgba(0, 128, 0, 0.42)!important;
+  color: #46bf00!important;
+}
+
+#menu button.active,
+#menu button:hover,
+.dg li.save-row .button:hover,
+.dg.main .close-button:hover {
+  background-color: rgba(66, 187, 16, 0.66) !important;
+}
+
+#menu button.active {
+  color: #65ff00 !important;
+}
+
+.close-button {
+  border: 1px solid!important;
+}
+
+.slider-fg:after {
+  display: none!important;
+}
+
+.dg .property-name {
+  width: 58%;
+}
+
+.dg .slider {
+  position: relative;
+  top: -20px;
+  border-radius: 0;
+  width: 58%;
+  margin-left: 0px;
+  margin-right: 0;
+}
+
+.dg .slider-fg {
+  border-radius: 0;
+}
+
+.dg .c .slider-fg {
+  background-color: rgba(214, 255, 0, 0.78)!important;
+}
+
+.dg .c .slider:hover .slider-fg {
+  background-color: rgb(149, 255, 0) !important;
+}
+
+.slider-fg:after {
+  top: 3px;
+  position: relative;
+}
+
+.dg .has-slider input[type=text] {
+  width: 26% !important;
+  left: 8px;
+}
+
+.dg li:not(.folder) {
+  background-color: rgba(26, 26, 26, 0.67)!important;
+  border-bottom-color: rgba(88, 255, 0, 0.66) !important;
+  /*border-bottom: 1px solid rgba(0, 191, 191, 0.66)!important;*/
+}
+.dg .cr.number {
+  /*border-left-color: rgba(0, 191, 191, 0.66)!important;*/
+}
+
+#server {
+  position: absolute;
+  display: block;
+  top: 5px;
+  left: 6px;
+  border: 1px solid;
+  width: auto;
+}
+
+#server,
+#server input {
+  color: #3da303;
+  background-color: #003600;
+}
+
+#server input {
+  border: 1px;
+  font-size: 16px;
+}

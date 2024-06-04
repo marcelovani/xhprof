@@ -96,3 +96,17 @@ else {
   // diff report call graph image generation
   xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2, $type, $threshold, $source);
 }
+
+/**
+ * Helper to prepage dotGraph object in js.
+ *
+ * @param $script
+ * @return string
+ */
+function getDotGraph($script) {
+  // Prepare graphlib-dot object.
+  $script = preg_replace('/(.+)/', '\'$1\' +', $script);
+  $script = preg_replace('/\}\'\s*\+/', "}'", $script);
+
+  return 'var dotGraph = ' . $script . ';';
+}

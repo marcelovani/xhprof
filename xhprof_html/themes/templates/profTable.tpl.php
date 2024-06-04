@@ -26,7 +26,7 @@
           $color = 'inherit';
         }
     ?>
-    
+
     <tr>
 	<td style="background-color: <?php echo $color; ?>;"><span style="display: none"><?php echo $color; ?></span>&nbsp;</td>
         <td><a href="index.php?run=<?php echo $run1; ?>&amp;symbol=<?php echo urlencode($element['fn']); ?>"><?php echo htmlentities($element['fn'], ENT_QUOTES, 'UTF-8'); ?></a></td>
@@ -46,10 +46,10 @@
 </tbody>
 </table>
 <script type="text/javascript">
-$(document).ready(function() 
+$(document).ready(function()
     {
         $("#box-table-a").stickyTableHeaders();
-        $("#box-table-a").tablesorter( {sortList: []} ); 
-    } 
+        $("#box-table-a").tablesorter( {sortList: []} );
+    }
 );
 </script>
