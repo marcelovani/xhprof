@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
-ini_set('display_errors', FALSE);
-ini_set('html_errors', FALSE);
+ini_set('display_errors', TRUE);
+ini_set('html_errors', TRUE);
 
 if (!isCommandLineInterface()) {
   $url = parse_url($_SERVER['REQUEST_URI']);
@@ -16,11 +16,12 @@ global $_xhprof;
 $_xhprof = array();
 
 // Change these:
+// @todo use from .env
 $_xhprof['dbtype'] = 'mysql';
-$_xhprof['dbhost'] = '127.0.0.1';
+$_xhprof['dbhost'] = 'xhprof_db';
 $_xhprof['dbport'] = '3306';
 $_xhprof['dbuser'] = 'root';
-$_xhprof['dbpass'] = '';
+$_xhprof['dbpass'] = 'pass';
 $_xhprof['dbname'] = 'xhprof';
 $_xhprof['dbadapter'] = 'Mysqli';
 $_xhprof['servername'] = 'myserver';

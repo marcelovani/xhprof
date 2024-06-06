@@ -268,16 +268,28 @@ CREATE TABLE `details` (
     $resultSet = $this->db->query($query);
     $data = $this->db->getNextAssoc($resultSet);
 
-    //The Performance data is compressed lightly to avoid max row length
+    if ($perfdata = @gzuncompress($data['perfdata'])) {
+        // Data was compressed.
+    }
+    else {
+        // Uncompress.
+        $perfdata = $data['perfdata'];
+    }
+
+    // The Performance data is compressed lightly to avoid max row length
 	if (!isset($GLOBALS['_xhprof']['serializer']) || strtolower($GLOBALS['_xhprof']['serializer'] == 'php')) {
-		$contents = unserialize(gzuncompress($data['perfdata']));
+		$contents = unserialize($perfdata);
 	} else {
-		$contents = json_decode(gzuncompress($data['perfdata']), true);
+		$contents = json_decode($perfdata, true);
 	}
 
+    // New traces come like this.
+    if (isset($contents['data'])) {
+        $contents = $contents['data'];
+    }
     //This data isnt' needed for display purposes, there's no point in keeping it in this array
+    unset($perfdata);
     unset($data['perfdata']);
-
 
     // The same function is called twice when diff'ing runs. In this case we'll populate the global scope with an array
     if (is_null($this->run_details))
@@ -456,7 +468,7 @@ CREATE TABLE `details` (
         $sql['servername'] = $this->db->escape($sname);
         $sql['type']  = (int) (isset($xhprof_details['type']) ? $xhprof_details['type'] : 0);
         $sql['timestamp'] = $this->db->escape($_SERVER['REQUEST_TIME']);
-	$sql['server_id'] = $this->db->escape($_xhprof['servername']);
+	    $sql['server_id'] = $this->db->escape($_xhprof['servername']);
         $sql['aggregateCalls_include'] = getenv('xhprof_aggregateCalls_include') ? getenv('xhprof_aggregateCalls_include') : '';
 
         $query = "INSERT INTO `details` (`id`, `url`, `c_url`, `timestamp`, `server name`, `perfdata`, `type`, `cookie`, `post`, `get`, `pmu`, `wt`, `cpu`, `server_id`, `aggregateCalls_include`) VALUES('$run_id', '{$sql['url']}', '{$sql['c_url']}', FROM_UNIXTIME('{$sql['timestamp']}'), '{$sql['servername']}', '{$sql['data']}', '{$sql['type']}', '{$sql['cookie']}', '{$sql['post']}', '{$sql['get']}', '{$sql['pmu']}', '{$sql['wt']}', '{$sql['cpu']}', '{$sql['server_id']}', '{$sql['aggregateCalls_include']}')";

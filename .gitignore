@@ -1,12 +1,7 @@
-xtemp
 .idea
 .DS_Store
-
+docker/traces
+docker/database
 node_modules
 vendor
-
-#
-# Netbeans project files
-#
-/nbproject
-/xhprof_lib/config.php
+xhprof_lib/config.php

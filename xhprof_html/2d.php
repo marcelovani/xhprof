@@ -28,7 +28,7 @@
  *
  * @author Changhao Jiang (cjiang@facebook.com)
  */
-require_once ("../xhprof_lib/config.php");
+require_once (getcwd() . "/../config.php");
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs))
 {
@@ -105,7 +105,9 @@ if (!empty($run)) {
   echo __LINE__ . 'Not implemented';
 }
 
-require_once XHPROF_LIB_ROOT . '/templates/2d.php';
+require_once (getcwd() . "/themes/templates/2d.php");
+//
+//require_once XHPROF_LIB_ROOT . '/templates/2d.php';
 
 
 ?>
