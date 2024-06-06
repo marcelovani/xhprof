@@ -2,7 +2,7 @@
 
 function displayRuns($resultSet, $title = "")
 {
-    echo "<div class=\"runTitle\">$title</div>\n";
+    echo "<h1 class=\"runTitle\">$title</h1>\n";
     echo "<table id=\"box-table-a\" class=\"tablesorter\" summary=\"Stats\"><thead><tr><th>Timestamp</th><th>Cpu</th><th>Wall Time</th><th>Peak Memory Usage</th><th>URL</th><th>Simplified URL</th></tr></thead>";
     echo "<tbody>\n";
     while ($row = XHProfRuns_Default::getNextAssoc($resultSet))
@@ -29,10 +29,10 @@ function displayRuns($resultSet, $title = "")
     echo "</table>\n";
     echo <<<SORTTABLE
 <script type="text/javascript">
-$(document).ready(function() 
-    { 
-        $("#box-table-a").tablesorter( {sortList: []} ); 
-    } 
+$(document).ready(function()
+    {
+        $("#box-table-a").tablesorter( {sortList: []} );
+    }
 );
 </script>
 SORTTABLE;
@@ -105,7 +105,7 @@ function showChart($rs, $flip = false)
 
 
     ob_start();
-      require ("themes/templates/chart.tpl.php");
+      require (XHPROF_LIB_ROOT."/templates/chart.phtml");
       $stuff = ob_get_contents();
     ob_end_clean();
    return array($stuff, "<div id=\"container\" style=\"width: 1000px; height: 500px; margin: 0 auto\"></div>");

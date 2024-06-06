@@ -22,6 +22,7 @@ $_xhprof['dbadapter'] = 'Mysqli';
 $_xhprof['servername'] = 'myserver';
 $_xhprof['namespace'] = 'myapp';
 $_xhprof['url'] = 'http://localhost' . HOME;
+$_xhprof['getparam'] = "_profile";
 
 /*
  * MySQL/MySQLi/PDO ONLY

@@ -268,6 +268,11 @@ CREATE TABLE `details` (
     $resultSet = $this->db->query($query);
     $data = $this->db->getNextAssoc($resultSet);
 
+      // can't find specified data
+      if (empty($data)) {
+          return array(null, null);
+      }
+
     if ($perfdata = @gzuncompress($data['perfdata'])) {
         // Data was compressed.
     }
@@ -438,9 +443,9 @@ CREATE TABLE `details` (
 		}
 
 
-	$sql['pmu'] = isset($xhprof_data['main()']['pmu']) ? $xhprof_data['main()']['pmu'] : '';
- 	$sql['wt']  = isset($xhprof_data['main()']['wt'])  ? $xhprof_data['main()']['wt']  : '';
-	$sql['cpu'] = isset($xhprof_data['main()']['cpu']) ? $xhprof_data['main()']['cpu'] : '';
+	$sql['pmu'] = isset($xhprof_data['main()']['pmu']) ? $xhprof_data['main()']['pmu'] : 0;
+ 	$sql['wt']  = isset($xhprof_data['main()']['wt'])  ? $xhprof_data['main()']['wt']  : 0;
+	$sql['cpu'] = isset($xhprof_data['main()']['cpu']) ? $xhprof_data['main()']['cpu'] : 0;
 
 
 		// The value of 2 seems to be light enugh that we're not killing the server, but still gives us lots of breathing room on
@@ -451,20 +456,12 @@ CREATE TABLE `details` (
 			$sql['data'] = $this->db->escape(gzcompress(json_encode($xhprof_data), 2));
 		}
 
-		$sname = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
 
-    if (isCommandLineInterface()) {
-      $url = implode(' ', $_SERVER['argv']);
-      $c_url = '';
-    }
-    else {
-      $url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF'];
-      $this->db->escape($url);
-      $c_url = $this->db->escape(_urlSimilartor($_SERVER['REQUEST_URI']));
-    }
+	$url   = PHP_SAPI === 'cli' ? implode(' ', $_SERVER['argv']) : $_SERVER['REQUEST_URI'];
+ 	$sname = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
 
-        $sql['url'] = $url;
-        $sql['c_url'] = $c_url;
+        $sql['url'] = $this->db->escape($url);
+        $sql['c_url'] = $this->db->escape(_urlSimilartor($url));
         $sql['servername'] = $this->db->escape($sname);
         $sql['type']  = (int) (isset($xhprof_details['type']) ? $xhprof_details['type'] : 0);
         $sql['timestamp'] = $this->db->escape($_SERVER['REQUEST_TIME']);
