@@ -1,5 +1,7 @@
+.idea
 .DS_Store
+docker/traces
+docker/database
 node_modules
 vendor
-.idea
-
+xhprof_lib/config.php

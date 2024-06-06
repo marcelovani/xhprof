@@ -2,7 +2,8 @@
 if (!defined('XHPROF_LIB_ROOT')) {
   define('XHPROF_LIB_ROOT', dirname(dirname(__FILE__)) . '/xhprof_lib');
 }
-require_once("../config.php");
+
+require_once(XHPROF_LIB_ROOT . "/../config.php");
 require_once XHPROF_LIB_ROOT . '/display/xhprof.php';
 require(XHPROF_LIB_ROOT . "/utils/common.php");
 
@@ -75,8 +76,7 @@ if (!is_null($serverFilter)) {
 $_xh_header = "";
 if (isset($_GET['run1']) || isset($_GET['run'])) {
   require("themes/templates/header.tpl.php");
-  displayXHProfReport($xhprof_runs_impl, $params, $source, $run, $wts,
-    $symbol, $sort, $run1, $run2);
+  displayXHProfReport($xhprof_runs_impl, $params, $source, $run, $wts, $symbol, $sort, $run1, $run2);
 }
 elseif (isset($_GET['geturl'])) {
   $last = (isset($_GET['last'])) ? $_GET['last'] : 100;

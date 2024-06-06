@@ -96,7 +96,7 @@ function xhprof_generate_mime_header($type, $length) {
 function xhprof_generate_image_by_dot($dot_script, $type) {
   // get config => yep really dirty - but unobstrusive
   global $_xhprof;
-  
+
   $errorFile    = $_xhprof['dot_errfile'];
   $tmpDirectory = $_xhprof['dot_tempdir'];
   $dotBinary    = $_xhprof['dot_binary'];
@@ -455,10 +455,11 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
                                     / $sym_table[$child]["wt"])
                   : "0.0%";
 
-      $taillabel = ($sym_table[$parent]["wt"] > 0) ?
-        sprintf("%.1f%%",
-                100 * $info["wt"] /
-                ($sym_table[$parent]["wt"] - $sym_table["$parent"]["excl_wt"]))
+      $swt = $sym_table[$parent]["wt"];
+      $sewt = $sym_table["$parent"]["excl_wt"];
+      $diff = $swt - $sewt;
+      $taillabel = ($sym_table[$parent]["wt"] > 0 && $diff > 0) ?
+        sprintf("%.1f%%", 100 * $info["wt"] / $diff)
         : "0.0%";
 
       $linewidth= 1;
@@ -579,6 +580,25 @@ function xhprof_render_image($xhprof_runs_impl, $run_id, $type, $threshold,
 }
 
 function xhprof_render_dot($xhprof_runs_impl, $run_id, $type, $threshold,
+                           $func, $source, $critical_path) {
+
+    if (!$run_id)
+        return;
+
+    list($raw_data, $a) = $xhprof_runs_impl->get_run($run_id, $source, $description);
+    if (!$raw_data) {
+        xhprof_error("Raw data is empty");
+        return "";
+    }
+
+    //global $script;
+
+    $script = xhprof_generate_dot_script($raw_data, $threshold, $source, $description, $func, $critical_path);
+
+    return $script;
+}
+
+function xhprof_render_3d($xhprof_runs_impl, $run_id, $type, $threshold,
                              $func, $source, $critical_path) {
 
   if (!$run_id)
@@ -590,9 +610,26 @@ function xhprof_render_dot($xhprof_runs_impl, $run_id, $type, $threshold,
     return "";
   }
 
-  //global $script;
+  global $script;
 
   $script = xhprof_generate_dot_script($raw_data, $threshold, $source, $description, $func, $critical_path);
+
+  // Prepare graphlib-dot object.
+  $script = preg_replace('/(.+)/', '\'$1\' +', $script);
+  $script = preg_replace('/\}\'\s*\+/', "}'", $script);
+
+//  $script = preg_replace('/^\s*digraph call_graph\s*{/', '{', $script);
+  /*$script = preg_replace('/\[/', ':["', $script);
+  $script = preg_replace('/\]\;/', '""],', $script);*/
+
+/*  echo "<pre style='
+        height: 300px;
+        overflow-y: scroll;
+        width: 98%;
+        border: 1px solid #000;
+        padding: 1em;'>";
+  print_r($script);
+  echo "</pre>";*/
 
  return $script;
 }

@@ -28,10 +28,14 @@
 <div id="view-center-tables">
    <div id="run-id-wrapper">
       <h2 class="run-details">RunID: <?php echo $xhprof_runs_impl->run_details['id']; ?> against <?php echo $xhprof_runs_impl->run_details['server name'];?><?php echo htmlentities($xhprof_runs_impl->run_details['url'], ENT_QUOTES, 'UTF-8'); ?> </h2>
+      <a href="callgraph.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">View Callgraph</a>
       <a href="callgraph.php?theme=raw&show_internal=0&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Raw List</a>
       <a href="callgraph.php?theme=viz.js&show_internal=0&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Callgraph</a>
       <a href="callgraph.php?theme=vr&show_internal=0&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">VR Viewer</a>
-      <!--<a href="callgraph.php?theme=vr&run=<?php /*echo $xhprof_runs_impl->run_details['id']; */?>" class="callgraph">Stereo Viewer</a>-->
+      <a href="2d.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">2D Viwer</a>
+      <a href="3d.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">3D Viwer</a>
+      <a href="3d2.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">3D2 Viwer</a>
+      <a href="vr.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">VR Viwer</a>
    </div>
     <div id="left-col">
      <div>
@@ -52,14 +56,14 @@
         <tr><td>Avg CPU Ticks</td><td><?php echo printSeconds($comparative['url']['avg(`cpu`)']);?></td><td><?php echo printSeconds($comparative['c_url']['avg(`cpu`)']);?></td></tr>
         <tr><td>95% CPU Ticks</td><td><?php echo printSeconds($comparative['url']['95(`cpu`)']);?></td><td><?php echo printSeconds($comparative['c_url']['95(`cpu`)']);?></td></tr>
         <?php if (isset($arrayOfTotal[1]["label"])) : ?>
-        <tr><td style="font-weight: bold;"><?php echo $arrayOfTotal[1]["label"]; ?></td><td style="font-weight: bold;"><?php echo $arrayOfTotal[1]["value"]; ?></td><td>&nbsp;</td></tr>
-        <tr><td>Min Peak Memory Usage</td><td><?php echo number_format($comparative['url']['min(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td><td><?php echo number_format($comparative['c_url']['min(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td></tr>
-        <tr><td>Max Peak Memory Usage</td><td><?php echo number_format($comparative['url']['max(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td><td><?php echo number_format($comparative['c_url']['max(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td></tr>
-        <tr><td>Avg Peak Memory Usage</td><td><?php echo number_format($comparative['url']['avg(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td><td><?php echo number_format($comparative['c_url']['avg(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td></tr>
-        <tr><td>95% Peak Memory Usage</td><td><?php echo number_format($comparative['url']['95(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td><td><?php echo number_format($comparative['c_url']['95(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td></tr>
+          <tr><td style="font-weight: bold;"><?php echo $arrayOfTotal[1]["label"]; ?></td><td style="font-weight: bold;"><?php echo $arrayOfTotal[1]["value"]; ?></td><td>&nbsp;</td></tr>
+          <tr><td>Min Peak Memory Usage</td><td><?php echo number_format($comparative['url']['min(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td><td><?php echo number_format($comparative['c_url']['min(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td></tr>
+          <tr><td>Max Peak Memory Usage</td><td><?php echo number_format($comparative['url']['max(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td><td><?php echo number_format($comparative['c_url']['max(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td></tr>
+          <tr><td>Avg Peak Memory Usage</td><td><?php echo number_format($comparative['url']['avg(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td><td><?php echo number_format($comparative['c_url']['avg(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td></tr>
+          <tr><td>95% Peak Memory Usage</td><td><?php echo number_format($comparative['url']['95(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td><td><?php echo number_format($comparative['c_url']['95(`pmu`)']) . " " . $arrayOfTotal[1]["metric"];?></td></tr>
         <?php endif; ?>
         <?php if (isset($arrayOfTotal[2]["label"])) : ?>
-        <tr><td style="font-weight: bold;"><?php echo $arrayOfTotal[2]["label"]; ?></td><td style="font-weight: bold;"><?php echo $arrayOfTotal[2]["value"]; ?></td><td>&nbsp;</td></tr>
+          <tr><td style="font-weight: bold;"><?php echo $arrayOfTotal[2]["label"]; ?></td><td style="font-weight: bold;"><?php echo $arrayOfTotal[2]["value"]; ?></td><td>&nbsp;</td></tr>
         <?php endif; ?>
         <tr><td style="font-weight: bold;">Number of Function Calls:</td><td style="font-weight: bold;"><?php echo $format_total; ?></td><td>&nbsp;</td></tr>
         <tr>
