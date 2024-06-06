@@ -1,3 +1,5 @@
+<?php die(__FILE__); ?>
+
 <script type="text/javascript">
         var chart;
         $(document).ready(function() {

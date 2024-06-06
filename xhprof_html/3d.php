@@ -14,6 +14,8 @@
 //  limitations under the License.
 //
 
+die(__FILE__);
+
 /**
  *
  * A callgraph generator for XHProf.

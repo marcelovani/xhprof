@@ -28,14 +28,9 @@
 <div id="view-center-tables">
    <div id="run-id-wrapper">
       <h2 class="run-details">RunID: <?php echo $xhprof_runs_impl->run_details['id']; ?> against <?php echo $xhprof_runs_impl->run_details['server name'];?><?php echo htmlentities($xhprof_runs_impl->run_details['url'], ENT_QUOTES, 'UTF-8'); ?> </h2>
-      <a href="callgraph.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">View Callgraph</a>
-      <a href="callgraph.php?theme=raw&show_internal=0&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Raw List</a>
+      <a href="callgraph.php?theme=raw&show_internal=0&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">View Raw</a>
       <a href="callgraph.php?theme=viz.js&show_internal=0&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Callgraph</a>
       <a href="callgraph.php?theme=vr&show_internal=0&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">VR Viewer</a>
-      <a href="2d.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">2D Viwer</a>
-      <a href="3d.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">3D Viwer</a>
-      <a href="3d2.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">3D2 Viwer</a>
-      <a href="vr.php?run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">VR Viwer</a>
    </div>
     <div id="left-col">
      <div>

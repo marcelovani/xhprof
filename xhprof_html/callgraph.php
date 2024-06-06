@@ -87,7 +87,11 @@ if (!empty($run)) {
   }
   $script = xhprof_render_dot($xhprof_runs_impl, $run, $type, $threshold, $func, $source, $critical);
 
-  require_once 'themes/' . $_GET['theme'] . '.php';
+  if (file_exists('themes/' . $_GET['theme'] . '/index.php')) {
+    require_once 'themes/' . $_GET['theme'] . '/index.php';
+  } else if (file_exists('themes/demo/' . $_GET['theme'] . '/index.php')) {
+    require_once 'themes/demo/' . $_GET['theme'] . '/index.php';
+  }
 
   // single run call graph image generation
   // xhprof_render_image($xhprof_runs_impl, $run, $type, $threshold, $func, $source, $critical);

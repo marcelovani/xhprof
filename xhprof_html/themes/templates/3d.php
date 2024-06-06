@@ -1,3 +1,5 @@
+<?php die(__FILE__); ?>
+
 <!DOCTYPE html>
 <html>
 	<head>
