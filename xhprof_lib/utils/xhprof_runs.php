@@ -268,6 +268,11 @@ CREATE TABLE `details` (
     $resultSet = $this->db->query($query);
     $data = $this->db->getNextAssoc($resultSet);
 
+    // can't find specified data
+    if (empty($data)) {
+        return array(null, null);
+    }
+
     //The Performance data is compressed lightly to avoid max row length
 	if (!isset($GLOBALS['_xhprof']['serializer']) || strtolower($GLOBALS['_xhprof']['serializer'] == 'php')) {
 		$contents = unserialize(gzuncompress($data['perfdata']));
@@ -424,11 +429,11 @@ CREATE TABLE `details` (
 				$sql['post'] = $this->db->escape(json_encode(array("Skipped" => "Post data omitted by rule")));
 			}
 		}
-
-
-	$sql['pmu'] = isset($xhprof_data['main()']['pmu']) ? $xhprof_data['main()']['pmu'] : '';
- 	$sql['wt']  = isset($xhprof_data['main()']['wt'])  ? $xhprof_data['main()']['wt']  : '';
-	$sql['cpu'] = isset($xhprof_data['main()']['cpu']) ? $xhprof_data['main()']['cpu'] : '';
+        
+        
+	$sql['pmu'] = isset($xhprof_data['main()']['pmu']) ? $xhprof_data['main()']['pmu'] : 0;
+ 	$sql['wt']  = isset($xhprof_data['main()']['wt'])  ? $xhprof_data['main()']['wt']  : 0;
+	$sql['cpu'] = isset($xhprof_data['main()']['cpu']) ? $xhprof_data['main()']['cpu'] : 0;
 
 
 		// The value of 2 seems to be light enugh that we're not killing the server, but still gives us lots of breathing room on
@@ -438,21 +443,13 @@ CREATE TABLE `details` (
 		} else {
 			$sql['data'] = $this->db->escape(gzcompress(json_encode($xhprof_data), 2));
 		}
+			
+        
+	$url   = PHP_SAPI === 'cli' ? implode(' ', $_SERVER['argv']) : $_SERVER['REQUEST_URI'];
+ 	$sname = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
 
-		$sname = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
-
-    if (isCommandLineInterface()) {
-      $url = implode(' ', $_SERVER['argv']);
-      $c_url = '';
-    }
-    else {
-      $url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF'];
-      $this->db->escape($url);
-      $c_url = $this->db->escape(_urlSimilartor($_SERVER['REQUEST_URI']));
-    }
-
-        $sql['url'] = $url;
-        $sql['c_url'] = $c_url;
+        $sql['url'] = $this->db->escape($url);
+        $sql['c_url'] = $this->db->escape(_urlSimilartor($url));
         $sql['servername'] = $this->db->escape($sname);
         $sql['type']  = (int) (isset($xhprof_details['type']) ? $xhprof_details['type'] : 0);
         $sql['timestamp'] = $this->db->escape($_SERVER['REQUEST_TIME']);

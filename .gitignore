@@ -1,5 +1,6 @@
+/nbproject
+/xhprof_lib/config.php
+.idea
 .DS_Store
 node_modules
 vendor
-.idea
-

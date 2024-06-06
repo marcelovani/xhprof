@@ -1,10 +1,10 @@
 <?php
-if (!defined('XHPROF_LIB_ROOT')) {
-  define('XHPROF_LIB_ROOT', dirname(dirname(__FILE__)) . '/xhprof_lib');
-}
-require_once("../config.php");
-require_once XHPROF_LIB_ROOT . '/display/xhprof.php';
-require(XHPROF_LIB_ROOT . "/utils/common.php");
+
+require_once dirname(dirname(__FILE__)) . '/xhprof_lib/defaults.php';
+require_once XHPROF_CONFIG;
+
+include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
+include (XHPROF_LIB_ROOT . "/utils/common.php");
 
 if (FALSE !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
   die("You do not have permission to view this page.");
@@ -73,134 +73,138 @@ if (!is_null($serverFilter)) {
   $criteria['server_id'] = $serverFilter;
 }
 $_xh_header = "";
-if (isset($_GET['run1']) || isset($_GET['run'])) {
-  require("themes/templates/header.tpl.php");
-  displayXHProfReport($xhprof_runs_impl, $params, $source, $run, $wts,
-    $symbol, $sort, $run1, $run2);
-}
-elseif (isset($_GET['geturl'])) {
-  $last = (isset($_GET['last'])) ? $_GET['last'] : 100;
-  $last = (int) $last;
-  $criteria['url'] = $_GET['geturl'];
-  $criteria['limit'] = $last;
-  $criteria['order by'] = 'timestamp';
-  $rs = $xhprof_runs_impl->getUrlStats($criteria);
-  list($header, $body) = showChart($rs, TRUE);
-  $_xh_header .= $header;
+if(isset($_GET['run1']) || isset($_GET['run']))
+{
+    include (XHPROF_LIB_ROOT."/templates/header.phtml");
+	displayXHProfReport($xhprof_runs_impl, $params, $source, $run, $wts,
+	                    $symbol, $sort, $run1, $run2);
+}elseif (isset($_GET['geturl']))
+{
+    $last = (isset($_GET['last'])) ?  $_GET['last'] : 100;
+    $last = (int) $last;
+    $criteria['url'] = $_GET['geturl'];
+    $criteria['limit'] = $last;
+    $criteria['order by'] = 'timestamp';
+    $rs = $xhprof_runs_impl->getUrlStats($criteria);
+    list($header, $body) = showChart($rs, true);
+    $_xh_header .= $header;
 
-  require("themes/templates/header.tpl.php");
-  $rs = $xhprof_runs_impl->getRuns($criteria);
-  require("themes/templates/emptyBody.tpl.php");
+    include (XHPROF_LIB_ROOT."/templates/header.phtml");
+    $rs = $xhprof_runs_impl->getRuns($criteria);
+    include (XHPROF_LIB_ROOT."/templates/emptyBody.phtml");
 
-  $url = htmlentities($_GET['geturl'], ENT_QUOTES, "UTF-8");
-  displayRuns($rs, "Runs with URL: $url");
-}
-elseif (isset($_GET['getcurl'])) {
-  $last = (isset($_GET['last'])) ? $_GET['last'] : 100;
-  $last = (int) $last;
-  $criteria['c_url'] = $_GET['getcurl'];
-  $criteria['limit'] = $last;
-  $criteria['order by'] = 'timestamp';
+    $url = htmlentities($_GET['geturl'], ENT_QUOTES, "UTF-8");
+    displayRuns($rs, "Runs with URL: $url");
+}elseif (isset($_GET['getcurl']))
+{
+    $last = (isset($_GET['last'])) ?  $_GET['last'] : 100;
+    $last = (int) $last;
+    $criteria['c_url'] = $_GET['getcurl'];
+    $criteria['limit'] = $last;
+    $criteria['order by'] = 'timestamp';
 
-  $rs = $xhprof_runs_impl->getUrlStats($criteria);
-  list($header, $body) = showChart($rs, TRUE);
-  $_xh_header .= $header;
-  require("themes/templates/header.tpl.php");
+    $rs = $xhprof_runs_impl->getUrlStats($criteria);
+    list($header, $body) = showChart($rs, true);
+    $_xh_header .= $header;
+    include (XHPROF_LIB_ROOT."/templates/header.phtml");
 
-  $url = htmlentities($_GET['getcurl'], ENT_QUOTES, "UTF-8");
-  $rs = $xhprof_runs_impl->getRuns($criteria);
-  require("themes/templates/emptyBody.tpl.php");
-  displayRuns($rs, "Runs with Simplified URL: $url");
-}
-elseif (isset($_GET['getruns'])) {
-  require("themes/templates/header.tpl.php");
-  $days = (int) $_GET['days'];
+    $url = htmlentities($_GET['getcurl'], ENT_QUOTES, "UTF-8");
+    $rs = $xhprof_runs_impl->getRuns($criteria);
+    include(XHPROF_LIB_ROOT."/templates/emptyBody.phtml");
+    displayRuns($rs, "Runs with Simplified URL: $url");
+}elseif (isset($_GET['getruns']))
+{
+    include (XHPROF_LIB_ROOT."/templates/header.phtml");
+    $days = (int) $_GET['days'];
 
-  switch ($_GET['getruns']) {
-    case "cpu":
-      $load = "cpu";
-      break;
-    case "wt":
-      $load = "wt";
-      break;
-    case "pmu":
-      $load = "pmu";
-      break;
-  }
+    switch ($_GET['getruns'])
+    {
+        case "cpu":
+            $load = "cpu";
+            break;
+        case "wt":
+            $load = "wt";
+            break;
+        case "pmu":
+            $load = "pmu";
+            break;
+    }
 
-  $criteria['order by'] = $load;
-  $criteria['limit'] = "500";
-  $criteria['where'] = "DATE_SUB(CURDATE(), INTERVAL $days DAY) <= `timestamp`";
-  $rs = $xhprof_runs_impl->getRuns($criteria);
-  displayRuns($rs, "Worst runs by $load");
-}
-elseif (isset($_GET['hit'])) {
-  require("themes/templates/header.tpl.php");
-  $last = (isset($_GET['hit'])) ? $_GET['hit'] : 25;
-  $last = (int) $last;
-  $days = (isset($_GET['days'])) ? $_GET['days'] : 1;
-  $days = (int) $days;
-  if (isset($_GET['type']) && ($_GET['type'] === 'url' OR $_GET['type'] = 'curl')) {
-    $type = $_GET['type'];
-  }
-  else {
-    $type = 'url';
-  }
+    $criteria['order by'] = $load;
+    $criteria['limit'] = "500";
+    $criteria['where'] = "DATE_SUB(CURDATE(), INTERVAL $days DAY) <= `timestamp`";
+    $rs = $xhprof_runs_impl->getRuns($criteria);
+    displayRuns($rs, "Worst runs by $load");
+}elseif(isset($_GET['hit']))
+{
+    include (XHPROF_LIB_ROOT."/templates/header.phtml");
+    $last = (isset($_GET['hit'])) ?  $_GET['hit'] : 25;
+    $last = (int) $last;
+    $days = (isset($_GET['days'])) ?  $_GET['days'] : 1;
+    $days = (int) $days;
+    if (isset($_GET['type']) && ($_GET['type'] === 'url' OR $_GET['type'] = 'curl'))
+    {
+      $type = $_GET['type'];
+    }else
+    {
+      $type = 'url';
+    }
 
-  $criteria['limit'] = $last;
-  $criteria['days'] = $days;
-  $criteria['type'] = $type;
-  $resultSet = $xhprof_runs_impl->getHardHit($criteria);
+    $criteria['limit'] = $last;
+    $criteria['days'] = $days;
+    $criteria['type'] = $type;
+    $resultSet = $xhprof_runs_impl->getHardHit($criteria);
 
-  echo "<div class=\"runTitle\">Hardest Hit</div>\n";
-  echo "<table id=\"box-table-a\" class=\"tablesorter\" summary=\"Stats\"><thead><tr><th>URL</th><th>Hits</th><th class=\"{sorter: 'numeric'}\">Total Wall Time</th><th>Avg Wall Time</th></tr></thead>";
-  echo "<tbody>\n";
-  while ($row = XHProfRuns_Default::getNextAssoc($resultSet)) {
-    $url = urlencode($row['url']);
-    $html['url'] = htmlentities($row['url'], ENT_QUOTES, 'UTF-8');
-    echo "\t<tr><td><a href=\"?geturl={$url}\">{$html['url']}</a></td><td>{$row['count']}</td><td>" . number_format($row['total_wall']) . " ms</td><td>" . number_format($row['avg_wall']) . " ms</td></tr>\n";
-  }
-  echo "</tbody>\n";
-  echo "</table>\n";
-  echo <<<CODESE
+    echo "<h1 class=\"runTitle\">Hardest Hit</h1>\n";
+    echo "<table id=\"box-table-a\" class=\"tablesorter\" summary=\"Stats\"><thead><tr><th>URL</th><th>Hits</th><th class=\"{sorter: 'numeric'}\">Total Wall Time</th><th>Avg Wall Time</th></tr></thead>";
+    echo "<tbody>\n";
+    while ($row = XHProfRuns_Default::getNextAssoc($resultSet))
+    {
+        $url = urlencode($row['url']);
+        $html['url'] = htmlentities($row['url'], ENT_QUOTES, 'UTF-8');
+        echo "\t<tr><td><a href=\"?geturl={$url}\">{$html['url']}</a></td><td>{$row['count']}</td><td>" . number_format($row['total_wall']) . " ms</td><td>" . number_format($row['avg_wall']) . " ms</td></tr>\n";
+    }
+    echo "</tbody>\n";
+    echo "</table>\n";
+    echo <<<CODESE
     <script type="text/javascript">
-    $(document).ready(function() { 
-      $.tablesorter.addParser({ 
-	  id: 'pretty', 
-	  is: function(s) { 
-	      return false; 
-	  }, 
+    $(document).ready(function() {
+      $.tablesorter.addParser({
+	  id: 'pretty',
+	  is: function(s) {
+	      return false;
+	  },
 	  format: function(s) {
 	      s = s.replace(/ ms/g,"");
 	      return s.replace(/,/g,"");
-	  }, 
-	  // set type, either numeric or text 
-	  type: 'numeric' 
+	  },
+	  // set type, either numeric or text
+	  type: 'numeric'
       });
-      $(function() { 
-	  $("table").tablesorter({ 
-	      headers: { 
-		  2: { 
-		      sorter:'pretty' 
+      $(function() {
+	  $("table").tablesorter({
+	      headers: {
+		  2: {
+		      sorter:'pretty'
 		  },
 		  3: {
 		      sorter:'pretty'
 		  }
 	      }
-	  }); 
+	  });
       });
-    }); 
+    });
     </script>
 CODESE;
-}
-else {
-  require("themes/templates/header.tpl.php");
-  $last = (isset($_GET['last'])) ? $_GET['last'] : 25;
-  $last = (int) $last;
-  $criteria['order by'] = "timestamp";
-  $criteria['limit'] = $last;
-  $rs = $xhprof_runs_impl->getRuns($criteria);
-  displayRuns($rs, "Last $last Runs");
+}else
+{
+    include (XHPROF_LIB_ROOT."/templates/header.phtml");
+    $last = (isset($_GET['last'])) ?  $_GET['last'] : 25;
+    $last = (int) $last;
+    $criteria['order by'] = "timestamp";
+    $criteria['limit'] = $last;
+    $rs = $xhprof_runs_impl->getRuns($criteria);
+    displayRuns($rs, "Last $last Runs");
 }
 
-require("themes/templates/footer.tpl.php");
+include (XHPROF_LIB_ROOT."/templates/footer.phtml");
