@@ -70,8 +70,8 @@ services:
       - local
     volumes:
       - dbdata:/var/lib/mysql
-    ports:
-      - "43306:3306"
+#    ports:
+#      - "43306:3306"
 
   pma:
     image: phpmyadmin/phpmyadmin
