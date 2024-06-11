@@ -26,17 +26,18 @@
     "url": "https://github.com/marcelovani/xhprof/issues"
   },
   "dependencies": {
+    "dagre-d3-renderer": "^0.1.0",
     "dat.gui": "^0.6.1",
     "express": "^4.14.0",
     "jquery": "^2.1.4",
     "leap_tree": "https://github.com/marcelovani/Leap-Three-Camera-Controls.git",
-    "threeVR": "https://github.com/marcelovani/threeVR.git",
     "leapjs": "^0.6.4",
     "mediator-js": "^0.9.9",
     "requirejs": "^2.3.2",
     "socket.io": "^1.7.1",
     "svg-pan-zoom": "^3.3.0",
     "three": "https://github.com/marcelovani/three.js",
+    "threeVR": "https://github.com/marcelovani/threeVR.git",
     "viz.js": "^1.3.0"
   },
   "devDependencies": {

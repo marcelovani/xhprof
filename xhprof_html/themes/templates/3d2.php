@@ -52,8 +52,8 @@
 
 <script id="js">
   <?php
-    global $script;
-    print 'var g = graphlibDot.read(' . PHP_EOL . $script . PHP_EOL . ');';
+    global $digraph;
+    print 'var g = graphlibDot.read(' . PHP_EOL . $digraph . PHP_EOL . ');';
   ?>
 
   window.onload = function () {

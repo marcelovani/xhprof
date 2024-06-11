@@ -91,17 +91,17 @@ if (!array_key_exists($type, $xhprof_legal_image_types)) {
 $xhprof_runs_impl = new XHProfRuns_Default();
 
 if (!empty($run)) {
-  $script = xhprof_render_3d($xhprof_runs_impl, $run, $type,
+  $digraph = xhprof_render_3d($xhprof_runs_impl, $run, $type,
     $threshold, $func, $source, $critical);
 
   // Make it compatible with d3
-  $script = preg_replace('/shape=box/', 'shape=rect', $script);
-  $script = preg_replace('/shape=octagon/', 'shape=rect', $script);
-  $script = preg_replace('/fillcolor=(\w+)/', 'style="fill: $1"', $script);
-  $script = preg_replace('/width=(\d?\.\d?),\s/', '', $script);
-  $script = preg_replace('/height=(\d?\.\d?),\s/', '', $script);
-  $script = preg_replace('/style="setlinewidth\((10)\)/', 'style="stroke-width: 4px; stroke: #F08101', $script);
-  $script = preg_replace('/style="setlinewidth\((.*)\)/', 'style="stroke-width: $1px', $script);
+  $digraph = preg_replace('/shape=box/', 'shape=rect', $digraph);
+  $digraph = preg_replace('/shape=octagon/', 'shape=rect', $digraph);
+  $digraph = preg_replace('/fillcolor=(\w+)/', 'style="fill: $1"', $digraph);
+  $digraph = preg_replace('/width=(\d?\.\d?),\s/', '', $digraph);
+  $digraph = preg_replace('/height=(\d?\.\d?),\s/', '', $digraph);
+  $digraph = preg_replace('/style="setlinewidth\((10)\)/', 'style="stroke-width: 4px; stroke: #F08101', $digraph);
+  $digraph = preg_replace('/style="setlinewidth\((.*)\)/', 'style="stroke-width: $1px', $digraph);
 
 } else {
   echo __LINE__ . 'Not implemented';

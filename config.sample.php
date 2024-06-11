@@ -19,7 +19,7 @@ $_xhprof['dbuser'] = 'root';
 $_xhprof['dbpass'] = '';
 $_xhprof['dbname'] = 'xhprof';
 $_xhprof['dbadapter'] = 'Mysqli';
-$_xhprof['servername'] = 'myserver';
+$_xhprof['servername'] = 'mys';
 $_xhprof['namespace'] = 'myapp';
 $_xhprof['url'] = 'http://localhost' . HOME;
 

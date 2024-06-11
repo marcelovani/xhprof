@@ -1,3 +1,3 @@
 <?php
 echo '<pre>';
-print_r($script);
+print_r($digraph);

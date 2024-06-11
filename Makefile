@@ -37,7 +37,7 @@ D_VALUES='123', '/dummy.php', '/dummy.php', '2016-11-08 23:03:23', 'local', 0x78
 db-import-dummy:
 	docker-compose exec php sh -c "echo \"INSERT INTO details VALUES (${D_VALUES});\" | $(DB_CONN)"
 
-TRACE=$(shell cat docker/traces/1.xhprof)
+TRACE=$(shell cat docker/traces/1234.xhprof)
 T_VALUES='1234', '/trace.php', '/trace.php', '2016-11-08 23:03:23', 'local', '$(shell cat docker/traces/1.xhprof)', 0, 0x613a313a7b733a363a226861735f6a73223b733a313a2231223b7d, 0x613a313a7b733a373a22536b6970706564223b733a32353a22506f73742064617461206f6d69747465642062792072756c65223b7d, 0x613a303a7b7d, 0, 53, 0, 'mys', ''
 db-import-traces:
 	docker-compose exec php sh -c "echo \"INSERT INTO details VALUES (\" > /database/tmp.sql"

@@ -37,7 +37,7 @@ echo "</pre>";
 
 
 $XHPROF_ROOT = realpath(dirname(__FILE__) .'/..');
-require_once $XHPROF_ROOT . "/xhprof_lib/config.php";
+require_once $XHPROF_ROOT . "/config.php";
 require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
 require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
 

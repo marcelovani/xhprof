@@ -201,9 +201,9 @@
 
 		<script>
       <?php
-        global $script;
+        global $digraph;
         //print 'var dot_script = graphlibDot.parse(' . $script . ');';
-        print 'var g = graphlibDot.read(' . PHP_EOL . $script . PHP_EOL . ');';
+        print 'var g = graphlibDot.read(' . PHP_EOL . $digraph . PHP_EOL . ');';
       ?>
 
       window.onload = function () {

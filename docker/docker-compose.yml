@@ -7,7 +7,7 @@ services:
 #    image: ekinhbayar/php-7.4-alpine3.11-git-gd-intl-composer-tideways_xhprof-phpredis
     build:
       context: ./
-      dockerfile: php/Dockerfile
+      dockerfile: php/Dockerfile7
     container_name: "${PROJECT_NAME}_php"
     environment:
       DB_HOST: "${DB_HOST}"
@@ -34,7 +34,7 @@ services:
     networks:
       - local
     volumes:
-      - ../xhprof_html:/app:delegated
+      - ../xhprof_html:/app
 
   nginx:
 #    image: nginx:latest

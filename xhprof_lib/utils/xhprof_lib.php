@@ -50,7 +50,7 @@ function xhprof_get_metrics($xhprof_data) {
 
   // get list of valid metrics
   $possible_metrics = xhprof_get_possible_metrics();
-
+//var_dump($possible_metrics);
   // return those that are present in the raw data.
   // We'll just look at the root of the subtree for this.
   $metrics = array();
@@ -393,7 +393,7 @@ function xhprof_compute_flat_info($raw_data, &$overall_totals) {
 
   // compute inclusive times for each function
   $symbol_tab = xhprof_compute_inclusive_times($raw_data);
-
+//var_dump($symbol_tab);exit;
   /* total metric value is the metric value for "main()" */
   foreach ($metrics as $metric) {
     $overall_totals[$metric] = $symbol_tab["main()"][$metric];
@@ -501,7 +501,6 @@ function xhprof_compute_inclusive_times($raw_data) {
    * function is called from.
    */
   foreach ($raw_data as $parent_child => $info) {
-
     list($parent, $child) = xhprof_parse_parent_child($parent_child);
 
     if ($parent == $child) {
@@ -513,9 +512,9 @@ function xhprof_compute_inclusive_times($raw_data) {
       xhprof_error("Error in Raw Data: parent & child are both: $parent");
       return;
     }
-
+//var_dump($parent . ' ==> ' . $child . PHP_EOL);
     if (!isset($symbol_tab[$child])) {
-
+//echo 1;
       if ($display_calls) {
         $symbol_tab[$child] = array("ct" => $info["ct"]);
       } else {
@@ -525,6 +524,7 @@ function xhprof_compute_inclusive_times($raw_data) {
         $symbol_tab[$child][$metric] = $info[$metric];
       }
     } else {
+//echo 2;
       if ($display_calls) {
         /* increment call count for this child */
         $symbol_tab[$child]["ct"] += $info["ct"];
@@ -736,7 +736,6 @@ function xhprof_get_float_param($param, $default = 0) {
 
   // trim leading/trailing whitespace
   $val = trim($val);
-
   // TBD: confirm the value is indeed a float.
   if (true) // for now..
     return (float)$val;

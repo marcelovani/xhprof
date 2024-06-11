@@ -143,7 +143,7 @@
       <div id="panes">
         <div id="editor"># http://www.graphviz.org/content/cluster
 
-          <?php echo $script; ?>
+          <?php echo $digraph; ?>
 
 </div>
         <div id="graph">

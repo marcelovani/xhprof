@@ -27,14 +27,18 @@
     ?>
 <div id="view-center-tables">
    <div id="run-id-wrapper">
-      <h2 class="run-details">RunID: <?php echo $xhprof_runs_impl->run_details['id']; ?> against <?php echo $xhprof_runs_impl->run_details['server name'];?><?php echo htmlentities($xhprof_runs_impl->run_details['url'], ENT_QUOTES, 'UTF-8'); ?> </h2>
-      <a href="callgraph.php?theme=raw&show_internal=0&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">View Raw</a>
-      <a href="callgraph.php?theme=viz.js&show_internal=0&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">Callgraph</a>
-      <a href="callgraph.php?theme=vr&show_internal=0&run=<?php echo $xhprof_runs_impl->run_details['id']; ?>" class="callgraph">VR Viewer</a>
+     <?php $id = $xhprof_runs_impl->run_details['id']; ?>
+      <h2 class="run-details">RunID: <?php echo $id; ?> against <?php echo $xhprof_runs_impl->run_details['server name'];?><?php echo htmlentities($xhprof_runs_impl->run_details['url'], ENT_QUOTES, 'UTF-8'); ?> </h2>
+      <a href="callgraph.php?theme=viz.js&show_internal=0&links=0&run=<?php echo $id; ?>" class="callgraph">Callgraph</a>
+      <a href="callgraph.php?theme=raw&show_internal=0&run=<?php echo $id; ?>" class="callgraph">View Raw</a>
+<!--      <a href="callgraph.php?theme=viz-edit&show_internal=0&url=http://127.0.0.1:8000/run_file.php&run=--><?php //echo $id; ?><!--" class="callgraph">Editor</a>-->
+      <a href="/themes/viz-edit/index.php?theme=viz-edit?a=1&url=/run_db.php%3Frun=<?php echo $id; ?>%26links=1%26show_internal=%26" class="callgraph">Editor (db)</a>
+      <a href="/themes/viz-edit/index.php?theme=viz-edit?a=1&url=/run_file.php%3Frun=<?php echo $id; ?>%26links=1%26show_internal=%26" class="callgraph">Editor (file)</a>
+      <a href="callgraph.php?theme=vr&show_internal=0&run=<?php echo $id; ?>" class="callgraph">VR Viewer</a>
    </div>
     <div id="left-col">
      <div>
-	<form method="get" action=""><input type="hidden" name="run1" value="<?php echo $xhprof_runs_impl->run_details['id']; ?>" />
+	<form method="get" action=""><input type="hidden" name="run1" value="<?php echo $id; ?>" />
      <table id="box-table-b">
      <thead>
         <tr><th>Stat</th><th>Exact URL</th><th>Similar URLs</th></tr>
