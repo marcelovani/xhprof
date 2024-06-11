@@ -259,11 +259,11 @@ user-select: none;
     <div id="socialLinks">
       <a target="_blank" href="http://twitter.com/share?text=Learn%20to%20make%20your%20%23threejs%20projects%20explorable%20with%20@LeapMotion&amp;url=http://leapmotion.github.io/Leap-Three-Camera-Controls/">
 
-        <img src="./themes/demo/leap/twitter.png">
+        <img src="./themes/experiments/leap/twitter.png">
       </a>
-      <a target="_blank" href="http://www.facebook.com/sharer.php?u=http://leapmotion.github.io/Leap-Three-Camera-Controls/"><img src="./themes/demo/leap/facebook.png"></a>
-      <a target="_blank" href="https://github.com/leapmotion/Leap-Three-Camera-Controls"><img src="./themes/demo/leap/github.png"></a>
-      <a target="_blank" href="https://developer.leapmotion.com/"><img src="./themes/demo/leap/leapmotion.png"></a>
+      <a target="_blank" href="http://www.facebook.com/sharer.php?u=http://leapmotion.github.io/Leap-Three-Camera-Controls/"><img src="./themes/experiments/leap/facebook.png"></a>
+      <a target="_blank" href="https://github.com/leapmotion/Leap-Three-Camera-Controls"><img src="./themes/experiments/leap/github.png"></a>
+      <a target="_blank" href="https://developer.leapmotion.com/"><img src="./themes/experiments/leap/leapmotion.png"></a>
     </div>
   </div>
 
@@ -567,7 +567,7 @@ function animate(){
       </p>
       <p>
         Hopefully you don't look like this dude:
-        <img src="./themes/demo/leap/coolGif.gif">
+        <img src="./themes/experiments/leap/coolGif.gif">
         but if you do, don't worry! now we get to actually start using the camera.
       </p>
 
@@ -647,7 +647,7 @@ controls.update();
         <li>staticLength:   Tells us how far away from the target that the camera comes to rest</li>
       </ul>
 
-      <h3><a target="_blank" href="./themes/demo/leap/LeapSpringControls.js"> SEE SOURCE </a></h3>
+      <h3><a target="_blank" href="./themes/experiments/leap/LeapSpringControls.js"> SEE SOURCE </a></h3>
 
 
     </div>
@@ -718,7 +718,7 @@ controls.update();
       </ul>
 
 
-      <h3><a target="_blank" href="./themes/demo/leap/LeapPointerControls.js"> SEE SOURCE </a></h3>
+      <h3><a target="_blank" href="./themes/experiments/leap/LeapPointerControls.js"> SEE SOURCE </a></h3>
 
     </div>
 
@@ -804,7 +804,7 @@ controls.update();
         <li>eyeDampening: Tells us how quickly the eye object will slow down</li>
       </ul>
 
-      <h3><a target="_blank" href="./themes/demo/leap/LeapEyeLookControls.js"> SEE SOURCE </a></h3>
+      <h3><a target="_blank" href="./themes/experiments/leap/LeapEyeLookControls.js"> SEE SOURCE </a></h3>
     </div>
 
     <div class="slide inactiveSlide" id="twoHandControls">
@@ -850,7 +850,7 @@ controls.rotationSmoothing  = 0.2;
 controls.update();
       </code></pre>
 
-      <h3><a target="_blank" href="./themes/demo/leap/LeapTwoHandControls.js"> SEE SOURCE </a></h3>
+      <h3><a target="_blank" href="./themes/experiments/leap/LeapTwoHandControls.js"> SEE SOURCE </a></h3>
 
       <!--<p>TODO: Description of Parameters</p>-->
 
@@ -916,7 +916,7 @@ controls.update();
       <li>maxZoom:                Tells us the farthest we can be</li>
       </ul>
 
-            <h3><a target="_blank" href="./themes/demo/leap/LeapPinchRotateControls.js"> SEE SOURCE </a></h3>
+            <h3><a target="_blank" href="./themes/experiments/leap/LeapPinchRotateControls.js"> SEE SOURCE </a></h3>
     </div>
 
     <div class="slide inactiveSlide" id="trackballControls">
@@ -986,7 +986,7 @@ controls.update();
         <li>minZoom:            Tells us the closest we can be</li>
         <li>maxZoom:            Tells us the farthest we can be</li>
       </ul>
-      <h3><a target="_blank" href="./themes/demo/leap/LeapTrackballControls.js"> SEE SOURCE </a></h3>
+      <h3><a target="_blank" href="./themes/experiments/leap/LeapTrackballControls.js"> SEE SOURCE </a></h3>
     </div>
 
     <div class="slide inactiveSlide" id="paddleControls">
@@ -1044,7 +1044,7 @@ controls.update();
       <li>maxSpeed:               Tells us what we will limit the cameras speed to</li>
       </ul>
 
-      <h3><a target="_blank" href="./themes/demo/leap/LeapPaddleControls.js"> SEE SOURCE </a></h3>
+      <h3><a target="_blank" href="./themes/experiments/leap/LeapPaddleControls.js"> SEE SOURCE </a></h3>
     </div>
 
   </div>
@@ -1059,25 +1059,25 @@ controls.update();
 
   -->
 
-<!--  <script src="./themes/demo/leap/jquery.min.js"></script>-->
-<!--  <script src="./themes/demo/leap/three.min.js"></script>-->
-<!--  <script src="./themes/demo/leap/leap.min.js"></script>-->
+<!--  <script src="./themes/experiments/leap/jquery.min.js"></script>-->
+<!--  <script src="./themes/experiments/leap/three.min.js"></script>-->
+<!--  <script src="./themes/experiments/leap/leap.min.js"></script>-->
   <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
   <script src="../../node_modules/three/build/three.min.js"></script>
   <script src="../../node_modules/leapjs/leap-0.6.4.min.js"></script>
-  <script src="./themes/demo/leap/dat.gui.min.js"></script>
+  <script src="./themes/experiments/leap/dat.gui.min.js"></script>
 
   <script src="../../node_modules/viz.js/viz.js"></script>
-  <script src="../3d/js/utils.js"></script>
+  <script src="/themes/experiments/3d/js/utils.js"></script>
 
-  <script src="./themes/demo/leap/LeapSpringControls.js"></script>
-  <script src="./themes/demo/leap/LeapPointerControls.js"></script>
-  <script src="./themes/demo/leap/LeapEyeLookControls.js"></script>
-<!--  <script src="./themes/demo/leap/LeapTwoHandControls.js"></script>-->
+  <script src="./themes/experiments/leap/LeapSpringControls.js"></script>
+  <script src="./themes/experiments/leap/LeapPointerControls.js"></script>
+  <script src="./themes/experiments/leap/LeapEyeLookControls.js"></script>
+<!--  <script src="./themes/experiments/leap/LeapTwoHandControls.js"></script>-->
   <script src="../../node_modules/leap_three/controls/LeapTwoHandControls.js"></script>
-  <script src="./themes/demo/leap/LeapPinchRotateControls.js"></script>
-  <script src="./themes/demo/leap/LeapTrackballControls.js"></script>
-  <script src="./themes/demo/leap/LeapPaddleControls.js"></script>
+  <script src="./themes/experiments/leap/LeapPinchRotateControls.js"></script>
+  <script src="./themes/experiments/leap/LeapTrackballControls.js"></script>
+  <script src="./themes/experiments/leap/LeapPaddleControls.js"></script>
 
   <!--
 
@@ -1276,7 +1276,7 @@ controls.update();
         // DotGraph include                                                   //
         ////////////////////////////////////////////////////////////////////////
         <?php
-          print getDotGraph($script);
+          print getDotGraph($digraph);
         ?>
         dotToScene(dotGraph, scene, []);
 

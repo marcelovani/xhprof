@@ -153,7 +153,7 @@ function render() {
 
 // Initialize lesson on page load
 function initializeLesson( dotGraph ) {
-	worker = new Worker( "./themes/demo/3d/js/worker.js" );
+	worker = new Worker( "./themes/experiments/3d/js/worker.js" );
 
 	worker.onmessage = function ( e ) {
 		dotGraph = e.data;

@@ -9,19 +9,19 @@
         <meta name="author" content="Script Tutorials" />
         <title>3D Debugger</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <link href="/themes/demo/3d/css/main.css" rel="stylesheet" type="text/css" />
+        <link href="/themes/experiments/3d/css/main.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
         <script src="../../node_modules/jquery-csv/src/jquery.csv.min.js"></script>
         <script src="../../node_modules/viz.js/viz.js"></script>
         <script src="../../node_modules/three/build/three.in.js"></script>
-        <script src="/themes/demo/3d/js/three.min.js"></script>
-        <script src="/themes/demo/3d/js/THREEx.WindowResize.js"></script>
-        <script src="/themes/demo/3d/js/OrbitControls.js"></script>
-        <script src="/themes/demo/3d/js/stats.min.js"></script>
-        <script src="/themes/demo/3d/js/utils.js"></script>
-        <script src="/themes/demo/3d/js/main.js"></script>
+        <script src="/themes/experiments/3d/js/three.min.js"></script>
+        <script src="/themes/experiments/3d/js/THREEx.WindowResize.js"></script>
+        <script src="/themes/experiments/3d/js/OrbitControls.js"></script>
+        <script src="/themes/experiments/3d/js/stats.min.js"></script>
+        <script src="/themes/experiments/3d/js/utils.js"></script>
+        <script src="/themes/experiments/3d/js/main.js"></script>
         <output id="list"></output>
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -36,9 +36,9 @@
         <script>
           <?php
           // Prepare graphlib-dot object.
-          $script = preg_replace('/(.+)/', '\'$1\' +', $script);
-          $script = preg_replace('/\}\'\s*\+/', "}'", $script);
-          print 'var g = ' . $script . ';';
+          $digraph = preg_replace('/(.+)/', '\'$1\' +', $digraph);
+          $digraph = preg_replace('/\}\'\s*\+/', "}'", $digraph);
+          print 'var g = ' . $digraph . ';';
           ?>
           initializeLesson(g);
         </script>

@@ -32,10 +32,10 @@
   <body>
     <div id="example"></div>
 
-  <script src="./themes/demo/cardboard/js/third-party/threejs/three.js"></script>
-  <script src="./themes/demo/cardboard/js/third-party/threejs/StereoEffect.js"></script>
-  <script src="./themes/demo/cardboard/js/third-party/threejs/DeviceOrientationControls.js"></script>
-  <script src="./themes/demo/cardboard/js/third-party/threejs/OrbitControls.js"></script>
+  <script src="./themes/experiments/cardboard/js/third-party/threejs/three.js"></script>
+  <script src="./themes/experiments/cardboard/js/third-party/threejs/StereoEffect.js"></script>
+  <script src="./themes/experiments/cardboard/js/third-party/threejs/DeviceOrientationControls.js"></script>
+  <script src="./themes/experiments/cardboard/js/third-party/threejs/OrbitControls.js"></script>
 
   <script>
     var camera, scene, renderer;
@@ -91,7 +91,7 @@
       scene.add(light);
 
       var texture = THREE.ImageUtils.loadTexture(
-        './themes/demo/cardboard/textures/patterns/checker.png'
+        './themes/experiments/cardboard/textures/patterns/checker.png'
       );
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;

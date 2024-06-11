@@ -13,12 +13,13 @@ require.config( {
 		'LeapSpringControls': '/node_modules/leap_three/controls/LeapSpringControls',
 		'LeapEyeLookControls': '/node_modules/leap_three/controls/LeapEyeLookControls',
 		'leapPlugins': '/themes/3d/js/leap-plugins-0.1.11pre',
-		'utils': '/themes/vr/js/utils',
-		'vrRenderer': '/themes/vr/js/vrRenderer',
-		'vrControls': '/themes/vr/js/vrControls',
-		'vrPlot': '/themes/vr/js/vrPlot',
-		'vrTargets': '/themes/vr/js/vrTargets',
-		'led': '/themes/vr/js/led'
+		'utils': '/themes/experiments/vr/js/utils',
+		'vrRenderer': '/themes/experiments/vr/js/vrRenderer',
+		'vrControls': '/themes/experiments/vr/js/vrControls',
+		'vrPlot': '/themes/experiments/vr/js/vrPlot',
+		'vrTargets': '/themes/experiments/vr/js/vrTargets',
+		'vrPanel': '/themes/experiments/vr/js/vrPanel',
+		'led': '/themes/experiments/vr/js/led'
 	},
 	shim: {
 		'jQuery': {
@@ -62,11 +63,12 @@ var activeShape = 'callgraph';
 //});
 
 require( [
-	'utils',
+	'./utils',
 	'vrPlot',
 	'vrTargets',
 	'vrRenderer',
-	'vrControls'
+	'vrControls',
+	'vrPanel'
 	],
 	function (_utils, _vrPlot, _vrTargets, Renderer, Controls ) {
 
@@ -127,7 +129,7 @@ require( [
 					break;
 
 				case 'vr':
-					require( [ 'CSS3DStereoRenderer' ], function () {
+					require( [ './CSS3DStereoRenderer' ], function () {
 						vrPlot.plotObj( dotObjects );
 						vrPlot.addCSSObjToScene( 'callgraph' );
 						vrTargets.init(objects);

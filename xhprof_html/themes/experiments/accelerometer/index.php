@@ -47,7 +47,7 @@
     <script src="../../node_modules/three/build/three.min.js"></script>
     <script src="../../node_modules/three/examples/js/controls/DeviceOrientationControls.js"></script>
     <script src="../../node_modules/viz.js/viz.js"></script>
-    <script src="../3d/js/utils.js"></script>
+    <script src="/themes/experiments/3d/js/utils.js"></script>
 
     <script>
 			(function() {
@@ -91,7 +91,7 @@
             // DotGraph include                                                   //
             ////////////////////////////////////////////////////////////////////////
             <?php
-              print getDotGraph($script);
+              print getDotGraph($digraph);
             ?>
             dotToScene(dotGraph, scene, objects);
 

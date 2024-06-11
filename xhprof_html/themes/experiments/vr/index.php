@@ -4,10 +4,10 @@
   <title>VR xhprof</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <link rel="stylesheet" href="./themes/vr/css/main.css">
-  <link rel="stylesheet" href="./themes/vr/css/gui.css">
-  <link rel="stylesheet" href="./themes/vr/css/loader.css">
-  <link rel="stylesheet" href="./themes/vr/css/led.css">
+  <link rel="stylesheet" href="/themes/experiments/vr/css/main.css">
+  <link rel="stylesheet" href="/themes/experiments/vr/css/gui.css">
+  <link rel="stylesheet" href="/themes/experiments/vr/css/loader.css">
+  <link rel="stylesheet" href="/themes/experiments/vr/css/led.css">
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -23,7 +23,7 @@
 
 <script>
 var dotObjects;
-<?php print getDotGraph($script); ?>
+<?php print getDotGraph($digraph); ?>
 </script>
 
 <script src="../../node_modules/three/build/three.min.js"></script>
@@ -33,10 +33,10 @@ var dotObjects;
 <script src="../../node_modules/dat.gui/build/dat.gui.js"></script>
 <script src="../../node_modules/mediator-js/mediator.min.js"></script>
 
-<script data-main="/themes/vr/js/main" src="/node_modules/requirejs/require.js"></script>
+<script data-main="/themes/experiments/vr/js/main" src="/node_modules/requirejs/require.js"></script>
 
-<script src="js/vrGui.js"></script>
-<script src="js/vrPanel.js"></script>
+<script src="/themes/experiments/vr/js/vrGui.js"></script>
+<script src="/themes/experiments/vr/js/vrPanel.js"></script>
 
 <div id="container">
   <!-- Loader -->

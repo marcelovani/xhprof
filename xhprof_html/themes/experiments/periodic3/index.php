@@ -119,7 +119,7 @@
     <script src="../../node_modules/three/examples/js/libs/tween.min.js"></script>
 		<script src="../../node_modules/three/examples/js/controls/TrackballControls.js"></script>
     <script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
-    <script src="./themes/3d/js/utils.js"></script>
+    <script src="/themes/experiments/3d/js/utils.js"></script>
 
 		<div id="container"></div>
 		<div id="info"><a href="http://threejs.org" target="_blank">three.js css3d</a> - periodic table. <a href="https://plus.google.com/113862800338869870683/posts/QcFk5HrWran" target="_blank">info</a>.</div>
@@ -263,7 +263,7 @@
 
       var renderers = [];
       renderers['3d'] = "../../node_modules/three/examples/js/renderers/CSS3DRenderer.js";
-      renderers['vr'] = "./themes/vr/js/CSS3DStereoRenderer2.js";
+      renderers['vr'] = "./themes/experiments/vr/js/CSS3DStereoRenderer2.js";
 
       setRenderer('3d');
 

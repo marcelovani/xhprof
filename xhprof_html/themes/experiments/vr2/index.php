@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>three.js webgl - controls - deviceorientation</title>
   <meta name="viewport" content="user-scalable=no, initial-scale=1">
-  <link rel="stylesheet" href="./themes/demo/vr/css/main.css">
+  <link rel="stylesheet" href="./themes/experiments/vr/css/main.css">
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -51,24 +51,24 @@
 <script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
 <script src="../../node_modules/viz.js/viz.js"></script>
 
-<script src="../../vr/js/main.js"></script>
-<script src="../3d/js/utils.js"></script>
-<script src="../../vr/js/vrPanel.js"></script>
-<script src="../../vr/js/vrControls.js"></script>
-<script src="../../vr/js/vrRenderer.js"></script>
-<script src="../../vr/js/vrPlot.js"></script>
-<script src="../themes/vr/js/vrShapeTable.js"></script>
-<script src="../themes/vr/js/vrShapeTube.js"></script>
-<script src="../themes/vr/js/vrShapeHelix.js"></script>
-<script src="../themes/vr/js/vrShapeSphere.js"></script>
-<script src="../themes/vr/js/vrShapeGrid.js"></script>
+<script src="/themes/experiments/vr/js/main.js"></script>
+<script src="/themes/experiments/3d/js/utils.js"></script>
+<script src="/themes/experiments/vr/js/vrPanel.js"></script>
+<script src="/themes/experiments/vr/js/vrControls.js"></script>
+<script src="/themes/experiments/vr/js/vrRenderer.js"></script>
+<script src="/themes/experiments/vr/js/vrPlot.js"></script>
+<script src="/themes/experiments/vr/js/vrShapeTable.js"></script>
+<script src="/themes/experiments/vr/js/vrShapeTube.js"></script>
+<script src="/themes/experiments/vr/js/vrShapeHelix.js"></script>
+<script src="/themes/experiments/vr/js/vrShapeSphere.js"></script>
+<script src="/themes/experiments/vr/js/vrShapeGrid.js"></script>
 
 <script>
   var container, camera, scene, renderer;
 
   var renderers = [];
   renderers['3d'] = "../../node_modules/three/examples/js/renderers/CSS3DRenderer.js";
-  renderers['vr'] = "./themes/vr/js/CSS3DStereoRenderer2.js";
+  renderers['vr'] = "./themes/experiments/vr/js/CSS3DStereoRenderer2.js";
 
   var objects = [];
   var targets = { table: [], sphere: [], helix: [], tube: [], grid: [] };
@@ -85,7 +85,7 @@
       // DotGraph include                                                   //
       ////////////////////////////////////////////////////////////////////////
       <?php
-        print getDotGraph($script);
+        print getDotGraph($digraph);
       ?>
       // Position objects.
       var dotObjects = dotToObject2( dotPlain( dotGraph ) );

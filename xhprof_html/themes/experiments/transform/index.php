@@ -42,10 +42,10 @@
   </style>
 
 
-  <script src="./themes/demo/transform/three.min.js"></script>
-  <script src="./themes/demo/transform/leap-0.6.3.min.js"></script>
-  <script src="./themes/demo/transform/leap-plugins-0.1.11pre.js"></script>
-  <script src="./themes/demo/transform/leap.rigged-hand-0.1.5.min.js"></script>
+  <script src="./themes/experiments/transform/three.min.js"></script>
+  <script src="./themes/experiments/transform/leap-0.6.3.min.js"></script>
+  <script src="./themes/experiments/transform/leap-plugins-0.1.11pre.js"></script>
+  <script src="./themes/experiments/transform/leap.rigged-hand-0.1.5.min.js"></script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

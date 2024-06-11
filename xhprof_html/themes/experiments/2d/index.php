@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<title>dot d3 viewer</title>
     <link rel="stylesheet" href="./themes/css/xhprof.css">
-    <link rel="stylesheet" href="./themes/css/2d.css">
+    <link rel="stylesheet" href="./themes/experiments/2d/2d.css">
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -23,10 +23,12 @@
   //@todo put whole thing inside a box like demo-dagre
   ?>
   <script src="./node_modules/d3/d3.min.js"></script>
+  <script src="./node_modules/graphlib-dot/dist/graphlib-dot.js"></script>
+  <script src="./node_modules/dagre-d3/dist/dagre-d3.min.js"></script>
 <!--  <script src="http://cpettitt.github.io/project/graphlib-dot/v0.4.10/graphlib-dot.min.js"></script>-->
 <!--  <script src="http://cpettitt.github.io/project/dagre-d3/v0.1.5/dagre-d3.min.js"></script>-->
-  <script src="../templates/third-party/dagre-d3/dist/dagre-d3.js"></script>
-  <script src="../templates//third-party/graphlib-dot/dist/graphlib-dot.js"></script>
+<!--  <script src="/third-party/dagre-d3/dist/dagre-d3.js"></script>-->
+<!--  <script src="/third-party/graphlib-dot/dist/graphlib-dot.js"></script>-->
 
 	<body>
   <svg id="graphContainer">
@@ -37,9 +39,9 @@
       <?php
         //global $script;
         // Prepare graphlib-dot object.
-        $script = preg_replace('/(.+)/', '\'$1\' +', $script);
-        $script = preg_replace('/\}\'\s*\+/', "}'", $script);
-        print 'var g = graphlibDot.parse(' . PHP_EOL . $script . PHP_EOL . ')';
+        $digraph = preg_replace('/(.+)/', '\'$1\' +', $digraph);
+        $digraph = preg_replace('/\}\'\s*\+/', "}'", $digraph);
+        print 'var g = graphlibDot.read(' . PHP_EOL . $digraph . PHP_EOL . ')';
       ?>
 
       window.onload = function () {
@@ -74,8 +76,10 @@
 //        console.log(g);return;
 
         // Render the graphlib object using d3.
-        var renderer = new dagreD3.Renderer();
-        renderer.run(g, d3.select("svg g"));
+        // var renderer = new dagreD3.Renderer();
+        var render = dagreD3.render();
+        d3.select("svg g").call(render, g);
+        // renderer.run(g, d3.select("svg g"));
 
 
         // Optional - resize the SVG element based on the contents.

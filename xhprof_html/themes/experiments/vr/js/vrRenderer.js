@@ -13,7 +13,7 @@ define( ['jQuery'], function ( jQuery ) {
 		this.render = function () {
 			switch ( renderType ) {
 				case '3d':
-					require( ['CSS3DRenderer', 'led'], function (_renderer, _led ) {
+					require( ['CSS3DRenderer', './led'], function (_renderer, _led ) {
 						if ( renderer instanceof THREE.CSS3DRenderer ) {
 							renderer.render( scene, camera );
 							renderer2.render( scene2, camera );
@@ -39,7 +39,7 @@ define( ['jQuery'], function ( jQuery ) {
 
 				case 'vr':
 				default:
-					require( ['CSS3DStereoRenderer', 'led'], function ( Renderer, _led ) {
+					require( ['./CSS3DStereoRenderer', 'led'], function (Renderer, _led ) {
 						if ( renderer instanceof THREE.CSS3DStereoRenderer ) {
 							effect.render( scene, camera );
 							renderer2.render( scene2, camera );

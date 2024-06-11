@@ -25,7 +25,7 @@
   </style>
 </head>
 <body>
-<?php include(getcwd() . '/themes/templates/graph_filter_options.php'); ?>
+<?php include(getcwd() . '/themes/viz.js/graph_filter_options.php'); ?>
 
 <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
 <script src="../../node_modules/three/build/three.js"></script>
@@ -37,10 +37,10 @@
 <!--<script src="../themes/leap/LeapTwoHandControls.js"></script>-->
 <script src="../../node_modules/three/examples/js/effects/StereoEffect.js"></script>
 <script src="../../node_modules/three/examples/js/effects/VREffect.js"></script>
-<script src="../3d/js/utils.js"></script>
-<script src="../3d/js/leap.rigged-hand-0.1.5.min.js"></script>
+<script src="/themes/experiments/3d/js/utils.js"></script>
+<script src="/themes/experiments/3d/js/leap.rigged-hand-0.1.5.min.js"></script>
 <!--<script src="../../node_modules/leapjs/examples/lib/leap-plugins-0.1.6.js"></script>-->
-<script src="../3d/js/leap-plugins-0.1.11pre.js"></script>
+<script src="/themes/experiments/3d/js/leap-plugins-0.1.11pre.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -89,7 +89,7 @@ function init() {
   // DotGraph include                                                   //
   ////////////////////////////////////////////////////////////////////////
   <?php
-    print getDotGraph($script);
+    print getDotGraph($digraph);
   ?>
   dotToScene(dotGraph, scene, objects);
 

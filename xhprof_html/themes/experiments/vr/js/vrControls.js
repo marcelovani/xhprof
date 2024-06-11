@@ -61,7 +61,7 @@ define( [], function () {
 			for ( var i = 0; i < Object.keys( enabledControls ).length; i++ ) {
 				switch ( enabledControls[i] ) {
 					case 'trackballControls':
-						require( ['trackballControls'], function () {
+						require( ['./TrackballControls'], function () {
 							if ( trackballControls instanceof THREE.TrackballControls ) {
 								trackballControls.update( clock.getDelta() );
 							}
