@@ -1,0 +1,190 @@
+#app {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+#editor {
+    border-right: 1px solid #ccc;
+    flex: 1 1 50%;
+    -webkit-flex: 1 1 50%;
+    display: none;
+}
+
+#output {
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+    position: relative;
+    overflow: auto;
+}
+
+/*#output {*/
+/*    margin: 0;*/
+/*    !*position: absolute;*!*/
+/*    top: 50px;*/
+/*    bottom: 0;*/
+/*    right: 0;*/
+/*    !*left: 50%;*!*/
+/*    overflow: scroll;*/
+/*}*/
+
+#header {
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+
+#header, .params b {
+    font-size: 18px;
+}
+
+#header {
+    flex: 0 0 auto;
+    -webkit-flex: 0 0 auto;
+}
+
+#panes {
+    display: flex;
+    display: -webkit-flex;
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+}
+
+#graph {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    flex: 1 1 50%;
+    -webkit-flex: 1 1 50%;
+}
+
+#options {
+    flex: 0 0 auto;
+    background: #eee;
+    border-bottom: 1px solid #ccc;
+    padding: 8px;
+    -webkit-flex: 0 0 auto;
+    font-family: "Lucida Grande", Sans-Serif;
+    font-size: 14px;
+}
+
+#options a {
+    text-decoration: none;
+    color: black;
+}
+
+#options .button a {
+    text-decoration: none;
+    color: white;
+}
+
+#output svg rect:nth-child(1) {
+    fill: darkorange;
+    stroke: darkorange;
+}
+
+#output svg rect:nth-child(2) {
+    fill: gray;
+}
+
+#options .threshold {
+    border: 1px solid lightgray;
+    display: inline-block;
+    padding: 0 3px;
+}
+
+#options label {
+    margin-right: 8px;
+}
+
+#options #raw.disabled {
+    opacity: 0.5;
+}
+
+#output svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#output #text {
+    font-size: 12px;
+    font-family: monaco, courier, monospace;
+    white-space: pre;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+#output img {
+    display: block;
+    margin: 0 auto;
+}
+
+#output.working svg, #output.error svg,
+#output.working #text, #output.error #text,
+#output.working img, #output.error img {
+    opacity: 0.4;
+}
+
+#output.error #error {
+    display: inherit;
+}
+
+#output #error {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    margin-right: 20px;
+    background: red;
+    color: white;
+    z-index: 1;
+}
+
+.button {
+    background: #3498db;
+    background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+    background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+    background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+    background-image: -o-linear-gradient(top, #3498db, #2980b9);
+    background-image: linear-gradient(to bottom, #3498db, #2980b9);
+    -webkit-border-radius: 4;
+    -moz-border-radius: 4;
+    border-radius: 4px;
+    padding: 5px 8px 5px 8px;
+    line-height: 37px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.button a {
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 7px 5px 7px 5px;
+    text-decoration: none;
+    line-height: 37px;
+}
+
+.button:hover {
+    background: #3cb0fd;
+    background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+    text-decoration: none;
+}
+
