@@ -262,70 +262,29 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
     // init_metrics($raw_data, null, null);
   }
 
-  //$sym_table = xhprof_compute_flat_info($raw_data, $totals);
-//var_dump(array_keys($raw_data));exit;
-  function get_relatated_items($data, $func) {
-    $childrenMap = [];
-
-    // Create a map of each parent to its direct children
-    foreach ($data as $key => $item) {
-      list($parent, $child) = xhprof_parse_parent_child($item);
-
-      if (!isset($childrenMap[$item])) {
-        $childrenMap[$item] = [];
-      }
-      $childrenMap[$item]['child'] = $child;
-      $childrenMap[$item]['parent'] = $parent;
-      $childrenMap[$item]['key'] = $key;
-    }
-
-    // Recursive function to traverse children
-    function include_children($childrenMap, $func, &$interested, &$pointer) {
-      foreach ($childrenMap as $key => $item) {
-//        $key = $item['key'];
-//        if ($key < $pointer) {
-//          continue;
-//        }
-//        echo '<pre>';
-//        var_dump($item);exit;
-        if ($item['parent'] == $func && !isset($interested[$key])) {
-          $interested[$key] = 1;
-//          var_dump($key, $interested, $item, $childrenMap);exit;
-          include_children($childrenMap, $item['child'], $interested, $key);
-        }
+  if ($func) {
+    // Filter list by function name.
+    $interested_funcs = filter_out_functions(array_keys($raw_data), $func);
+    foreach ($raw_data as $symbol => $info) {
+      if (!array_key_exists($symbol, $interested_funcs)) {
+        unset($raw_data[$symbol]);
       }
     }
-
-    $interested = ['main()' => 1];
-    $pointer = 0;
-    include_children($childrenMap, $func, $interested, $pointer);
-
-    return $interested;
   }
-
-//  var_dump($func);exit;
-if ($func) {
-  $interested_funcs = get_relatated_items(array_keys($raw_data), $func);
-  foreach ($raw_data as $symbol => $info) {
-    if (!array_key_exists($symbol, $interested_funcs)) {
-      unset($raw_data[$symbol]);
-//      unset($raw_data['Drupal\Component\DependencyInjection\Container::createService==>Drupal\Core\Image\ImageFactory::__construct']);
-    }
-  }
-//  var_dump($raw_data);
-//  var_dump($interested_funcs);
-//  var_dump($sym_table);
-//  exit;
-}
-//  echo '<pre>';
-//  var_dump($raw_data);
-//  exit;
 
   $sym_table = xhprof_compute_flat_info($raw_data, $totals);
 
-//  var_dump($sym_table);exit;
-//var_dump($critical_path);exit;
-//  $critical_path=0;
+  // Show internal php functions if the button is selected (default 1).
+  if (!$show_internal) {
+    $all_functions = get_defined_functions();
+    $internal = $all_functions['internal'];
+    foreach ($sym_table as $symbol => $info) {
+      if (in_array($symbol, $internal)) {
+        unset($sym_table[$symbol]);
+      }
+    }
+  }
+
   if ($critical_path) {
     $children_table = xhprof_get_children_table($raw_data);
     $node = "main()";
@@ -360,9 +319,6 @@ if ($func) {
     }
   }
 
-//  var_dump($sym_table);exit;
-//  var_dump(array_keys($raw_data));exit;
-
   // if it is a benchmark callgraph, we make the benchmarked function the root.
  if ($source == "bm" && array_key_exists("main()", $sym_table)) {
     $total_times = $sym_table["main()"]["ct"];
@@ -379,90 +335,9 @@ if ($func) {
     }
   }
 
-  // use the function to filter out irrelevant functions.
-//  if (!empty($func)) {
-//    $interested_funcs = array();
-//    foreach ($raw_data as $parent_child => $info) {
-//      list($parent, $child) = xhprof_parse_parent_child($parent_child);
-//      if ($parent == $func || $child == $func) {
-//        $interested_funcs[$parent] = 1;
-//        $interested_funcs[$child] = 1;
-//      }
-//    }
-//    foreach ($sym_table as $symbol => $info) {
-//      if (!array_key_exists($symbol, $interested_funcs)) {
-//        unset($sym_table[$symbol]);
-//      }
-//    }
-//  }
-
-//  function get_relatated_items($data, $func) {
-//    $childrenMap = [];
-//
-//    // Create a map of each parent to its direct children
-//    foreach ($data as $key => $item) {
-//      list($parent, $child) = xhprof_parse_parent_child($item);
-//
-//      if (!isset($childrenMap[$item])) {
-//        $childrenMap[$item] = [];
-//      }
-//      $childrenMap[$item]['child'] = $child;
-//      $childrenMap[$item]['parent'] = $parent;
-//      $childrenMap[$item]['key'] = $key;
-//    }
-//
-//    // Recursive function to traverse children
-//    function include_children($childrenMap, $func, &$interested, &$pointer) {
-//      foreach ($childrenMap as $key => $item) {
-////        $key = $item['key'];
-////        if ($key < $pointer) {
-////          continue;
-////        }
-//        if ($item['parent'] == $func && (!isset($interested[$item['child']]))) {
-//          $interested[$item['parent']] = 1;
-//          $interested[$item['child']] = 1;
-////          var_dump($key, $interested, $item, $childrenMap);exit;
-//          include_children($childrenMap, $item['child'], $interested, $key);
-//        }
-//      }
-//    }
-//
-//    $interested = [];
-//    $pointer = 0;
-//    include_children($childrenMap, $func, $interested, $pointer);
-//
-//    return $interested;
-//  }
-//
-////  echo '<pre>';
-//  if (!empty($func)) {
-//    $interested_funcs = get_relatated_items(array_keys($raw_data), $func);
-//    foreach ($sym_table as $symbol => $info) {
-//      if (!array_key_exists($symbol, $interested_funcs)) {
-//        unset($sym_table[$symbol]);
-//      }
-//    }
-//  echo '<pre>';
-//  var_dump($sym_table);
-//  exit;
-//  }
-
   $result = "digraph call_graph {\n";
   $result .= 'graph [label="" style="filled" fontstyle="bold" fontname="Arial" ssize="30,60" fontsize="40" ];' . PHP_EOL;
   $result .= 'node [shape="box" style="filled" fontname="Arial" fontsize="11" caption="function" ];' . PHP_EOL;
-
-  // Show internal php functions if the button is selected (default 1).
-  if (!$show_internal) {
-    $all_functions = get_defined_functions();
-    $internal = $all_functions['internal'];
-    foreach ($sym_table as $symbol => $info) {
-      if (in_array($symbol, $internal)) {
-        unset($sym_table[$symbol]);
-      }
-    }
-  }
-
-//  var_dump($sym_table);exit;
 
   // Filter out functions whose exclusive time ratio is below threshold, and
   // also assign a unique integer id for each function to be generated. In the
@@ -508,15 +383,6 @@ if ($func) {
     $height = ", height=".sprintf("%.1f", $max_height / $sizing_factor);
 
     $uri = $_SERVER['REQUEST_URI'];
-//    $actual_link = str_replace("&", "&amp;", $actual_link);
-    $actual_link = urlencode($uri);
-//var_dump($actual_link);exit;
-//    var_dump($_SERVER);exit;
-//    $link = sprintf(', URL="%s&amp;symbol=%s"',$uri, urlencode($symbol));
-//    $link = ', URL=' . $_SERVER['HTTP_REFERER'];// . '&amp;symbol=' . urlencode($symbol);
-//    $link = ", URL=/callgraph.php?theme=viz-edit&amp;show_internal=0&amp;url=http://127.0.0.1:8000/run_file.php&amp;run=5824fecf0481f ";
-//    $link = ', URL="/callgraph.php?theme=viz-edit&amp;show_internal=0&amp;url=/run_file.php%3Frun=5824fecf0481f&amp;symbol=' . $symbol . '" ';
-//echo '<pre>'; var_dump($_SERVER);exit;
 
     if ($links) {
       $link = ', URL="/themes/viz-edit/index.php?theme=viz-edit?a=1'
@@ -531,12 +397,9 @@ if ($func) {
     }
 
     if ($symbol == "main()") {
-//      $shape = "octagon";
       $name ="Total: ".($totals["wt"]/1000.0)." ms\\n";
       $name .= addslashes(isset($page) ? $page : $symbol);
     } else {
-//      $shape = "box";
-//      var_dump($symbol,$info);
       $name = addslashes($symbol)."\\nInc: ". sprintf("%.3f",$info["wt"]/1000) .
               " ms (" . sprintf("%.1f%%", 100 * $info["wt"]/$totals["wt"]).")";
     }
@@ -588,10 +451,8 @@ if ($func) {
                .$height.$fontsize.$fillcolor."];\n";
   }
 
-  // How that the functions are filtered we dont need any further conditions.
+  // Now that the functions are filtered we don't need any further conditions.
   $func='';
-//  var_dump(sizeof($raw_data));exit;
-    // Generate all the edges' information.
   foreach ($raw_data as $parent_child => $info) {
     list($parent, $child) = xhprof_parse_parent_child($parent_child);
 
@@ -622,35 +483,23 @@ if ($func) {
       }
       $line = "N" . $sym_table[$parent]["id"] . " -> N" . $sym_table[$child]["id"];
       $result .= $line;
-//var_dump($sym_table[$parent]);
-//var_dump($sym_table[$child]);
-//echo $line;
-//die('bbb');
+
       $result .= "[arrowsize=$arrow_size, style=\"setlinewidth($linewidth)\","
                  ." label=\""
                  .$label."\", headlabel=\"".$headlabel
                  ."\", taillabel=\"".$taillabel."\"";
       $result .= "];\n";
-//      var_dump('YES');
-    }
-    else {
-      //aaa
-//      var_dump($func, $parent, $child);
-//      var_dump($sym_table[$parent]);
-//      var_dump($sym_table[$child]);
-////      die('aaaa');
-//      var_dump($sym_table);
     }
   }
   $result = $result . "\n}";
-//exit;
+
   return $result;
 }
 
 function  xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2,
                                    $type, $threshold, $source) {
-  $total1;
-  $total2;
+  $total1 = 0;
+  $total2 = 0;
 
   list($raw_data1, $a) = $xhprof_runs_impl->get_run($run1, $source, $desc_unused);
   list($raw_data2, $b) = $xhprof_runs_impl->get_run($run2, $source, $desc_unused);
@@ -667,6 +516,7 @@ function  xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2,
   $content = xhprof_generate_image_by_dot($digraph, $type);
 
   xhprof_generate_mime_header($type, strlen($content));
+
   echo $content;
 }
 
@@ -741,24 +591,87 @@ function xhprof_render_image($xhprof_runs_impl, $run_id, $type, $threshold,
   echo $content;
 }
 
+/**
+ * Renders SVG image.
+ *
+ * @param object $xhprof_runs_impl
+ *  An object that implements the iXHProfRuns interface
+ * @param string $run_id
+ *   the unique id for the phprof run, this is the primary key for phprof database table.
+ * @param string $type
+ *   One of the supported image types. See also $xhprof_legal_image_types
+ * @param float $threshold
+ *   The threshold value [0,1). The functions in the raw_data whose exclusive wall times ratio are below the
+ *   threshold will be filtered out and won't appear in the generated image
+ * @param string $func
+ *   The focus function.
+ * @param string $source
+ *   The source.
+ * @param bool $critical_path
+ *   Show critical path.
+ * @param bool $show_internal
+ *   Show internal PHP functions.
+ * @param bool $links
+ *   Add links to the elements to allow filtering.
+ * @return string|void
+ */
 function xhprof_render_dot($xhprof_runs_impl, $run_id, $type, $threshold,
                            $func, $source, $critical_path, $show_internal=false, $links=false) {
 
-    if (!$run_id)
-        return;
-    list($raw_data, $a) = $xhprof_runs_impl->get_run($run_id, $source, $description);
-//var_dump(sizeof($raw_data));exit;
-//    var_dump($raw_data);exit;
-    if (!$raw_data) {
-        xhprof_error("Raw data is empty");
-        return "";
+  if (!$run_id)
+    return;
+
+  list($raw_data, $a) = $xhprof_runs_impl->get_run($run_id, $source, $description);
+
+  if (!$raw_data) {
+    xhprof_error("Raw data is empty");
+    return "";
+  }
+
+  $digraph = xhprof_generate_dot_script($raw_data, $threshold, $source, $description, $func,
+                                        $critical_path, null, null, $show_internal, $links);
+
+  return $digraph;
+}
+
+/**
+ * Get a list of all called functions related to the specified function.
+ *
+ * @param array $data
+ *   The raw data.
+ * @param string $func
+ *   The function name.
+ */
+function filter_out_functions($data, $func) {
+  $childrenMap = [];
+
+  // Create a map of each parent to its direct children
+  foreach ($data as $key => $item) {
+    list($parent, $child) = xhprof_parse_parent_child($item);
+
+    if (!isset($childrenMap[$item])) {
+      $childrenMap[$item] = [];
     }
+    $childrenMap[$item]['child'] = $child;
+    $childrenMap[$item]['parent'] = $parent;
+    $childrenMap[$item]['key'] = $key;
+  }
 
-    //global $script;
+  // Recursive function to traverse children
+  function include_children($childrenMap, $func, &$interested, &$pointer) {
+    foreach ($childrenMap as $key => $item) {
+      if ($item['parent'] == $func && !isset($interested[$key])) {
+        $interested[$key] = 1;
+        include_children($childrenMap, $item['child'], $interested, $key);
+      }
+    }
+  }
 
-  $digraph = xhprof_generate_dot_script($raw_data, $threshold, $source, $description, $func, $critical_path, null, null, $show_internal, $links);
+  $interested = ['main()' => 1];
+  $pointer = 0;
+  include_children($childrenMap, $func, $interested, $pointer);
 
-    return $digraph;
+  return $interested;
 }
 
 function xhprof_render_3d($xhprof_runs_impl, $run_id, $type, $threshold,
