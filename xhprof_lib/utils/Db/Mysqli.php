@@ -66,14 +66,14 @@ class Db_Mysqli extends Db_Abstract
     {
         return mysqli_affected_rows($this->linkID);
     }
-    
+
     public static function unixTimestamp($field)
     {
-        return 'UNIX_TIMESTAMP('.$field.')';
+        return 'UNIX_TIMESTAMP(' . $field . ')';
     }
-    
+
     public static function dateSub($days)
     {
-        return 'DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY)';
+        return 'DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)';
     }
 }

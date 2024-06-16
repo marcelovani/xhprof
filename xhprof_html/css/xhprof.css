@@ -108,10 +108,6 @@ a:hover{
   text-decoration: underline;
 }
 
-a:visited{
-  color: #547E8F;
-}
-
 .container{
   max-width: 1400px;
   padding: 20px;
@@ -197,10 +193,12 @@ a:visited{
     cursor: pointer;
     color: #fff;
     padding: 2px 15px 3px 15px;
-    background-color: #6dbcc4;
+    background-color: var(--theme);
     border-radius: 4px;
     height:35px;
     text-transform: uppercase;
+    text-decoration: none !important;
+    vertical-align: top;
 }
 
 .form-button:hover {
@@ -404,6 +402,7 @@ a.callgraph:link {
     border-collapse: collapse;
     text-align: left;
     border: 1px solid #ececec;
+    margin-top: 10px;
 }
 
 .box-table-title{

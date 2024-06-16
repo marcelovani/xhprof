@@ -555,7 +555,7 @@ function profiler_report ($url_params,
   $run1_txt = sprintf("<b>Run #%s:</b> %s", $run1, $run1_desc);
 
   $base_url_params = xhprof_array_unset(xhprof_array_unset($url_params,
-                                                           'symbol'),
+                                                           'func'),
                                         'all');
 
   $top_link_query_string = "$base_path/?" . http_build_query($base_url_params);
@@ -748,7 +748,7 @@ function print_function_info($url_params, $info, $sort, $run1, $run2) {
 
   $href = "$base_path/?" .
            http_build_query(xhprof_array_set($url_params,
-                                             'symbol', $info["fn"]));
+                                             'func', $info["fn"]));
 
   print('<td>');
   print(xhprof_render_link($info["fn"], $href));
@@ -974,7 +974,7 @@ function print_pc_array($url_params, $results, $base_ct, $base_info, $parent,
   foreach ($results as $info) {
     $href = "$base_path/?" .
       http_build_query(xhprof_array_set($url_params,
-                                        'symbol', $info["fn"]));
+                                        'func', $info["fn"]));
     $odd_even = 1 - $odd_even;
 
     if ($odd_even) {
@@ -1073,7 +1073,6 @@ function symbol_report($url_params,
       print('</tr>');
     }
 
-
     foreach ($metrics as $metric) {
       $m = $metric;
 
@@ -1120,10 +1119,14 @@ function symbol_report($url_params,
   print("<br /><h1 class='runTitle'>");
   print("Parent/Child $regr_impr report for <b>$rep_symbol</b></h1>");
 
-  $callgraph_href = "$base_path/callgraph.php?"
-    . http_build_query(xhprof_array_set($url_params, 'func', $rep_symbol));
+//  $callgraph_href = "$base_path/graphviz/?"
+//    . http_build_query(xhprof_array_set($url_params, 'func', $rep_symbol));
+//  print(" <a class='callgraph' href='$callgraph_href'>View Callgraph $diff_text</a><br />");
 
-  print(" <a class='callgraph' href='$callgraph_href'>View Callgraph $diff_text</a><br />");
+  $id = @$_GET['run'];
+  // @todo create a function to remove duplicated code below.
+  $si = !empty($_GET['show_internal']) ? $_GET['show_internal'] : '0';
+  print('<a href="/graphviz/?url=/api/db/%3Frun=' . $id . '%26links=1%26show_internal=' . $si . '%26func=' . $rep_symbol . '" class="callgraph form-button">Callgraph</a>');
 
   print("<br />");
 

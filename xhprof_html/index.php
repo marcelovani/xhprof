@@ -3,8 +3,9 @@
 require_once dirname(dirname(__FILE__)) . '/xhprof_lib/defaults.php';
 require_once XHPROF_CONFIG;
 
-include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
-include (XHPROF_LIB_ROOT . "/utils/common.php");
+require_once XHPROF_LIB_ROOT . '/display/xhprof.php';
+require_once XHPROF_LIB_ROOT . "/utils/common.php";
+require_once XHPROF_LIB_ROOT . '/params.php';
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs))
 {
@@ -16,7 +17,7 @@ unset($controlIPs);
 // param name, its type, and default value
 $params = array('run'        => array(XHPROF_STRING_PARAM, ''),
                 'wts'        => array(XHPROF_STRING_PARAM, ''),
-                'symbol'     => array(XHPROF_STRING_PARAM, ''),
+                'func'       => array(XHPROF_STRING_PARAM, ''),
                 'sort'       => array(XHPROF_STRING_PARAM, 'wt'), // wall time
                 'run1'       => array(XHPROF_STRING_PARAM, ''),
                 'run2'       => array(XHPROF_STRING_PARAM, ''),
@@ -82,7 +83,7 @@ if(isset($_GET['run1']) || isset($_GET['run']))
 {
     include (XHPROF_LIB_ROOT."/templates/header.phtml");
 	displayXHProfReport($xhprof_runs_impl, $params, $source, $run, $wts,
-	                    $symbol, $sort, $run1, $run2);
+	                    $func, $sort, $run1, $run2);
 }elseif (isset($_GET['geturl']))
 {
     $last = (isset($_GET['last'])) ?  $_GET['last'] : 100;

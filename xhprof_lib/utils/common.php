@@ -125,3 +125,98 @@ function getFilter($filterName)
     }
     return $serverFilter;
 }
+
+/**
+ * Helper for report url.
+ *
+ * @return string
+ */
+function xhprof_get_report_url()
+{
+    $uri = xhprof_parse_endpoint_uri();
+    $url = xhprof_build_query_string($uri);
+
+    return '/?' . $url;
+}
+
+/**
+ * Helper to rebuild url
+ *
+ * @param $parsed_url
+ * @param $parsed_qs
+ * @return string
+ */
+function xhprof_build_url($parsed_qs)
+{
+    $base_uri = xhprof_parse_uri();
+
+    $qs = xhprof_build_query_string($parsed_qs);
+    $qs = str_replace('&', '%26', $qs);
+    $url = $base_uri['path'] . '?' . $base_uri['api']['path'] . '%3F' . $qs;
+
+    return $url;
+}
+
+/**
+ * Builds a query string from uri parts.
+ *
+ * @param array $parts
+ *   The query string arguments
+ * @return string
+ *   The query string
+ */
+function xhprof_build_query_string($parts) {
+    $qs = '';
+    foreach ($parts as $k => $v) {
+        $qs .= sprintf('%s=%s&', $k, $v);
+    }
+    $qs = trim($qs, '&');
+
+    return $qs;
+}
+
+/**
+ * Helper to get the current path.
+ * @return mixed
+ */
+function xhprof_get_request_path()
+{
+    $parsed_url = parse_url($_SERVER['REQUEST_URI']);
+var_dump($parsed_url);
+    return $parsed_url['path'];
+}
+
+/**
+ * Helper to return markup for the threshold button
+ *
+ * @param $title
+ * @param $increment
+ * @param float $default
+ * @return string
+ */
+function xhprof_get_threshold_button($title, $increment, $default = 0.01)
+{
+    $api_uri = xhprof_parse_endpoint_uri();
+    if (isset($api_uri['threshold'])) {
+        $current = (float) $api_uri['threshold'];
+    } else {
+        $current = $default;
+    }
+
+    $current = $current + $increment;
+    if ($current <= 0) {
+        $current = 0.01;
+    }
+    if ($current > 1) {
+        $current = 1;
+    }
+    $api_uri['threshold'] = $current;
+
+    $url = xhprof_build_url($api_uri);
+//    $url = xhprof_build_endpoint_url($api_uri);
+//    var_dump($base_uri, $api_uri, $url);
+//exit;
+    return "<span class=\"button form-button\"><a href=\"$url\">$current</a></span>";
+//var_dump($button);exit;
+    return $markup;
+}

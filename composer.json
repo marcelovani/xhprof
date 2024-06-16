@@ -1,0 +1,10 @@
+{
+  "name": "marcelovani/xhprof_gui",
+  "description": "Xhprof GUI",
+  "keywords": ["PHP", "xhprof", "profiling"],
+  "license": "MIT",
+  "require": {
+    "php": "^8.0",
+    "symfony/dotenv": "^6.4"
+  }
+}

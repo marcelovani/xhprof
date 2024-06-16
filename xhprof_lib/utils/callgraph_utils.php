@@ -249,23 +249,82 @@ function xhprof_get_children_table($raw_data) {
  */
 function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
                                     $func, $critical_path, $right=null,
-                                    $left=null) {
+                                        $left=null, $show_internal=false, $links=false
+) {
 
   $max_width = 5;
   $max_height = 3.5;
   $max_fontsize = 35;
   $max_sizing_ratio = 20;
-
-  $totals;
+  $totals = 0;
 
   if ($left === null) {
     // init_metrics($raw_data, null, null);
   }
+
+  if ($func) {
+    // Filter list by function name.
+    $interested_funcs = filter_out_functions(array_keys($raw_data), $func);
+    foreach ($raw_data as $symbol => $info) {
+      if (!array_key_exists($symbol, $interested_funcs)) {
+        unset($raw_data[$symbol]);
+      }
+    }
+    // Now that the functions are filtered we don't need any further conditions.
+    // @todo update the actual conditions to stop using this variable.
+    $func='';
+  }
+
   $sym_table = xhprof_compute_flat_info($raw_data, $totals);
+
+  // Show internal php functions if the button is selected (default 1).
+  if (!$show_internal) {
+    $all_functions = get_defined_functions();
+    $internal = $all_functions['internal'];
+    foreach ($sym_table as $symbol => $info) {
+      if (in_array($symbol, $internal)) {
+        unset($sym_table[$symbol]);
+      }
+    }
+  }
+
+    // if it is a benchmark callgraph, we make the benchmarked function the root.
+    if ($source == "bm" && array_key_exists("main()", $sym_table)) {
+        $total_times = $sym_table["main()"]["ct"];
+        $remove_funcs = array("main()",
+            "hotprofiler_disable",
+            "call_user_func_array",
+            "xhprof_disable");
+
+        foreach ($remove_funcs as $cur_del_func) {
+            if (array_key_exists($cur_del_func, $sym_table) &&
+                $sym_table[$cur_del_func]["ct"] == $total_times) {
+                unset($sym_table[$cur_del_func]);
+            }
+        }
+    }
+
+    // Filter out functions whose exclusive time ratio is below threshold, and
+    // also assign a unique integer id for each function to be generated. In the
+    // meantime, find the function with the most exclusive time (potentially the
+    // performance bottleneck).
+    $cur_id = 0; $max_wt = 0;
+    foreach ($sym_table as $symbol => $info) {
+        if (empty($func) && abs($info["wt"] / $totals["wt"]) < $threshold) {
+            unset($sym_table[$symbol]);
+            continue;
+        }
+        if ($max_wt == 0 || $max_wt < abs($info["excl_wt"])) {
+            $max_wt = abs($info["excl_wt"]);
+        }
+        $sym_table[$symbol]["id"] = $cur_id;
+        $cur_id ++;
+    }
 
   if ($critical_path) {
     $children_table = xhprof_get_children_table($raw_data);
-    $node = "main()";
+    array_pop($sym_table);
+    $node = array_key_last($sym_table);
     $path = array();
     $path_edges = array();
     $visited = array();
@@ -279,10 +338,8 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
             continue;
           }
           if ($max_child === null ||
-            abs($raw_data[xhprof_build_parent_child_key($node,
-                                                        $child)]["wt"]) >
-            abs($raw_data[xhprof_build_parent_child_key($node,
-                                                        $max_child)]["wt"])) {
+            abs($raw_data[xhprof_build_parent_child_key($node, $child)]["wt"]) >
+            abs($raw_data[xhprof_build_parent_child_key($node, $max_child)]["wt"])) {
             $max_child = $child;
           }
         }
@@ -297,57 +354,9 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
     }
   }
 
-  // if it is a benchmark callgraph, we make the benchmarked function the root.
- if ($source == "bm" && array_key_exists("main()", $sym_table)) {
-    $total_times = $sym_table["main()"]["ct"];
-    $remove_funcs = array("main()",
-                          "hotprofiler_disable",
-                          "call_user_func_array",
-                          "xhprof_disable");
-
-    foreach ($remove_funcs as $cur_del_func) {
-      if (array_key_exists($cur_del_func, $sym_table) &&
-          $sym_table[$cur_del_func]["ct"] == $total_times) {
-        unset($sym_table[$cur_del_func]);
-      }
-    }
-  }
-
-  // use the function to filter out irrelevant functions.
-  if (!empty($func)) {
-    $interested_funcs = array();
-    foreach ($raw_data as $parent_child => $info) {
-      list($parent, $child) = xhprof_parse_parent_child($parent_child);
-      if ($parent == $func || $child == $func) {
-        $interested_funcs[$parent] = 1;
-        $interested_funcs[$child] = 1;
-      }
-    }
-    foreach ($sym_table as $symbol => $info) {
-      if (!array_key_exists($symbol, $interested_funcs)) {
-        unset($sym_table[$symbol]);
-      }
-    }
-  }
-
   $result = "digraph call_graph {\n";
-
-  // Filter out functions whose exclusive time ratio is below threshold, and
-  // also assign a unique integer id for each function to be generated. In the
-  // meantime, find the function with the most exclusive time (potentially the
-  // performance bottleneck).
-  $cur_id = 0; $max_wt = 0;
-  foreach ($sym_table as $symbol => $info) {
-    if (empty($func) && abs($info["wt"] / $totals["wt"]) < $threshold) {
-      unset($sym_table[$symbol]);
-      continue;
-    }
-    if ($max_wt == 0 || $max_wt < abs($info["excl_wt"])) {
-      $max_wt = abs($info["excl_wt"]);
-    }
-    $sym_table[$symbol]["id"] = $cur_id;
-    $cur_id ++;
-  }
+  $result .= 'graph [label="" style="filled" fontstyle="bold" fontname="Arial" ssize="30,60" fontsize="40" ];' . PHP_EOL;
+  $result .= 'node [shape="box" style="filled" fontname="Arial" fontsize="11" caption="function" ];' . PHP_EOL;
 
   // Generate all nodes' information.
   foreach ($sym_table as $symbol => $info) {
@@ -375,23 +384,35 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
     $width = ", width=".sprintf("%.1f", $max_width / $sizing_factor);
     $height = ", height=".sprintf("%.1f", $max_height / $sizing_factor);
 
+    if ($links) {
+      $endpoint = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
+      $parts = (isset($_SERVER['HTTP_REFERER'])) ? parse_url($_SERVER['HTTP_REFERER']) : ['path' => '/'];
+      $link = ', URL="' .  $parts['path'] . '?url=' . $endpoint
+        . '%3Frun=' . $_GET['run']
+        . '%26links=' . $links
+        . '%26show_internal=' . $show_internal
+        . '%26func=' . $symbol . '" ';
+    }
+    else {
+      $link = '';
+    }
+
     if ($symbol == "main()") {
-      $shape = "octagon";
       $name ="Total: ".($totals["wt"]/1000.0)." ms\\n";
       $name .= addslashes(isset($page) ? $page : $symbol);
     } else {
-      $shape = "box";
       $name = addslashes($symbol)."\\nInc: ". sprintf("%.3f",$info["wt"]/1000) .
               " ms (" . sprintf("%.1f%%", 100 * $info["wt"]/$totals["wt"]).")";
     }
+
     if ($left === null) {
-      $label = ", label=\"".$name."\\nExcl: "
+      $label = "label=\"".$name."\\nExcl: "
                .(sprintf("%.3f",$info["excl_wt"]/1000.0))." ms ("
                .sprintf("%.1f%%", 100 * $info["excl_wt"]/$totals["wt"])
                . ")\\n".$info["ct"]." total calls\"";
     } else {
       if (isset($left[$symbol]) && isset($right[$symbol])) {
-         $label = ", label=\"".addslashes($symbol).
+         $label = "label=\"".addslashes($symbol).
                   "\\nInc: ".(sprintf("%.3f",$left[$symbol]["wt"]/1000.0))
                   ." ms - "
                   .(sprintf("%.3f",$right[$symbol]["wt"]/1000.0))." ms = "
@@ -404,7 +425,7 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
                    .(sprintf("%.3f",$right[$symbol]["ct"]))." = "
                    .(sprintf("%.3f",$info["ct"]))."\"";
       } else if (isset($left[$symbol])) {
-        $label = ", label=\"".addslashes($symbol).
+        $label = "label=\"".addslashes($symbol).
                   "\\nInc: ".(sprintf("%.3f",$left[$symbol]["wt"]/1000.0))
                    ." ms - 0 ms = ".(sprintf("%.3f",$info["wt"]/1000.0))
                    ." ms"."\\nExcl: "
@@ -414,7 +435,7 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
                   "\\nCalls: ".(sprintf("%.3f",$left[$symbol]["ct"]))." - 0 = "
                   .(sprintf("%.3f",$info["ct"]))."\"";
       } else {
-        $label = ", label=\"".addslashes($symbol).
+        $label = "label=\"".addslashes($symbol).
                   "\\nInc: 0 ms - "
                   .(sprintf("%.3f",$right[$symbol]["wt"]/1000.0))
                   ." ms = ".(sprintf("%.3f",$info["wt"]/1000.0))." ms".
@@ -425,12 +446,12 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
                   ." = ".(sprintf("%.3f",$info["ct"]))."\"";
       }
     }
+
     $result .= "N" . $sym_table[$symbol]["id"];
-    $result .= "[shape=$shape ".$label.$width
+    $result .= "[".$label.$width.$link
                .$height.$fontsize.$fillcolor."];\n";
   }
 
-  // Generate all the edges' information.
   foreach ($raw_data as $parent_child => $info) {
     list($parent, $child) = xhprof_parse_parent_child($parent_child);
 
@@ -445,10 +466,11 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
                                     / $sym_table[$child]["wt"])
                   : "0.0%";
 
-      $taillabel = ($sym_table[$parent]["wt"] > 0) ?
-        sprintf("%.1f%%",
-                100 * $info["wt"] /
-                ($sym_table[$parent]["wt"] - $sym_table["$parent"]["excl_wt"]))
+      $swt = $sym_table[$parent]["wt"];
+      $sewt = $sym_table["$parent"]["excl_wt"];
+      $diff = $swt - $sewt;
+      $taillabel = ($sym_table[$parent]["wt"] > 0 && $diff > 0) ?
+        sprintf("%.1f%%", 100 * $info["wt"] / $diff)
         : "0.0%";
 
       $linewidth= 1;
@@ -469,6 +491,7 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
 
     }
   }
+
   $result = $result . "\n}";
 
   return $result;
@@ -476,8 +499,8 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
 
 function  xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2,
                                    $type, $threshold, $source) {
-  $total1;
-  $total2;
+  $total1 = 0;
+  $total2 = 0;
 
   list($raw_data1, $a) = $xhprof_runs_impl->get_run($run1, $source, $desc_unused);
   list($raw_data2, $b) = $xhprof_runs_impl->get_run($run2, $source, $desc_unused);
@@ -488,12 +511,13 @@ function  xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2,
   $symbol_tab1 = xhprof_compute_flat_info($raw_data1, $total1);
   $symbol_tab2 = xhprof_compute_flat_info($raw_data2, $total2);
   $run_delta = xhprof_compute_diff($raw_data1, $raw_data2);
-  $script = xhprof_generate_dot_script($run_delta, $threshold, $source,
+  $digraph = xhprof_generate_dot_script($run_delta, $threshold, $source,
                                        null, null, true,
                                        $symbol_tab1, $symbol_tab2);
-  $content = xhprof_generate_image_by_dot($script, $type);
+  $content = xhprof_generate_image_by_dot($digraph, $type);
 
   xhprof_generate_mime_header($type, strlen($content));
+
   echo $content;
 }
 
@@ -527,10 +551,10 @@ function xhprof_get_content_by_run($xhprof_runs_impl, $run_id, $type,
     return "";
   }
 
-  $script = xhprof_generate_dot_script($raw_data, $threshold, $source,
+  $digraph = xhprof_generate_dot_script($raw_data, $threshold, $source,
                                        $description, $func, $critical_path);
                     
-  $content = xhprof_generate_image_by_dot($script, $type);
+  $content = xhprof_generate_image_by_dot($digraph, $type);
   return $content;
 }
 
@@ -566,4 +590,127 @@ function xhprof_render_image($xhprof_runs_impl, $run_id, $type, $threshold,
 
   xhprof_generate_mime_header($type, strlen($content));
   echo $content;
+}
+
+/**
+ * Renders SVG image.
+ *
+ * @param object $xhprof_runs_impl
+ *  An object that implements the iXHProfRuns interface
+ * @param string $run_id
+ *   the unique id for the phprof run, this is the primary key for phprof database table.
+ * @param string $type
+ *   One of the supported image types. See also $xhprof_legal_image_types
+ * @param float $threshold
+ *   The threshold value [0,1). The functions in the raw_data whose exclusive wall times ratio are below the
+ *   threshold will be filtered out and won't appear in the generated image
+ * @param string $func
+ *   The focus function.
+ * @param string $source
+ *   The source.
+ * @param bool $critical_path
+ *   Show critical path.
+ * @param bool $show_internal
+ *   Show internal PHP functions.
+ * @param bool $links
+ *   Add links to the elements to allow filtering.
+ * @return string|void
+ */
+function xhprof_render_dot($xhprof_runs_impl, $run_id, $type, $threshold,
+                           $func, $source, $critical_path, $show_internal=false, $links=false) {
+
+  if (!$run_id)
+    return;
+
+  list($raw_data, $a) = $xhprof_runs_impl->get_run($run_id, $source, $description);
+
+  if (!$raw_data) {
+    xhprof_error("Raw data is empty");
+    return "";
+  }
+
+  $digraph = xhprof_generate_dot_script($raw_data, $threshold, $source, $description, $func,
+                                        $critical_path, null, null, $show_internal, $links);
+
+  return $digraph;
+}
+
+/**
+ * Get a list of all called functions related to the specified function.
+ *
+ * @param array $data
+ *   The raw data.
+ * @param string $func
+ *   The function name.
+ */
+function filter_out_functions($data, $func) {
+  $childrenMap = [];
+
+  // Create a map of each parent to its direct children
+  foreach ($data as $key => $item) {
+    list($parent, $child) = xhprof_parse_parent_child($item);
+
+    if (!isset($childrenMap[$item])) {
+      $childrenMap[$item] = [];
+    }
+    $childrenMap[$item]['child'] = $child;
+    $childrenMap[$item]['parent'] = $parent;
+    $childrenMap[$item]['key'] = $key;
+  }
+
+  // Recursive function to traverse children
+  function include_children($childrenMap, $func, &$interested, &$pointer) {
+    foreach ($childrenMap as $key => $item) {
+      if ($item['parent'] == $func && !isset($interested[$key])) {
+        $interested[$key] = 1;
+        include_children($childrenMap, $item['child'], $interested, $key);
+      }
+    }
+  }
+
+  $interested = ['main()' => 1];
+  $pointer = 0;
+  include_children($childrenMap, $func, $interested, $pointer);
+
+  return $interested;
+}
+
+/**
+ * Splits the parts of the base url and the API url.
+ *
+ * @return array
+ */
+function xhprof_parse_uri() {
+    $parsed_uri = parse_url($_SERVER['REQUEST_URI']);
+    $qs = $parsed_uri['query'];
+    $endpoint_args = explode('%3F', $qs);
+
+    return array_merge($parsed_uri, [
+       'api' => [
+           'path' => $endpoint_args[0],
+           'query' => $endpoint_args[1],
+       ]
+    ]);
+}
+
+/**
+ * Helper to parse the endpoint uri.
+ *
+ * @return array
+ */
+function xhprof_parse_endpoint_uri()
+{
+    $parsed_uri = xhprof_parse_uri();
+    $args = explode('%26', $parsed_uri['api']['query']);
+
+    // Build an array with arguments.
+    $result = [];
+    foreach ($args as $param) {
+        $kv = explode('=', $param);
+        if (isset($kv[1])) {
+            $result[$kv[0]] = $kv[1];
+        }
+    }
+
+    return $result;
 }

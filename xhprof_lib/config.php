@@ -1,16 +1,40 @@
 <?php
+/**
+ * @file This file is responsible for loading config from .env
+ */
+
+ini_set('max_execution_time', 100);
+
+use Symfony\Component\Dotenv\Dotenv;
+
+# Load .env.
+$locations = [
+    '../',
+    '../../',
+    '../../../',
+];
+foreach ($locations as $location) {
+    $autoload = "$location/vendor/autoload.php";
+    if (file_exists($autoload)) {
+        $root = realpath(dirname($autoload) . '/../');
+        require_once $autoload;
+        $dotenv = new Dotenv();
+        $dotenv->load("$root/.env");
+    }
+}
+
 $_xhprof = array();
 
 // Change these:
-$_xhprof['dbtype'] = 'mysql'; // Only relevant for PDO
-$_xhprof['dbhost'] = 'localhost';
-$_xhprof['dbuser'] = 'root';
-$_xhprof['dbpass'] = 'password';
-$_xhprof['dbname'] = 'xhprof';
-$_xhprof['dbadapter'] = 'Pdo';
-$_xhprof['servername'] = 'myserver';
-$_xhprof['namespace'] = 'myapp';
-$_xhprof['url'] = 'http://url/to/xhprof/xhprof_html';
+$_xhprof['dbtype'] = $_ENV['DB_TYPE'];
+$_xhprof['dbhost'] = $_ENV['DB_HOST'];
+$_xhprof['dbuser'] =  $_ENV['DB_USER'];
+$_xhprof['dbpass'] = $_ENV['DB_PASS'];
+$_xhprof['dbname'] = $_ENV['DB_NAME'];
+$_xhprof['dbadapter'] = $_ENV['DB_DRIVER'];
+$_xhprof['servername'] = 'my';
+$_xhprof['namespace'] = 'app';
+$_xhprof['url'] = $_ENV['PROJECT_BASE_URL'] . ':' . $_ENV['DB_DRIVER'];
 $_xhprof['getparam'] = "_profile";
 
 /*
@@ -50,10 +74,10 @@ $_xhprof['display'] = false;
 $_xhprof['doprofile'] = false;
 
 //Control IPs allow you to specify which IPs will be permitted to control when profiling is on or off within your application, and view the results via the UI.
-// $controlIPs = false; //Disables access controlls completely. 
-$controlIPs = array();
-$controlIPs[] = "127.0.0.1";   // localhost, you'll want to add your own ip here
-$controlIPs[] = "::1";         // localhost IP v6
+//$controlIPs = array();
+//$controlIPs[] = "127.0.0.1";   // localhost, you'll want to add your own ip here
+//$controlIPs[] = "::1";         // localhost IP v6
+$controlIPs = false; //Disables access controlls completely.
 
 //$otherURLS = array();
 

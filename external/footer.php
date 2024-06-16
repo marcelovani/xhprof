@@ -15,7 +15,7 @@ if ($_xhprof['ext_name'] && $_xhprof['doprofile'] === true) {
     if ($_xhprof['display'] === true && PHP_SAPI != 'cli' && !isset($isAjax))
     {
         // url to the XHProf UI libraries (change the host name and path)
-        $profiler_url = sprintf($_xhprof['url'].'/index.php?run=%s&source=%s', $run_id, $profiler_namespace);
+        $profiler_url = sprintf($_xhprof['url'].'/?run=%s&source=%s', $run_id, $profiler_namespace);
         echo '<a href="'. $profiler_url .'" target="_blank">Profiler output</a>';
     }
 }
