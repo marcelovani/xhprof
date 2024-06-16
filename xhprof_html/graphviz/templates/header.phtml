@@ -1,0 +1,39 @@
+<?php require_once getcwd() . '/../../xhprof_lib/utils/common.php'; ?>
+
+<div class="container">
+    <div class="dash-header">
+        <div class="xh-title-wrap">
+            <a class="xh-title" href="<?php print xhprof_get_report_url(); ?>">XH GUI</a>
+        </div>
+
+        <div id="options">
+            <form name="simple_bar" method="get" action="">
+                <label id="engine">
+                    Engine:
+                    <select>
+                        <option>circo</option>
+                        <option selected>dot</option>
+                        <option>fdp</option>
+                        <option>neato</option>
+                        <option>osage</option>
+                        <option>twopi</option>
+                    </select>
+                </label>
+
+                <label id="format">
+                    Format:
+                    <select>
+                        <option selected>svg</option>
+                        <option>png</option>
+                        <option>xdot</option>
+                        <option>plain</option>
+                        <option>ps</option>
+                    </select>
+                </label>
+
+                <?php include ("internal_functions.phtml"); ?>
+                <?php include ("threshold.phtml"); ?>
+            </form>
+        </div>
+    </div>
+</div>

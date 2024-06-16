@@ -1,0 +1,106 @@
+.switchbox {
+    position: relative;
+    display: inline-block;
+    width: 3em;
+    height: 1em;
+    padding: .125em;
+    overflow: hidden;
+    box-sizing: content-box;
+    border: 2px solid darkgrey;
+    outline: none;
+    border-radius: .75em;
+    background-color: white;
+    font-size: 1.25em;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: .15s ease-out;
+}
+.switchbox::before {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    background-color: darkgrey;
+    content: '';
+    transition: .15s ease-out;
+}
+.switchbox + label {
+    vertical-align: middle;
+}
+.switchbox-yes,
+.switchbox-no {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    transform: translateY(-50%);
+    font-size: .75em;
+    text-transform: uppercase;
+    pointer-events: none;
+    transition: inherit;
+}
+.switchbox-yes {
+    left: .75em;
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+}
+.switchbox-no {
+    right: .75em;
+    color: darkgrey;
+    opacity: 1;
+}
+.switchbox:hover,
+.switchbox:focus {
+    border-color: var(--theme); /* You probably need to change this! */
+    box-shadow: 0 0 .25em var(--theme); /* You probably need to change this too! */
+}
+.switchbox:hover::before,
+.switchbox:focus::before {
+    background-color: var(--theme); /* You probably need to change this! */
+}
+
+.switchbox.is-pressed {
+    border-color: var(--theme); /* You probably need to change this! */
+    background-color: var(--theme); /* You probably need to change this too! */
+}
+.switchbox.is-pressed .switchbox-yes {
+    opacity: 1;
+}
+.switchbox.is-pressed .switchbox-no {
+    opacity: 0;
+}
+.switchbox.is-pressed::before {
+    transform: translateX(2em);
+    background-color: white;
+}
+.switchbox.is-pressed:hover,
+.switchbox.is-pressed:focus {
+    border-color: rgba(0,0,0,.35);
+}
+.switchbox.is-pressed:hover::before,
+.switchbox.is-pressed:focus::before {
+    background-color: white;
+}
+
+/* Only for screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    white-space: nowrap;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+}
+
+body {
+    padding: 2em;
+    background: #e6e8ea;
+    font-size: 1.125em;
+    line-height: 1.5;
+}

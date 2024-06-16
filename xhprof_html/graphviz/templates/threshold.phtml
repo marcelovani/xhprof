@@ -1,0 +1,8 @@
+<span class="threshold">Threshold
+<?php
+    print xhprof_get_threshold_button('++', 0.1, $threshold);
+    print xhprof_get_threshold_button('+', 0.01, $threshold);
+    print xhprof_get_threshold_button('-', -0.01, $threshold);
+    print xhprof_get_threshold_button('--', -0.1, $threshold);
+?>
+</span>
