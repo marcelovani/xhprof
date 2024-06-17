@@ -2,6 +2,11 @@ body {
     background: white;
 }
 
+.xh-title-wrap {
+    display: inline-block;
+    float: left;
+}
+
 .container {
     width: 100%;
     height: 38px;
