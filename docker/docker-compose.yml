@@ -34,10 +34,10 @@ services:
     container_name: "${COMPOSE_PROJECT_NAME}_db"
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASS}"
       MYSQL_DATABASE: "${DB_NAME}"
       MYSQL_USER: "${DB_USER}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_PASSWORD: "${DB_PASS}"
       MYSQL_PORT: "${DB_PORT}"
       MYSQL_INNODB_BUFFER_POOL_SIZE: 5G
       MYSQL_NET_READ_TIMEOUT: 360
@@ -57,7 +57,7 @@ services:
       PMA_HOST: "${DB_HOST}"
       PMA_PORT: "${DB_PORT}"
       PMA_USER: "${DB_USER}"
-      PMA_PASSWORD: "${DB_PASSWORD}"
+      PMA_PASSWORD: "${DB_PASS}"
       PHP_UPLOAD_MAX_FILESIZE: 1G
       PHP_MAX_INPUT_VARS: 1G
       PMA_ARBITRARY: 1

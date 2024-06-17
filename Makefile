@@ -26,7 +26,7 @@ open:
 in:
 	docker-compose exec php bash
 
-DB_CONN=mysql -h$${DB_HOST} -u$${DB_USER} -p$${DB_PASSWORD} $${DB_NAME}
+DB_CONN=mysql -h$${DB_HOST} -u$${DB_USER} -p$${DB_PASS} $${DB_NAME}
 db-drop:
 	docker-compose exec php sh -c "echo truncate details | $(DB_CONN)"
 
