@@ -40,6 +40,10 @@ if ($threshold < 0 || $threshold > 1) {
     $threshold = .01;
 }
 
+if (empty($show_internal)) {
+    $show_internal = 0;
+}
+
 // if invalid value specified for type, use the default
 if (!array_key_exists($type, $xhprof_legal_image_types)) {
     $type = $params['type'][1]; // default image type.
