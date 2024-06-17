@@ -249,7 +249,7 @@ function xhprof_get_children_table($raw_data) {
  */
 function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
                                     $func, $critical_path, $right=null,
-                                        $left=null, $show_internal=false, $links=false
+                                    $left=null, $show_internal=false, $links=false
 ) {
 
   $max_width = 5;
