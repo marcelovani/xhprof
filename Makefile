@@ -5,7 +5,7 @@ export $(shell sed 's/=.*//' .env)
 build:
 	@make start
 	@make composer-install
-	@make db-import
+	@make db-install
 
 start:
 	@echo "Starting up containers for $(PROJECT_NAME)..."
