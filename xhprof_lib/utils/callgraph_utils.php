@@ -391,7 +391,7 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
         . '%3Frun=' . $_GET['run']
         . '%26links=' . $links
         . '%26show_internal=' . $show_internal
-        . '%26func=' . $symbol . '" ';
+        . '%26func=' . urlencode($symbol) . '" ';
     }
     else {
       $link = '';
@@ -665,10 +665,13 @@ function filter_out_functions($data, $func) {
         $interested[$key] = 1;
         include_children($childrenMap, $item['child'], $interested, $key);
       }
+      else if ($item['child'] == $func && !isset($interested[$key])) {
+          $interested[$key] = 1;
+      }
     }
   }
 
-  $interested = ['main()' => 1];
+  $interested = [$func => 1, 'main()' => 1];
   $pointer = 0;
   include_children($childrenMap, $func, $interested, $pointer);
 
