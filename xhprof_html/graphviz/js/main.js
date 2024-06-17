@@ -12,7 +12,7 @@
         parser = new DOMParser(),
         showError = null,
         formatEl = document.querySelector("#format select"),
-        engineEl = document.querySelector("#engine select"),
+        engineEl = document.querySelector("#engine select") || null,
         rawEl = document.querySelector("#raw input") || null,
         showInternalEl = document.querySelector("#show_internal") || null,
         shareEl = document.querySelector("#share"),
@@ -176,7 +176,7 @@
             "options": {
                 "files": [],
                 "format": formatEl.value === "png-image-element" ? "svg" : formatEl.value,
-                "engine": engineEl.value
+                "engine": (engineEl !== null && engineEl.value) || 'dot',
             },
         };
         worker.postMessage(params);
@@ -215,7 +215,7 @@
         reviewer.classList.remove("working");
         reviewer.classList.remove("error");
 
-        if (formatEl.value == "svg" && rawEl === null || !rawEl.checked) {
+        if (formatEl.value == "svg") {
             var svg = parser.parseFromString(result, "image/svg+xml");
             //get svg source.
             var serializer = new XMLSerializer();
@@ -284,7 +284,9 @@
     };
 
     formatEl.addEventListener("change", renderGraph);
-    engineEl.addEventListener("change", renderGraph);
+
+    if (engineEl !== null)
+        engineEl.addEventListener("change", renderGraph);
 
     if (rawEl !== null)
         rawEl.addEventListener("change", renderGraph);
@@ -310,8 +312,8 @@
     const params = new URLSearchParams(location.search.substring(1));
     if (params.has('engine')) {
         const engine = params.get('engine');
-        const index = engineEl.options.indexOf(engine);
-        if (index > -1) { // if index exists
+        const index = engineEl !== null && engineEl.options.indexOf(engine);
+        if (engineEl !== null && index > -1) { // if index exists
             engineEl.selectedIndex = index;
         } else {
             show_error({ message: `invalid engine ${engine} selected` });
