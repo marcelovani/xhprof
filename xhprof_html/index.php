@@ -1,5 +1,7 @@
 <?php
 
+use Xhprof\Controller\Report;
+
 require_once dirname(dirname(__FILE__)) . '/xhprof_lib/defaults.php';
 require_once XHPROF_CONFIG;
 
@@ -82,8 +84,8 @@ $_xh_header = "";
 if(isset($_GET['run1']) || isset($_GET['run']))
 {
     include (XHPROF_LIB_ROOT."/templates/header.phtml");
-	displayXHProfReport($xhprof_runs_impl, $params, $source, $run, $wts,
-	                    $func, $sort, $run1, $run2);
+    $report = new Report();
+    $report->displayXHProfReport($xhprof_runs_impl, $params, $source, $run, $wts, $func, $sort, $run1, $run2);
 }elseif (isset($_GET['geturl']))
 {
     $last = (isset($_GET['last'])) ?  $_GET['last'] : 100;

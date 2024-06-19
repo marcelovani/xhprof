@@ -20,6 +20,8 @@
 // implementation of the interface (class XHProfRuns).
 //
 
+use Xhprof\Utils;
+
 if (!defined('XHPROF_LIB_ROOT')) {
     define('XHPROF_LIB_ROOT', dirname(dirname(__FILE__)));
 }
@@ -437,8 +439,9 @@ class XHProfRuns_Default implements iXHProfRuns
         $url = PHP_SAPI === 'cli' ? implode(' ', $_SERVER['argv']) : $_SERVER['REQUEST_URI'];
         $sname = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
 
+        $utils = new Utils();
         $sql['url'] = $this->db->escape($url);
-        $sql['c_url'] = $this->db->escape(_urlSimilartor($url));
+        $sql['c_url'] = $this->db->escape($utils->urlSimilartor($url));
         $sql['servername'] = $this->db->escape($sname);
         $sql['type'] = (int)(isset($xhprof_details['type']) ? $xhprof_details['type'] : 0);
         $sql['timestamp'] = $this->db->escape($_SERVER['REQUEST_TIME']);

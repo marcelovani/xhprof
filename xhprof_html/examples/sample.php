@@ -34,9 +34,9 @@ echo "</pre>";
 
 
 $XHPROF_ROOT = realpath(dirname(__FILE__) .'/../..');
-include_once $XHPROF_ROOT . "/xhprof_lib/config.php";
-include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
-include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
+require_once $XHPROF_ROOT . "/xhprof_lib/config.php";
+require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
+require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
 
 // save raw data for this profiler run using default
 // implementation of iXHProfRuns.
