@@ -283,7 +283,7 @@ class Report
             $diff_text = "Diff";
             $base_url_params = xhprof_array_unset($base_url_params, 'run1');
             $base_url_params = xhprof_array_unset($base_url_params, 'run2');
-            $run1_link = xhprof_render_link('View Run #' . $run1,
+            $run1_link = $view->renderLink('View Run #' . $run1,
                 "$base_path/?" .
                 http_build_query(xhprof_array_set($base_url_params,
                     'run',
@@ -291,7 +291,7 @@ class Report
             $run2_txt = sprintf("<b>Run #%s:</b> %s",
                 $run2, $run2_desc);
 
-            $run2_link = xhprof_render_link('View Run #' . $run2,
+            $run2_link = $view->renderLink('View Run #' . $run2,
                 "$base_path/?" .
                 http_build_query(xhprof_array_set($base_url_params,
                     'run',
@@ -312,7 +312,7 @@ class Report
             // view the different runs or invert the current diff
             $links [] = $run1_link;
             $links [] = $run2_link;
-            $links [] = xhprof_render_link('Invert ' . $diff_text . ' Report',
+            $links [] = $view->renderLink('Invert ' . $diff_text . ' Report',
                 "$base_path/?" .
                 http_build_query($inverted_params));
         }
@@ -488,7 +488,7 @@ class Report
             $limit = $size;
             $display_link = "";
         } else {
-            $display_link = xhprof_render_link(" [ <b class=bubble>display all </b>]",
+            $display_link = $this->view->renderLink(" [ <b class=bubble>display all </b>]",
                 "$base_path/?" .
                 http_build_query(xhprof_array_set($url_params,
                     'all', 1)));

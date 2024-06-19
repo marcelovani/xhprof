@@ -125,8 +125,8 @@ print('<div id="view-diff-tables">');
         print("<thead>");
         print('<tr>');
         print("<th></th>");
-        print("<th $vwbar>Run One ID: " . xhprof_render_link("$run1", $href1) . "</th>");
-        print("<th $vwbar>Run Two ID: " . xhprof_render_link("$run2", $href2) . "</th>");
+        print("<th $vwbar>Run One ID: " . $view->renderLink("$run1", $href1) . "</th>");
+        print("<th $vwbar>Run Two ID: " . $view->renderLink("$run2", $href2) . "</th>");
         print("<th $vwbar>Diff</th>");
         print("<th $vwbar>Diff%</th>");
         print('</tr>');
@@ -138,7 +138,7 @@ print('<div id="view-diff-tables">');
           print_td_num($totals_1["ct"], $format_cbk["ct"]);
           print_td_num($totals_2["ct"], $format_cbk["ct"]);
           print_td_num($totals_2["ct"] - $totals_1["ct"], $format_cbk["ct"], true);
-          print_td_pct($totals_2["ct"] - $totals_1["ct"], $totals_1["ct"], true);
+          Xhprof->printTdPercent($totals_2["ct"] - $totals_1["ct"], $totals_1["ct"], true);
           print('</tr>');
         }
 
@@ -149,7 +149,7 @@ print('<div id="view-diff-tables">');
           print_td_num($totals_1[$m], $format_cbk[$m]);
           print_td_num($totals_2[$m], $format_cbk[$m]);
           print_td_num($totals_2[$m] - $totals_1[$m], $format_cbk[$m], true);
-          print_td_pct($totals_2[$m] - $totals_1[$m], $totals_1[$m], true);
+          Xhprof->printTdPercent($totals_2[$m] - $totals_1[$m], $totals_1[$m], true);
           print('<tr>');
         }
         print "</tbody>";
