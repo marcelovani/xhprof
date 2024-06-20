@@ -1,5 +1,7 @@
 <?php
 
+use Xhprof\Controller\XhprofRuns;
+
 function printSeconds($time)
 {
     $suffix = "microsecond";
