@@ -67,7 +67,7 @@ class Report
      * @param string $run2 New run id (for diff reports)
      *
      */
-    public function displayXHProfReport($xhprof_runs_impl, $url_params, $source,
+    public function displayXHProfReport(\XHProfRuns_Default $xhprof_runs_impl, $url_params, $source,
                                         $run, $wts, $symbol, $sort, $run1, $run2)
     {
 
@@ -101,7 +101,6 @@ class Report
                 echo "Given XHProf Run not found.";
                 return;
             }
-
 
             $this->profiler_single_run_report($url_params,
                 $xhprof_data,
@@ -283,7 +282,7 @@ class Report
             $diff_text = "Diff";
             $base_url_params = xhprof_array_unset($base_url_params, 'run1');
             $base_url_params = xhprof_array_unset($base_url_params, 'run2');
-            $run1_link = $view->renderLink('View Run #' . $run1,
+            $run1_link = $this->getView()->renderLink('View Run #' . $run1,
                 "$base_path/?" .
                 http_build_query(xhprof_array_set($base_url_params,
                     'run',
@@ -291,7 +290,7 @@ class Report
             $run2_txt = sprintf("<b>Run #%s:</b> %s",
                 $run2, $run2_desc);
 
-            $run2_link = $view->renderLink('View Run #' . $run2,
+            $run2_link = $this->getView()->renderLink('View Run #' . $run2,
                 "$base_path/?" .
                 http_build_query(xhprof_array_set($base_url_params,
                     'run',
@@ -312,13 +311,12 @@ class Report
             // view the different runs or invert the current diff
             $links [] = $run1_link;
             $links [] = $run2_link;
-            $links [] = $view->renderLink('Invert ' . $diff_text . ' Report',
+            $links [] = $this->getView()->renderLink('Invert ' . $diff_text . ' Report',
                 "$base_path/?" .
                 http_build_query($inverted_params));
         }
 
         // lookup function typeahead form
-
 
         /**
          * echo
@@ -346,12 +344,12 @@ class Report
                     $symbol_tab1[$rep_symbol] : null;
                 $info2 = isset($symbol_tab2[$rep_symbol]) ?
                     $symbol_tab2[$rep_symbol] : null;
-                symbol_report($url_params, $run_delta, $symbol_tab[$rep_symbol],
+                $this->getView()->symbolReport($url_params, $run_delta, $symbol_tab[$rep_symbol],
                     $sort, $rep_symbol,
                     $run1, $info1,
                     $run2, $info2);
             } else {
-                symbol_report($url_params, $run1_data, $symbol_tab[$rep_symbol],
+                $this->getView()->symbolReport($url_params, $run1_data, $symbol_tab[$rep_symbol],
                     $sort, $rep_symbol, $run1);
             }
         } else {

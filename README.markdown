@@ -3,6 +3,19 @@ XHProf UI
 
 This is a graphical front end designed to store and present the profiling information provided by the Facebook created XHProf profiling tool.
 
+- Debug features
+- Add screenshots to this readme
+- Mention algo to filter out in the first place, and avoid working with lots of data
+TODO
+- Work on todos
+- Make graph colorful based on calls to functions.
+- Add colors to lines too
+- When filtering by child, show connected parents for current function
+- When filtering by parent, show connected children for current function. This will allow to continue clicking and moving backwards if needed.
+- Why these two filters result in same graph>
+  - http://127.0.0.1:8000/graphviz/?url=/api/db/%3Frun=5824ff778a7c8%26links=1%26show_internal=%26func=template_preprocess_page
+  - http://127.0.0.1:8000/graphviz/?url=/api/db/%3Frun=5824ff778a7c8%26links=1%26show_internal=%26func=menu_tree_page_data
+  - 
 
 Related Tools
 -------------
