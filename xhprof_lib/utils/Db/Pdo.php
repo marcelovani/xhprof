@@ -65,6 +65,7 @@ class Db_Pdo extends Db_Abstract
     public function escape($str)
     {
         $str = $this->db->quote($str);
+        // @todo update this
         //Dirty trick, PDO::quote add quote around values (you're beautiful => 'you\'re beautiful')
         // which are already added in xhprof_runs.php
         $str = substr($str, 0, -1);

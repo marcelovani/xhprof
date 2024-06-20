@@ -2,6 +2,7 @@
 /**
  * @file Error controller.
  */
+
 namespace Xhprof\Controller;
 
 /**

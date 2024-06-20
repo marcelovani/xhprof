@@ -6,7 +6,6 @@
 namespace Xhprof\Controller;
 
 use Xhprof\View\XhprofView;
-use Xhprof\Controller\XhprofRuns;
 
 /**
  * Report class.
@@ -59,7 +58,7 @@ class Report
      *
      */
     public function displayXHProfReport(XhprofRuns $xhprof_runs_impl, $url_params, $source,
-                                                           $run, $wts, $symbol, $sort, $run1, $run2)
+                                                   $run, $wts, $symbol, $sort, $run1, $run2)
     {
 
         if ($run) {                              // specific run to display?
@@ -486,14 +485,14 @@ class Report
      * @author Kannan
      */
     public function profilerDiffReport($url_params,
-                                         $xhprof_data1,
-                                         $run1_desc,
-                                         $xhprof_data2,
-                                         $run2_desc,
-                                         $rep_symbol,
-                                         $sort,
-                                         $run1,
-                                         $run2)
+                                       $xhprof_data1,
+                                       $run1_desc,
+                                       $xhprof_data2,
+                                       $run2_desc,
+                                       $rep_symbol,
+                                       $sort,
+                                       $run1,
+                                       $run2)
     {
 
 

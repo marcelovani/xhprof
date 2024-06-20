@@ -79,14 +79,15 @@ interface iXHProfRuns
 class XhprofRuns implements iXHProfRuns
 {
 
-    private $dir = '';
     public $prefix = 't11_';
     public $run_details = null;
+
     /**
      *
      * @var Db_Abstract
      */
     protected $db;
+    private $dir = '';
 
     public function __construct($dir = null)
     {
@@ -140,9 +141,24 @@ class XhprofRuns implements iXHProfRuns
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
      */
 
-    private function gen_run_id($type)
+    /**
+     * Obtains the pages that have been the hardest hit over the past N days, utalizing the getRuns() method.
+     *
+     * @param array $criteria An associative array containing, at minimum, type, days, and limit
+     * @return resource The result set reprsenting the results of the query
+     */
+    public function getHardHit($criteria)
     {
-        return uniqid();
+        //call thing to get runs
+        $criteria['select'] = "distinct(`{$criteria['type']}`), count(`{$criteria['type']}`) AS `count` , sum(`wt`) as total_wall, avg(`wt`) as avg_wall";
+        unset($criteria['type']);
+        $criteria['where'] = $this->db->dateSub($criteria['days']) . " <= `timestamp`";
+        unset($criteria['days']);
+        $criteria['group by'] = "url";
+        $criteria['order by'] = "count";
+        $resultSet = $this->getRuns($criteria);
+
+        return $resultSet;
     }
 
     /**
@@ -209,38 +225,12 @@ class XhprofRuns implements iXHProfRuns
         return $resultSet;
     }
 
-    /**
-     * Obtains the pages that have been the hardest hit over the past N days, utalizing the getRuns() method.
-     *
-     * @param array $criteria An associative array containing, at minimum, type, days, and limit
-     * @return resource The result set reprsenting the results of the query
-     */
-    public function getHardHit($criteria)
-    {
-        //call thing to get runs
-        $criteria['select'] = "distinct(`{$criteria['type']}`), count(`{$criteria['type']}`) AS `count` , sum(`wt`) as total_wall, avg(`wt`) as avg_wall";
-        unset($criteria['type']);
-        $criteria['where'] = $this->db->dateSub($criteria['days']) . " <= `timestamp`";
-        unset($criteria['days']);
-        $criteria['group by'] = "url";
-        $criteria['order by'] = "count";
-        $resultSet = $this->getRuns($criteria);
-
-        return $resultSet;
-    }
-
     public function getDistinct($data)
     {
         $sql['column'] = $this->db->escape($data['column']);
         $query = "SELECT DISTINCT(`{$sql['column']}`) FROM `details`";
         $rs = $this->db->query($query);
         return $rs;
-    }
-
-    public static function getNextAssoc($resultSet)
-    {
-        $class = self::getDbClass();
-        return $class::getNextAssoc($resultSet);
     }
 
     /**
@@ -294,17 +284,10 @@ class XhprofRuns implements iXHProfRuns
         return array($contents, $data);
     }
 
-    /**
-     * Get stats (pmu, ct, wt) on a url or c_url
-     *
-     * @param array $data An associative array containing the limit you'd like to set for the queyr, as well as either c_url or url for the desired element.
-     * @return resource result set from the database query
-     */
-    public function getUrlStats($data)
+    public static function getNextAssoc($resultSet)
     {
-        $data['select'] = '`id`, ' . $this->db->unixTimestamp('timestamp') . ' as `timestamp`, `pmu`, `wt`, `cpu`';
-        $rs = $this->getRuns($data);
-        return $rs;
+        $class = self::getDbClass();
+        return $class::getNextAssoc($resultSet);
     }
 
     /**
@@ -356,6 +339,19 @@ class XhprofRuns implements iXHProfRuns
         $rs = $this->db->query($query);
         $row = $this->db->getNextAssoc($rs);
         return $row['value'];
+    }
+
+    /**
+     * Get stats (pmu, ct, wt) on a url or c_url
+     *
+     * @param array $data An associative array containing the limit you'd like to set for the queyr, as well as either c_url or url for the desired element.
+     * @return resource result set from the database query
+     */
+    public function getUrlStats($data)
+    {
+        $data['select'] = '`id`, ' . $this->db->unixTimestamp('timestamp') . ' as `timestamp`, `pmu`, `wt`, `cpu`';
+        $rs = $this->getRuns($data);
+        return $rs;
     }
 
     /**
@@ -461,5 +457,10 @@ class XhprofRuns implements iXHProfRuns
             }
             return -1;
         }
+    }
+
+    private function gen_run_id($type)
+    {
+        return uniqid();
     }
 }
