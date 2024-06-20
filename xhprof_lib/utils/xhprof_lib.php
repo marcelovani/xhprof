@@ -656,6 +656,7 @@ function xhprof_array_set($arr, $k, $v)
  */
 function xhprof_array_unset($arr, $k)
 {
+//    var_dump($arr);
     unset($arr[$k]);
     return $arr;
 }
@@ -670,25 +671,6 @@ define('XHPROF_BOOL_PARAM', 4);
 define('XHPROF_URL_PARAM', 5);
 
 
-/**
- * Internal helper function used by various
- * xhprof_get_param* flavors for various
- * types of parameters.
- *
- * @param string   name of the URL query string param
- *
- * @author Kannan
- */
-function xhprof_get_param_helper($param)
-{
-    $val = null;
-    if (isset($_GET[$param]))
-        $val = $_GET[$param];
-    else if (isset($_POST[$param])) {
-        $val = $_POST[$param];
-    }
-    return $val;
-}
 
 /**
  * Extracts value for string param $param from query
@@ -818,116 +800,6 @@ function xhprof_get_bool_param($val, $default = false)
     }
 
     return (bool)$val;
-}
-
-/**
- * Initialize params from URL query string. The function
- * creates globals variables for each of the params
- * and if the URL query string doesn't specify a particular
- * param initializes them with the corresponding default
- * value specified in the input.
- *
- * @params array $params An array whose keys are the names
- *                       of URL params who value needs to
- *                       be retrieved from the URL query
- *                       string. PHP globals are created
- *                       with these names. The value is
- *                       itself an array with 2-elems (the
- *                       param type, and its default value).
- *                       If a param is not specified in the
- *                       query string the default value is
- *                       used.
- * @author Kannan
- */
-function xhprof_param_init($params)
-{
-    // Make sure the 'url' param is the last item in the list.
-    // The 'url' param contains encoded urls for the APIS and will override default params.
-    if (isset($params['url'])) {
-        $param_url = $params['url'];
-        unset($params['url']);
-        $params['url'] = $param_url;
-    }
-
-    // Create variables specified in $params keys, init defaults.
-    foreach ($params as $name => $v) {
-        $type = $v[0];
-        $default = $v[1];
-
-        $val = xhprof_get_param_helper($name);
-
-        // Get the function name to be used to get values.
-        $function = xhprof_get_param_function($type);
-
-        // Call function.
-        $value = call_user_func($function, $val, $default);
-
-        // Create a global variable using the parameter name.
-        $GLOBALS[$name] = $value;
-
-        // Parse arguments from encoded url.
-        if ($name == 'url') {
-            $parts = parse_url($value);
-            if (!empty($parts['query'])) {
-                parse_str($parts['query'], $items);
-                if (!empty($items)) {
-                    foreach ($items as $item => $item_value) {
-                        // Check if the argument is valid.
-                        if (isset($params[$item])) {
-                            $type = $params[$item][0];
-
-                            // Get the function name to be used to get values.
-                            $function = xhprof_get_param_function($type);
-
-                            // Call function.
-                            $value = call_user_func($function, $item_value);
-
-                            $GLOBALS[$item] = $value;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-/**
- * Helper to provide the function to handle the param based on param type.
- *
- * @param int $type
- *   The param type.
- * @return string
- *   The function name.
- */
-function xhprof_get_param_function($type)
-{
-    switch ($type) {
-        case XHPROF_STRING_PARAM:
-            $function = 'xhprof_get_string_param';
-            break;
-
-        case XHPROF_UINT_PARAM:
-            $function = 'xhprof_get_uint_param';
-            break;
-
-        case XHPROF_FLOAT_PARAM:
-            $function = 'xhprof_get_float_param';
-            break;
-
-        case XHPROF_BOOL_PARAM:
-            $function = 'xhprof_get_bool_param';
-            break;
-
-        case XHPROF_URL_PARAM:
-            $function = 'xhprof_get_url_param';
-            break;
-
-        default:
-            xhprof_error("Invalid param type passed to xhprof_get_param_function: " . $type);
-            exit();
-    }
-
-    return $function;
 }
 
 /**

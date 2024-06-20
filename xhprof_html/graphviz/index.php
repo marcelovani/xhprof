@@ -1,6 +1,8 @@
 <?php
 require_once getcwd() . '/../../src/App.php';
-require_once XHPROF_LIB_ROOT . '/params.php';
+//require_once XHPROF_LIB_ROOT . '/params.php';
+
+use \Xhprof\Request\Params;
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
     die("You do not have permission to view this page.");
@@ -30,6 +32,9 @@ include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
 
 <div id="app">
     <div id="header">
+        <?php $params = new Params(); ?>
+        <?php $show_internal = $params->get('show_internal'); ?>
+        <?php $threshold = $params->get('threshold'); ?>
         <?php require("templates/header.phtml"); ?>
     </div>
     <div id="panes">

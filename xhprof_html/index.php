@@ -5,6 +5,7 @@ require_once '../src/App.php';
 use Xhprof\Controller\Report;
 use Xhprof\View\XhprofView;
 use Xhprof\Controller\XhprofRuns;
+use Xhprof\Request\Params;
 
 $view = new XhprofView();
 
@@ -12,7 +13,7 @@ require XHPROF_CONFIG;
 
 require_once XHPROF_LIB_ROOT . '/display/xhprof.php';
 require_once XHPROF_LIB_ROOT . "/utils/common.php";
-require_once XHPROF_LIB_ROOT . '/params.php';
+//require_once XHPROF_LIB_ROOT . '/params.php';
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
     die("You do not have permission to view this page.");
@@ -21,7 +22,7 @@ if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
 unset($controlIPs);
 
 // param name, its type, and default value
-$params = array('run' => array(XHPROF_STRING_PARAM, ''),
+$valid_params = array('run' => array(XHPROF_STRING_PARAM, ''),
     'wts' => array(XHPROF_STRING_PARAM, ''),
     'func' => array(XHPROF_STRING_PARAM, ''),
     'sort' => array(XHPROF_STRING_PARAM, 'wt'), // wall time
@@ -29,24 +30,32 @@ $params = array('run' => array(XHPROF_STRING_PARAM, ''),
     'run2' => array(XHPROF_STRING_PARAM, ''),
     'source' => array(XHPROF_STRING_PARAM, 'xhprof'),
     'all' => array(XHPROF_UINT_PARAM, 0),
+    'show_internal' => array(XHPROF_BOOL_PARAM, 'false'),
+    'links' => array(XHPROF_BOOL_PARAM, 'true'),
+    'func' => array(XHPROF_STRING_PARAM, ''),
+    'threshold' => array(XHPROF_FLOAT_PARAM, 0.01),
 );
 
 // pull values of these params, and create named globals for each param
-xhprof_param_init($params);
+$params = new Params($valid_params);
+$params = $params->getAll();
+//var_dump($params);
 
 /* reset params to be a array of variable names to values
    by the end of this page, param should only contain values that need
    to be preserved for the next page. unset all unwanted keys in $params.
  */
-foreach ($params as $k => $v) {
-    $params[$k] = $$k;
-
-    // unset key from params that are using default values. So URLs aren't
-    // ridiculously long.
-    if ($params[$k] == $v[1]) {
-        unset($params[$k]);
-    }
-}
+//foreach ($params as $k => $v) {
+//    if (!isset($params[$k]) || !isset($v[1])) {
+//        continue;
+//    }
+////    $params[$k] = $$k;
+//    // unset key from params that are using default values. So URLs aren't
+//    // ridiculously long.
+//    if ($params[$k] == $v[1]) {
+//        unset($params[$k]);
+//    }
+//}
 
 
 $vbar = ' class="vbar"';
@@ -83,7 +92,18 @@ if (!is_null($serverFilter)) {
 $_xh_header = "";
 if (isset($_GET['run1']) || isset($_GET['run'])) {
     include(XHPROF_LIB_ROOT . "/templates/header.phtml");
+    $params = new Params();
+//    var_dump($params);exit;
+    $source = $params->get('source');
+    $run = $params->get('run');
+    $wts = $params->get('wts');
+    $func = $params->get('func');
+    $sort = $params->get('sort');
+    $run1 = $params->get('run1');
+    $run2 = $params->get('run2');
+    $params = $params->getAll();
     $report = new Report();
+//    var_dump($params, $source, $run, $wts, $func, $sort, $run1, $run2);exit;
     $report->displayXHProfReport($xhprof_runs_impl, $params, $source, $run, $wts, $func, $sort, $run1, $run2);
 } elseif (isset($_GET['geturl'])) {
     $last = (isset($_GET['last'])) ? $_GET['last'] : 100;

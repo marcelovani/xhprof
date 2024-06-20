@@ -14,6 +14,8 @@
 //  limitations under the License.
 //
 
+use Xhprof\Request\Params;
+
 /**
  * AJAX endpoint for XHProf function name typeahead is implemented
  * as a thin wrapper around this file. The wrapper must set up
@@ -28,7 +30,7 @@
 include_once XHPROF_LIB_ROOT . '/utils/xhprof_lib.php';
 
 // param name, its type, and default value
-$params = array('q'          => array(XHPROF_STRING_PARAM, ''),
+$valid_params = array('q'          => array(XHPROF_STRING_PARAM, ''),
                 'run'        => array(XHPROF_STRING_PARAM, ''),
                 'run1'       => array(XHPROF_STRING_PARAM, ''),
                 'run2'       => array(XHPROF_STRING_PARAM, ''),
@@ -36,7 +38,7 @@ $params = array('q'          => array(XHPROF_STRING_PARAM, ''),
                 );
 
 // pull values of these params, and create named globals for each param
-xhprof_param_init($params);
+$params = new Params($valid_params)->getAll();
 
 if (!empty($run)) {
 
