@@ -4,7 +4,7 @@ $i = 0;
 
 foreach ($metrics as $metric) {
 
-    $arrayOfTotal[$i]["label"] = "Display run " . str_replace("<br />", " ", stat_description($metric));
+    $arrayOfTotal[$i]["label"] = "Display run " . str_replace("<br />", " ", $view->statDescription($metric));
     $arrayOfTotal[$i]["value"] = number_format($totals[$metric]) . " " . $possible_metrics[$metric][1];
     $arrayOfTotal[$i]["metric"] = $possible_metrics[$metric][1];
     $i++;

@@ -171,6 +171,7 @@ class Report
         global $base_path;
 
         $possible_metrics = xhprof_get_possible_metrics();
+        $view = $this->getView();
 
         if ($diff_mode) {
             global $xhprof_runs_impl;
@@ -181,9 +182,7 @@ class Report
             include XHPROF_LIB_ROOT."/templates/single_run_header_block.phtml";
         }
 
-
-        //echo xhprof_render_actions($links);
-
+        echo $this->getView()->renderActions($links);
 
         $flat_data = array();
         foreach ($symbol_tab as $symbol => $info) {
@@ -192,7 +191,7 @@ class Report
 
             $flat_data[] = $tmp;
         }
-        usort($flat_data, 'sort_cbk');
+        usort($flat_data, '\Xhprof\View\Xhprof::sortCbk');
 
         print("<br />");
 
@@ -495,7 +494,7 @@ class Report
         //Find top $n requests
         $data_copy = $flat_data;
         $data_copy = $this->getView()->aggregateCalls($data_copy, null, $run2);
-        usort($data_copy, 'sortWT');
+        usort($data_copy, '\Xhprof\View\Xhprof::sortWT');
 
         $iterations = 0;
         $colors = array('#4572A7', '#AA4643', '#89A54E', '#80699B', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92', '#EAFEBB', '#FEB4B1', '#2B6979', '#E9D6FE', '#FECDA3', '#FED980');

@@ -182,7 +182,7 @@ function xhprof_build_query_string($parts) {
 function xhprof_get_request_path()
 {
     $parsed_url = parse_url($_SERVER['REQUEST_URI']);
-var_dump($parsed_url);
+
     return $parsed_url['path'];
 }
 

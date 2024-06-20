@@ -100,7 +100,7 @@ class Xhprof
         global $vbbar;
         global $diff_mode;
 
-        $class = get_print_class($numer, $bold);
+        $class = $this->getPrintClass($numer, $bold);
 
         if ($denom == 0) {
             $pct = "N/A%";
@@ -186,6 +186,125 @@ class Xhprof
     }
 
     /**
+     * Callback comparison operator (passed to usort() for sorting array of
+     * tuples) that compares array elements based on the sort column
+     * specified in $sort_col (global parameter).
+     *
+     * @author Kannan
+     */
+    public static function sortCbk($a, $b)
+    {
+        global $sort_col;
+        global $diff_mode;
+
+        if ($sort_col == "fn") {
+
+            // case insensitive ascending sort for function names
+            $left = strtoupper($a["fn"]);
+            $right = strtoupper($b["fn"]);
+
+            if ($left == $right)
+                return 0;
+            return ($left < $right) ? -1 : 1;
+
+        } else {
+
+            // descending sort for all others
+            $left = $a[$sort_col];
+            $right = $b[$sort_col];
+
+            // if diff mode, sort by absolute value of regression/improvement
+            if ($diff_mode) {
+                $left = abs($left);
+                $right = abs($right);
+            }
+
+            if ($left == $right)
+                return 0;
+            return ($left > $right) ? -1 : 1;
+        }
+    }
+
+    /**
+     * Print "flat" data corresponding to one function.
+     *
+     * @author Kannan
+     */
+    public function printFunctionInfo($url_params, $info, $sort, $run1, $run2)
+    {
+        static $odd_even = 0;
+
+        global $totals;
+        global $sort_col;
+        global $metrics;
+        global $format_cbk;
+        global $display_calls;
+        global $base_path;
+
+        // Toggle $odd_or_even
+        $odd_even = 1 - $odd_even;
+
+        if ($odd_even) {
+            print("<tr>");
+        } else {
+            print('<tr>');
+        }
+
+        $href = "$base_path/?" .
+            http_build_query(xhprof_array_set($url_params,
+                'func', $info["fn"]));
+
+        print('<td>');
+        print($view->renderLink($info["fn"], $href));
+        print("</td>\n");
+
+        if ($display_calls) {
+            // Call Count..
+            $view->printTdNum($info["ct"], $format_cbk["ct"], ($sort_col == "ct"));
+            $view->printTdPercent($info["ct"], $totals["ct"], ($sort_col == "ct"));
+        }
+
+        // Other metrics..
+        foreach ($metrics as $metric) {
+            // Inclusive metric
+            $view->printTdNum($info[$metric], $format_cbk[$metric],
+                ($sort_col == $metric));
+            $view->printTdPercent($info[$metric], $totals[$metric],
+                ($sort_col == $metric));
+
+            // Exclusive Metric
+            $view->printTdNum($info["excl_" . $metric],
+                $format_cbk["excl_" . $metric],
+                ($sort_col == "excl_" . $metric));
+            $view->printTdPercent($info["excl_" . $metric],
+                $totals[$metric],
+                ($sort_col == "excl_" . $metric));
+        }
+
+        print("</tr>\n");
+    }
+
+    /**
+     * Get the appropriate description for a statistic
+     * (depending upon whether we are in diff report mode
+     * or single run report mode).
+     *
+     * @author Kannan
+     */
+    public function statDescription($stat)
+    {
+        global $descriptions;
+        global $diff_descriptions;
+        global $diff_mode;
+
+        if ($diff_mode) {
+            return $diff_descriptions[$stat];
+        } else {
+            return $descriptions[$stat];
+        }
+    }
+
+    /**
      * Print symbol summary.
      *
      * @param $symbol_info
@@ -196,16 +315,39 @@ class Xhprof
     private function printSymbolSummary($symbol_info, $stat, $base)
     {
         $val = $symbol_info[$stat];
-        $desc = str_replace("<br />", " ", stat_description($stat));
+        $desc = str_replace("<br />", " ", $this->statDescription($stat));
 
         print("$desc: </td>");
         print(number_format($val));
-        print(" (" . pct($val, $base) . "% of overall)");
+        print(" (" . $this->pct($val, $base) . "% of overall)");
         if (substr($stat, 0, 4) == "excl") {
             $func_base = $symbol_info[str_replace("excl_", "", $stat)];
-            print(" (" . pct($val, $func_base) . "% of this function)");
+            print(" (" . $this->pct($val, $func_base) . "% of this function)");
         }
         print("<br />");
+    }
+
+    /**
+     * Prints a <td> element with a numeric value.
+     */
+    public function printTdNum($num, $fmt_func, $bold = false, $attributes = null)
+    {
+
+        $class = $this->getPrintClass($num, $bold);
+
+        if (!empty($fmt_func)) {
+            $num = call_user_func($fmt_func, $num);
+        }
+
+        print("<td $attributes $class>$num</td>\n");
+    }
+
+    public static function sortWT($a, $b)
+    {
+        if ($a['excl_wt'] == $b['excl_wt']) {
+            return 0;
+        }
+        return ($a['excl_wt'] < $b['excl_wt']) ? 1 : -1;
     }
 
     /**
@@ -270,9 +412,9 @@ class Xhprof
 
             if ($display_calls) {
                 print("<td>Number of Function Calls</td>");
-                print_td_num($symbol_info1["ct"], $format_cbk["ct"]);
-                print_td_num($symbol_info2["ct"], $format_cbk["ct"]);
-                print_td_num($symbol_info2["ct"] - $symbol_info1["ct"],
+                $view->printTdNum($symbol_info1["ct"], $format_cbk["ct"]);
+                $view->printTdNum($symbol_info2["ct"], $format_cbk["ct"]);
+                $view->printTdNum($symbol_info2["ct"] - $symbol_info1["ct"],
                     $format_cbk["ct"], true);
                 $view->printTdPercent($symbol_info2["ct"] - $symbol_info1["ct"],
                     $symbol_info1["ct"], true);
@@ -285,9 +427,9 @@ class Xhprof
                 // Inclusive stat for metric
                 print('<tr>');
                 print("<td>" . str_replace("<br />", " ", $descriptions[$m]) . "</td>");
-                print_td_num($symbol_info1[$m], $format_cbk[$m]);
-                print_td_num($symbol_info2[$m], $format_cbk[$m]);
-                print_td_num($symbol_info2[$m] - $symbol_info1[$m], $format_cbk[$m], true);
+                $view->printTdNum($symbol_info1[$m], $format_cbk[$m]);
+                $view->printTdNum($symbol_info2[$m], $format_cbk[$m]);
+                $view->printTdNum($symbol_info2[$m] - $symbol_info1[$m], $format_cbk[$m], true);
                 $view->printTdPercent($symbol_info2[$m] - $symbol_info1[$m], $symbol_info1[$m], true);
                 print('</tr>');
 
@@ -302,9 +444,9 @@ class Xhprof
                 if ($symbol_info2['ct'] > 0) {
                     $avg_info2 = ($symbol_info2[$m] / $symbol_info2['ct']);
                 }
-                print_td_num($avg_info1, $format_cbk[$m]);
-                print_td_num($avg_info2, $format_cbk[$m]);
-                print_td_num($avg_info2 - $avg_info1, $format_cbk[$m], true);
+                $view->printTdNum($avg_info1, $format_cbk[$m]);
+                $view->printTdNum($avg_info2, $format_cbk[$m]);
+                $view->printTdNum($avg_info2 - $avg_info1, $format_cbk[$m], true);
                 $view->printTdPercent($avg_info2 - $avg_info1, $avg_info1, true);
                 print('</tr>');
 
@@ -312,9 +454,9 @@ class Xhprof
                 $m = "excl_" . $metric;
                 print('<tr>');
                 print("<td>" . str_replace("<br />", " ", $descriptions[$m]) . "</td>");
-                print_td_num($symbol_info1[$m], $format_cbk[$m]);
-                print_td_num($symbol_info2[$m], $format_cbk[$m]);
-                print_td_num($symbol_info2[$m] - $symbol_info1[$m], $format_cbk[$m], true);
+                $view->printTdNum($symbol_info1[$m], $format_cbk[$m]);
+                $view->printTdNum($symbol_info2[$m], $format_cbk[$m]);
+                $view->printTdNum($symbol_info2[$m] - $symbol_info1[$m], $format_cbk[$m], true);
                 $view->printTdPercent($symbol_info2[$m] - $symbol_info1[$m], $symbol_info1[$m], true);
                 print('</tr>');
             }
@@ -341,7 +483,7 @@ class Xhprof
         print('<tr align=right>');
 
         foreach ($pc_stats as $stat) {
-            $desc = stat_description($stat);
+            $desc = $this->statDescription($stat);
             if (array_key_exists($stat, $sortable_columns)) {
 
                 $href = "$base_path/?" .
@@ -369,13 +511,13 @@ class Xhprof
 
         if ($display_calls) {
             // Call Count
-            print_td_num($symbol_info["ct"], $format_cbk["ct"]);
+            $view->printTdNum($symbol_info["ct"], $format_cbk["ct"]);
             $view->printTdPercent($symbol_info["ct"], $totals["ct"]);
         }
 
         // Inclusive Metrics for current function
         foreach ($metrics as $metric) {
-            print_td_num($symbol_info[$metric], $format_cbk[$metric], ($sort_col == $metric));
+            $view->printTdNum($symbol_info[$metric], $format_cbk[$metric], ($sort_col == $metric));
             $view->printTdPercent($symbol_info[$metric], $totals[$metric], ($sort_col == $metric));
         }
         print("</tr>");
@@ -392,7 +534,7 @@ class Xhprof
 
         // Exclusive Metrics for current function
         foreach ($metrics as $metric) {
-            print_td_num($symbol_info["excl_" . $metric], $format_cbk["excl_" . $metric],
+            $view->printTdNum($symbol_info["excl_" . $metric], $format_cbk["excl_" . $metric],
                 ($sort_col == $metric),
                 $this->getTooltipAttributes("Child", $metric));
             $view->printTdPercent($symbol_info["excl_" . $metric], $symbol_info[$metric],
@@ -419,7 +561,7 @@ class Xhprof
                 $results[] = $info_tmp;
             }
         }
-        usort($results, 'sort_cbk');
+        usort($results, '\Xhprof\View\Xhprof::sortCbk');
 
         if (count($results) > 0) {
             $this->printPcArray($url_params, $results, $base_ct, $base_info, true,
@@ -440,7 +582,7 @@ class Xhprof
                 }
             }
         }
-        usort($results, 'sort_cbk');
+        usort($results, '\Xhprof\View\Xhprof::sortCbk');
 
         if (count($results)) {
             $this->printPcArray($url_params, $results, $base_ct, $base_info, false,
@@ -538,34 +680,99 @@ class Xhprof
      *
      * @author Kannan
      */
-private function pcInfo($info, $base_ct, $base_info, $parent)
-{
-    $view = new Xhprof();
+    private function pcInfo($info, $base_ct, $base_info, $parent)
+    {
+        $view = new Xhprof();
 
-    global $sort_col;
-    global $metrics;
-    global $format_cbk;
-    global $display_calls;
+        global $sort_col;
+        global $metrics;
+        global $format_cbk;
+        global $display_calls;
 
-    if ($parent)
-        $type = "Parent";
-    else
-        $type = "Child";
+        if ($parent)
+            $type = "Parent";
+        else
+            $type = "Child";
 
-    if ($display_calls) {
-        $mouseoverct = $this->getTooltipAttributes($type, "ct");
-        /* call count */
-        print_td_num($info["ct"], $format_cbk["ct"], ($sort_col == "ct"), $mouseoverct);
-        $view->printTdPercent($info["ct"], $base_ct, ($sort_col == "ct"), $mouseoverct);
+        if ($display_calls) {
+            $mouseoverct = $this->getTooltipAttributes($type, "ct");
+            /* call count */
+            $view->printTdNum($info["ct"], $format_cbk["ct"], ($sort_col == "ct"), $mouseoverct);
+            $view->printTdPercent($info["ct"], $base_ct, ($sort_col == "ct"), $mouseoverct);
+        }
+
+        /* Inclusive metric values  */
+        foreach ($metrics as $metric) {
+            $view->printTdNum($info[$metric], $format_cbk[$metric],
+                ($sort_col == $metric),
+                $this->getTooltipAttributes($type, $metric));
+            $view->printTdPercent($info[$metric], $base_info[$metric], ($sort_col == $metric),
+                $this->getTooltipAttributes($type, $metric));
+        }
     }
 
-    /* Inclusive metric values  */
-    foreach ($metrics as $metric) {
-        print_td_num($info[$metric], $format_cbk[$metric],
-            ($sort_col == $metric),
-            $this->getTooltipAttributes($type, $metric));
-        $view->printTdPercent($info[$metric], $base_info[$metric], ($sort_col == $metric),
-            $this->getTooltipAttributes($type, $metric));
+    /**
+     * Given a number, returns the td class to use for display.
+     *
+     * For instance, negative numbers in diff reports comparing two runs (run1 & run2)
+     * represent improvement from run1 to run2. We use green to display those deltas,
+     * and red for regression deltas.
+     */
+    public function getPrintClass($num, $bold)
+    {
+        global $vbar;
+        global $vbbar;
+        global $vrbar;
+        global $vgbar;
+        global $diff_mode;
+
+        if ($bold) {
+            if ($diff_mode) {
+                if ($num <= 0) {
+                    $class = $vgbar; // green (improvement)
+                } else {
+                    $class = $vrbar; // red (regression)
+                }
+            } else {
+                $class = $vbbar; // blue
+            }
+        } else {
+            $class = $vbar;  // default (black)
+        }
+
+        return $class;
     }
-}
+
+    /**
+     * Computes percentage for a pair of values, and returns it
+     * in string format.
+     */
+    public function pct($a, $b)
+    {
+        if ($b == 0) {
+            return "N/A";
+        } else {
+            $res = (round(($a * 1000 / $b)) / 10);
+            return $res;
+        }
+    }
+
+    /**
+     * Implodes the text for a bunch of actions (such as links, forms,
+     * into a HTML list and returns the text.
+     */
+    function renderActions($actions)
+    {
+        $out = array();
+        $out[] = "<div>\n";
+        if (count($actions)) {
+            $out[] = "<ul class=\"xhprof_actions\">\n";
+            foreach ($actions as $action) {
+                $out[] = "\t<li>" . $action . "</li>\n";
+            }
+            $out[] = "</ul>\n";
+        }
+        $out[] = "</div>\n";
+        return implode('', $out);
+    }
 }
