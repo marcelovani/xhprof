@@ -28,9 +28,9 @@
 // @author Kannan Muthukkaruppan
 //
 
-use Xhprof\View\Xhprof;
+use Xhprof\View\XhprofView;
 
-$view = new Xhprof();
+$view = new XhprofView();
 
 if (!defined('XHPROF_LIB_ROOT')) {
     // by default, the parent directory is XHPROF lib root
@@ -39,7 +39,7 @@ if (!defined('XHPROF_LIB_ROOT')) {
 
 include_once XHPROF_LIB_ROOT . '/utils/xhprof_lib.php';
 include_once XHPROF_LIB_ROOT . '/utils/callgraph_utils.php';
-include_once XHPROF_LIB_ROOT . '/utils/xhprof_runs.php';
+//include_once XHPROF_LIB_ROOT . '/utils/xhprof_runs.php';
 
 /**
  * Our coding convention disallows relative paths in hrefs.
@@ -120,43 +120,43 @@ $descriptions = array(
 // Formatting Callback Functions...
 $format_cbk = array(
     "fn" => "",
-    "ct" => "\Xhprof\View\Xhprof::countFormat",
-    "Calls%" => "\Xhprof\View\Xhprof::percentFormat",
+    "ct" => "\Xhprof\View\XhprofView::countFormat",
+    "Calls%" => "\Xhprof\View\XhprofView::percentFormat",
 
     "wt" => "number_format",
-    "IWall%" => "\Xhprof\View\Xhprof::percentFormat",
+    "IWall%" => "\Xhprof\View\XhprofView::percentFormat",
     "excl_wt" => "number_format",
-    "EWall%" => "\Xhprof\View\Xhprof::percentFormat",
+    "EWall%" => "\Xhprof\View\XhprofView::percentFormat",
 
     "ut" => "number_format",
-    "IUser%" => "\Xhprof\View\Xhprof::percentFormat",
+    "IUser%" => "\Xhprof\View\XhprofView::percentFormat",
     "excl_ut" => "number_format",
-    "EUser%" => "\Xhprof\View\Xhprof::percentFormat",
+    "EUser%" => "\Xhprof\View\XhprofView::percentFormat",
 
     "st" => "number_format",
-    "ISys%" => "\Xhprof\View\Xhprof::percentFormat",
+    "ISys%" => "\Xhprof\View\XhprofView::percentFormat",
     "excl_st" => "number_format",
-    "ESys%" => "\Xhprof\View\Xhprof::percentFormat",
+    "ESys%" => "\Xhprof\View\XhprofView::percentFormat",
 
     "cpu" => "number_format",
-    "ICpu%" => "\Xhprof\View\Xhprof::percentFormat",
+    "ICpu%" => "\Xhprof\View\XhprofView::percentFormat",
     "excl_cpu" => "number_format",
-    "ECpu%" => "\Xhprof\View\Xhprof::percentFormat",
+    "ECpu%" => "\Xhprof\View\XhprofView::percentFormat",
 
     "mu" => "number_format",
-    "IMUse%" => "\Xhprof\View\Xhprof::percentFormat",
+    "IMUse%" => "\Xhprof\View\XhprofView::percentFormat",
     "excl_mu" => "number_format",
-    "EMUse%" => "\Xhprof\View\Xhprof::percentFormat",
+    "EMUse%" => "\Xhprof\View\XhprofView::percentFormat",
 
     "pmu" => "number_format",
-    "IPMUse%" => "\Xhprof\View\Xhprof::percentFormat",
+    "IPMUse%" => "\Xhprof\View\XhprofView::percentFormat",
     "excl_pmu" => "number_format",
-    "EPMUse%" => "\Xhprof\View\Xhprof::percentFormat",
+    "EPMUse%" => "\Xhprof\View\XhprofView::percentFormat",
 
     "samples" => "number_format",
-    "ISamples%" => "\Xhprof\View\Xhprof::percentFormat",
+    "ISamples%" => "\Xhprof\View\XhprofView::percentFormat",
     "excl_samples" => "number_format",
-    "ESamples%" => "\Xhprof\View\Xhprof::percentFormat",
+    "ESamples%" => "\Xhprof\View\XhprofView::percentFormat",
 );
 
 // Textual descriptions for column headers in "diff" mode

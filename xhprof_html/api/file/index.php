@@ -1,6 +1,5 @@
 <?php
-require_once getcwd() . '/../../../xhprof_lib/defaults.php';
-require_once XHPROF_CONFIG;
+require_once getcwd() . '/../../../src/App.php';
 require_once XHPROF_LIB_ROOT . '/params.php';
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs))

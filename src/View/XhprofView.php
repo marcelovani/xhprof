@@ -5,10 +5,12 @@
 
 namespace Xhprof\View;
 
+use Xhprof\Controller\XhprofRuns;
+
 /**
  * View class.
  */
-class Xhprof
+class XhprofView
 {
     public static function countFormat($num)
     {
@@ -314,7 +316,7 @@ class Xhprof
         if ($denom == 0) {
             $pct = "N/A%";
         } else {
-            $pct = Xhprof::percentFormat($numer / abs($denom));
+            $pct = XhprofView::percentFormat($numer / abs($denom));
         }
 
         print("<td $attributes $class>$pct</td>\n");
@@ -344,7 +346,7 @@ class Xhprof
                                  $run2 = 0,
                                  $symbol_info2 = null)
     {
-        $view = new Xhprof();
+        $view = new XhprofView();
 
         // @todo delete all globals.
         global $vwbar;
@@ -543,7 +545,7 @@ class Xhprof
                 $results[] = $info_tmp;
             }
         }
-        usort($results, '\Xhprof\View\Xhprof::sortCbk');
+        usort($results, '\Xhprof\View\XhprofView::sortCbk');
 
         if (count($results) > 0) {
             $this->printPcArray($url_params, $results, $base_ct, $base_info, true,
@@ -564,7 +566,7 @@ class Xhprof
                 }
             }
         }
-        usort($results, '\Xhprof\View\Xhprof::sortCbk');
+        usort($results, '\Xhprof\View\XhprofView::sortCbk');
 
         if (count($results)) {
             $this->printPcArray($url_params, $results, $base_ct, $base_info, false,
@@ -627,7 +629,7 @@ class Xhprof
      */
     private function printPcArray($url_params, $results, $base_ct, $base_info, $parent, $run1, $run2)
     {
-        $view = new Xhprof();
+        $view = new XhprofView();
         global $base_path;
 
         // Construct section title
@@ -671,7 +673,7 @@ class Xhprof
      */
     private function pcInfo($info, $base_ct, $base_info, $parent)
     {
-        $view = new Xhprof();
+        $view = new XhprofView();
 
         global $sort_col;
         global $metrics;
@@ -774,5 +776,33 @@ class Xhprof
             $res = (round(($a * 1000 / $b)) / 10);
             return $res;
         }
+    }
+
+    public function displayRuns($resultSet, $title = "")
+    {
+        echo "<h1 class=\"runTitle\">$title</h1>\n";
+        echo "<table id=\"box-table-a\" class=\"tablesorter\" summary=\"Stats\"><thead><tr><th>Timestamp</th><th>Cpu</th><th>Wall Time</th><th>Peak Memory Usage</th><th>URL</th><th>Simplified URL</th></tr></thead>";
+        echo "<tbody>\n";
+        while ($row = XhprofRuns::getNextAssoc($resultSet))
+        {
+            $c_url = urlencode($row['c_url']);
+            $url = urlencode($row['url']);
+            $html['url'] = htmlentities($row['url'], ENT_QUOTES, 'UTF-8');
+            $html['c_url'] = htmlentities($row['c_url'], ENT_QUOTES, 'UTF-8');
+            $date = strtotime($row['timestamp']);
+            $date = date('M d H:i:s', $date);
+            echo "\t<tr><td><a href=\"?run={$row['id']}\">$date</a><br /><span class=\"runid\">{$row['id']}</span></td><td>{$row['cpu']}</td><td>{$row['wt']}</td><td>{$row['pmu']}</td><td><a href=\"?geturl={$url}\">{$html['url']}</a></td><td><a href=\"?getcurl={$c_url}\">{$html['c_url']}</a></td></tr>\n";
+        }
+        echo "</tbody>\n";
+        echo "</table>\n";
+        echo <<<SORTTABLE
+<script type="text/javascript">
+$(document).ready(function()
+    {
+        $("#box-table-a").tablesorter( {sortList: []} );
+    }
+);
+</script>
+SORTTABLE;
     }
 }

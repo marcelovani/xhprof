@@ -1,33 +1,5 @@
 <?php
 
-function displayRuns($resultSet, $title = "")
-{
-    echo "<h1 class=\"runTitle\">$title</h1>\n";
-    echo "<table id=\"box-table-a\" class=\"tablesorter\" summary=\"Stats\"><thead><tr><th>Timestamp</th><th>Cpu</th><th>Wall Time</th><th>Peak Memory Usage</th><th>URL</th><th>Simplified URL</th></tr></thead>";
-    echo "<tbody>\n";
-    while ($row = XHProfRuns_Default::getNextAssoc($resultSet))
-    {
-        $c_url = urlencode($row['c_url']);
-        $url = urlencode($row['url']);
-        $html['url'] = htmlentities($row['url'], ENT_QUOTES, 'UTF-8');
-        $html['c_url'] = htmlentities($row['c_url'], ENT_QUOTES, 'UTF-8');
-        $date = strtotime($row['timestamp']);
-        $date = date('M d H:i:s', $date);
-        echo "\t<tr><td><a href=\"?run={$row['id']}\">$date</a><br /><span class=\"runid\">{$row['id']}</span></td><td>{$row['cpu']}</td><td>{$row['wt']}</td><td>{$row['pmu']}</td><td><a href=\"?geturl={$url}\">{$html['url']}</a></td><td><a href=\"?getcurl={$c_url}\">{$html['c_url']}</a></td></tr>\n";
-    }
-    echo "</tbody>\n";
-    echo "</table>\n";
-    echo <<<SORTTABLE
-<script type="text/javascript">
-$(document).ready(function()
-    {
-        $("#box-table-a").tablesorter( {sortList: []} );
-    }
-);
-</script>
-SORTTABLE;
-}
-
 function printSeconds($time)
 {
     $suffix = "microsecond";
@@ -67,7 +39,7 @@ function showChart($rs, $flip = false)
         $arIDS = array();
         $arDateIDs = array();
 
-         while($row = XHProfRuns_Default::getNextAssoc($rs))
+         while($row = XhprofRuns::getNextAssoc($rs))
         {
             $date[] = "'" . date("Y-m-d", $row['timestamp']) . "'" ;
 

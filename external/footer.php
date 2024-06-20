@@ -10,7 +10,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 if ($_xhprof['ext_name'] && $_xhprof['doprofile'] === true) {
     $profiler_namespace = $_xhprof['namespace'];  // namespace for your application
     $xhprof_data = call_user_func($_xhprof['ext_name'].'_disable');
-    $xhprof_runs = new XHProfRuns_Default();
+    $xhprof_runs = new XhprofRuns();
     $run_id = $xhprof_runs->save_run($xhprof_data, $profiler_namespace, null, $_xhprof);
     if ($_xhprof['display'] === true && PHP_SAPI != 'cli' && !isset($isAjax))
     {

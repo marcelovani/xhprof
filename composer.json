@@ -12,6 +12,9 @@
         "symfony/dotenv": "^6.4"
     },
     "autoload": {
+        "files": [
+            "src/App.php"
+        ],
         "psr-4": {
             "Xhprof\\": "src"
         }

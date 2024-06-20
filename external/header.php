@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(dirname(__FILE__)) . '/xhprof_lib/defaults.php';
-require_once XHPROF_CONFIG;
+require_once getcwd() . '/../src/App.php';
+//require_once XHPROF_CONFIG;
 
 if (PHP_SAPI == 'cli') {
     $_SERVER['REMOTE_ADDR'] = null;
@@ -131,6 +131,7 @@ unset($domain);
 //Display warning if extension not available
 if ($_xhprof['ext_name'] && $_xhprof['doprofile'] === true) {
     include_once dirname(__FILE__) . '/../xhprof_lib/utils/xhprof_lib.php';
+    // @todo update this
     include_once dirname(__FILE__) . '/../xhprof_lib/utils/xhprof_runs.php';
     if (isset($ignoredFunctions) && is_array($ignoredFunctions) && !empty($ignoredFunctions)) {
         call_user_func($_xhprof['ext_name'] . '_enable', $flagsCpu + $flagsMemory, array('ignored_functions' => $ignoredFunctions));

@@ -1,5 +1,9 @@
 <?php
 
+require getcwd() . '../../src/App.php';
+
+use Xhprof\Controller\XhprofRuns;
+
 function bar($x) {
   if ($x > 0) {
     bar($x - 1);
@@ -33,14 +37,14 @@ print_r($xhprof_data);
 echo "</pre>";
 
 
-$XHPROF_ROOT = realpath(dirname(__FILE__) .'/../..');
-require_once $XHPROF_ROOT . "/xhprof_lib/config.php";
-require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
-require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
+//$XHPROF_ROOT = realpath(dirname(__FILE__) .'/../..');
+require_once XHPROF_LIB_ROOT . "/utils/xhprof_lib.php";
+// @todo update this
+require_once XHPROF_LIB_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
 
 // save raw data for this profiler run using default
 // implementation of iXHProfRuns.
-$xhprof_runs = new XHProfRuns_Default();
+$xhprof_runs = new XhprofRuns();
 
 // save the run under a namespace "xhprof_foo"
 $run_id = $xhprof_runs->save_run($xhprof_data, "xhprof_foo");

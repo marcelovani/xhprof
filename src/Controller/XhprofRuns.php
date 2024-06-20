@@ -20,6 +20,8 @@
 // implementation of the interface (class XHProfRuns).
 //
 
+namespace Xhprof\Controller;
+
 use Xhprof\Utils;
 
 if (!defined('XHPROF_LIB_ROOT')) {
@@ -30,7 +32,7 @@ if (!defined('XHPROF_LIB_ROOT')) {
  * iXHProfRuns interface for getting/saving a XHProf run.
  *
  * Clients can either use the default implementation,
- * namely XHProfRuns_Default, of this interface or define
+ * namely XhprofRuns, of this interface or define
  * their own implementation.
  *
  * @author Kannan
@@ -62,9 +64,8 @@ interface iXHProfRuns
     public function save_run($xhprof_data, $type, $run_id = null);
 }
 
-
 /**
- * XHProfRuns_Default is the default implementation of the
+ * XhprofRuns is the default implementation of the
  * iXHProfRuns interface for saving/fetching XHProf runs.
  *
  * This modified version of the file uses a MySQL backend to store
@@ -75,7 +76,7 @@ interface iXHProfRuns
  * @author Kannan
  * @author Paul Reinheimer (http://blog.preinheimer.com)
  */
-class XHProfRuns_Default implements iXHProfRuns
+class XhprofRuns implements iXHProfRuns
 {
 
     private $dir = '';
@@ -461,6 +462,4 @@ class XHProfRuns_Default implements iXHProfRuns
             return -1;
         }
     }
-
-
 }

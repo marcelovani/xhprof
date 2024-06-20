@@ -37,7 +37,7 @@ class ConfigLoader
     {
         # Load .env.
         $dotenv = new Dotenv();
-        $dotenv->load(DOCROOT . "/.env");
+        $dotenv->load(XHPROF_DOCROOT . "/.env");
     }
 
     /**

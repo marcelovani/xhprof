@@ -1,7 +1,8 @@
 <?php
-require_once getcwd() . '/../../../xhprof_lib/defaults.php';
-require_once XHPROF_CONFIG;
+require_once getcwd() . '/../../../src/App.php';
 require_once XHPROF_LIB_ROOT . '/params.php';
+
+use Xhprof\Controller\XhprofRuns;
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs))
 {
@@ -10,7 +11,7 @@ if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs))
 
 include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
 
-$xhprof_runs_impl = new XHProfRuns_Default();
+$xhprof_runs_impl = new XhprofRuns();
 
 if (!empty($run)) {
   $digraph = xhprof_render_dot($xhprof_runs_impl, $run, $type, $threshold, $func, $source, $critical, $show_internal, $links);

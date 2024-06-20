@@ -5,21 +5,6 @@
 
 ini_set('max_execution_time', 100);
 
-// Autoloader.
-$locations = [
-    './',
-    '../',
-    '../../',
-    '../../../',
-];
-foreach ($locations as $location) {
-    $autoload = "$location/vendor/autoload.php";
-    if (file_exists($autoload) && !defined('DOCROOT')) {
-        define('DOCROOT', realpath(dirname($autoload) . '/../'));
-        require_once $autoload;
-    }
-}
-
 use Xhprof\Config\ConfigLoader;
 
 $config = new ConfigLoader();

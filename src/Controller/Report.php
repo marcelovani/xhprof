@@ -5,8 +5,8 @@
 
 namespace Xhprof\Controller;
 
-use Xhprof\View\Xhprof;
-use XHProfRuns_Default;
+use Xhprof\View\XhprofView;
+use Xhprof\Controller\XhprofRuns;
 
 /**
  * Report class.
@@ -15,13 +15,13 @@ class Report
 {
 
     /**
-     * @var Xhprof;
+     * @var XhprofView;
      */
     private $view;
 
     public function __construct()
     {
-        $this->view = new Xhprof();
+        $this->view = new XhprofView();
     }
 
     /**
@@ -58,7 +58,7 @@ class Report
      * @param string $run2 New run id (for diff reports)
      *
      */
-    public function displayXHProfReport(XHProfRuns_Default $xhprof_runs_impl, $url_params, $source,
+    public function displayXHProfReport(XhprofRuns $xhprof_runs_impl, $url_params, $source,
                                                            $run, $wts, $symbol, $sort, $run1, $run2)
     {
 
@@ -354,7 +354,7 @@ class Report
     /**
      * Getter for Hxprof view.
      *
-     * @return Xhprof
+     * @return XhprofView
      *   The Xhprof view.
      */
     public function getView()
@@ -403,7 +403,7 @@ class Report
 
             $flat_data[] = $tmp;
         }
-        usort($flat_data, '\Xhprof\View\Xhprof::sortCbk');
+        usort($flat_data, '\Xhprof\View\XhprofView::sortCbk');
 
         print("<br />");
 
@@ -463,7 +463,7 @@ class Report
         //Find top $n requests
         $data_copy = $flat_data;
         $data_copy = $this->getView()->aggregateCalls($data_copy, null, $run2);
-        usort($data_copy, '\Xhprof\View\Xhprof::sortWT');
+        usort($data_copy, '\Xhprof\View\XhprofView::sortWT');
 
         $iterations = 0;
         $colors = array('#4572A7', '#AA4643', '#89A54E', '#80699B', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92', '#EAFEBB', '#FEB4B1', '#2B6979', '#E9D6FE', '#FECDA3', '#FED980');
