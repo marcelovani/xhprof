@@ -10,12 +10,79 @@ namespace Xhprof\View;
  */
 class Xhprof
 {
-    /**
-     * Return attribute names and values to be used by javascript tooltip.
-     */
-    function getTooltipAttributes($type, $metric)
+    public static function countFormat($num)
     {
-        return "type='$type' metric='$metric'";
+        $num = round($num, 3);
+        if (round($num) == $num) {
+            return number_format($num);
+        } else {
+            return number_format($num, 3);
+        }
+    }
+
+    /**
+     * Callback comparison operator (passed to usort() for sorting array of
+     * tuples) that compares array elements based on the sort column
+     * specified in $sort_col (global parameter).
+     *
+     * @author Kannan
+     */
+    public static function sortCbk($a, $b)
+    {
+        global $sort_col;
+        global $diff_mode;
+
+        if ($sort_col == "fn") {
+
+            // case insensitive ascending sort for function names
+            $left = strtoupper($a["fn"]);
+            $right = strtoupper($b["fn"]);
+
+            if ($left == $right)
+                return 0;
+            return ($left < $right) ? -1 : 1;
+
+        } else {
+
+            // descending sort for all others
+            $left = $a[$sort_col];
+            $right = $b[$sort_col];
+
+            // if diff mode, sort by absolute value of regression/improvement
+            if ($diff_mode) {
+                $left = abs($left);
+                $right = abs($right);
+            }
+
+            if ($left == $right)
+                return 0;
+            return ($left > $right) ? -1 : 1;
+        }
+    }
+
+    /*
+ * Formats call counts for XHProf reports.
+ *
+ * Description:
+ * Call counts in single-run reports are integer values.
+ * However, call counts for aggregated reports can be
+ * fractional. This function will print integer values
+ * without decimal point, but with commas etc.
+ *
+ *   4000 ==> 4,000
+ *
+ * It'll round fractional values to decimal precision of 3
+ *   4000.1212 ==> 4,000.121
+ *   4000.0001 ==> 4,000
+ *
+ */
+
+    public static function sortWT($a, $b)
+    {
+        if ($a['excl_wt'] == $b['excl_wt']) {
+            return 0;
+        }
+        return ($a['excl_wt'] < $b['excl_wt']) ? 1 : -1;
     }
 
     public function aggregateCalls($calls, $rules = null)
@@ -53,62 +120,63 @@ class Xhprof
         return array_merge($addIns, $calls);
     }
 
-    /*
- * Formats call counts for XHProf reports.
- *
- * Description:
- * Call counts in single-run reports are integer values.
- * However, call counts for aggregated reports can be
- * fractional. This function will print integer values
- * without decimal point, but with commas etc.
- *
- *   4000 ==> 4,000
- *
- * It'll round fractional values to decimal precision of 3
- *   4000.1212 ==> 4,000.121
- *   4000.0001 ==> 4,000
- *
- */
-    public static function countFormat($num)
-    {
-        $num = round($num, 3);
-        if (round($num) == $num) {
-            return number_format($num);
-        } else {
-            return number_format($num, 3);
-        }
-    }
-
     /**
-     * Get percent format.
+     * Print "flat" data corresponding to one function.
      *
-     * @param $s
-     * @param $precision
-     * @return string
+     * @author Kannan
      */
-    public static function percentFormat($s, $precision = 1)
+    public function printFunctionInfo($url_params, $info, $sort, $run1, $run2)
     {
-        return sprintf('%.' . $precision . 'f%%', 100 * $s);
-    }
+        static $odd_even = 0;
 
-    /**
-     * Prints a <td> element with a percentage.
-     */
-    public function printTdPercent($numer, $denom, $bold = false, $attributes = null)
-    {
-        global $vbar;
-        global $vbbar;
-        global $diff_mode;
+        global $totals;
+        global $sort_col;
+        global $metrics;
+        global $format_cbk;
+        global $display_calls;
+        global $base_path;
 
-        $class = $this->getPrintClass($numer, $bold);
+        // Toggle $odd_or_even
+        $odd_even = 1 - $odd_even;
 
-        if ($denom == 0) {
-            $pct = "N/A%";
+        if ($odd_even) {
+            print("<tr>");
         } else {
-            $pct = Xhprof::percentFormat($numer / abs($denom));
+            print('<tr>');
         }
 
-        print("<td $attributes $class>$pct</td>\n");
+        $href = "$base_path/?" .
+            http_build_query(xhprof_array_set($url_params,
+                'func', $info["fn"]));
+
+        print('<td>');
+        print($view->renderLink($info["fn"], $href));
+        print("</td>\n");
+
+        if ($display_calls) {
+            // Call Count..
+            $view->printTdNum($info["ct"], $format_cbk["ct"], ($sort_col == "ct"));
+            $view->printTdPercent($info["ct"], $totals["ct"], ($sort_col == "ct"));
+        }
+
+        // Other metrics..
+        foreach ($metrics as $metric) {
+            // Inclusive metric
+            $view->printTdNum($info[$metric], $format_cbk[$metric],
+                ($sort_col == $metric));
+            $view->printTdPercent($info[$metric], $totals[$metric],
+                ($sort_col == $metric));
+
+            // Exclusive Metric
+            $view->printTdNum($info["excl_" . $metric],
+                $format_cbk["excl_" . $metric],
+                ($sort_col == "excl_" . $metric));
+            $view->printTdPercent($info["excl_" . $metric],
+                $totals[$metric],
+                ($sort_col == "excl_" . $metric));
+        }
+
+        print("</tr>\n");
     }
 
     /**
@@ -186,148 +254,6 @@ class Xhprof
     }
 
     /**
-     * Callback comparison operator (passed to usort() for sorting array of
-     * tuples) that compares array elements based on the sort column
-     * specified in $sort_col (global parameter).
-     *
-     * @author Kannan
-     */
-    public static function sortCbk($a, $b)
-    {
-        global $sort_col;
-        global $diff_mode;
-
-        if ($sort_col == "fn") {
-
-            // case insensitive ascending sort for function names
-            $left = strtoupper($a["fn"]);
-            $right = strtoupper($b["fn"]);
-
-            if ($left == $right)
-                return 0;
-            return ($left < $right) ? -1 : 1;
-
-        } else {
-
-            // descending sort for all others
-            $left = $a[$sort_col];
-            $right = $b[$sort_col];
-
-            // if diff mode, sort by absolute value of regression/improvement
-            if ($diff_mode) {
-                $left = abs($left);
-                $right = abs($right);
-            }
-
-            if ($left == $right)
-                return 0;
-            return ($left > $right) ? -1 : 1;
-        }
-    }
-
-    /**
-     * Print "flat" data corresponding to one function.
-     *
-     * @author Kannan
-     */
-    public function printFunctionInfo($url_params, $info, $sort, $run1, $run2)
-    {
-        static $odd_even = 0;
-
-        global $totals;
-        global $sort_col;
-        global $metrics;
-        global $format_cbk;
-        global $display_calls;
-        global $base_path;
-
-        // Toggle $odd_or_even
-        $odd_even = 1 - $odd_even;
-
-        if ($odd_even) {
-            print("<tr>");
-        } else {
-            print('<tr>');
-        }
-
-        $href = "$base_path/?" .
-            http_build_query(xhprof_array_set($url_params,
-                'func', $info["fn"]));
-
-        print('<td>');
-        print($view->renderLink($info["fn"], $href));
-        print("</td>\n");
-
-        if ($display_calls) {
-            // Call Count..
-            $view->printTdNum($info["ct"], $format_cbk["ct"], ($sort_col == "ct"));
-            $view->printTdPercent($info["ct"], $totals["ct"], ($sort_col == "ct"));
-        }
-
-        // Other metrics..
-        foreach ($metrics as $metric) {
-            // Inclusive metric
-            $view->printTdNum($info[$metric], $format_cbk[$metric],
-                ($sort_col == $metric));
-            $view->printTdPercent($info[$metric], $totals[$metric],
-                ($sort_col == $metric));
-
-            // Exclusive Metric
-            $view->printTdNum($info["excl_" . $metric],
-                $format_cbk["excl_" . $metric],
-                ($sort_col == "excl_" . $metric));
-            $view->printTdPercent($info["excl_" . $metric],
-                $totals[$metric],
-                ($sort_col == "excl_" . $metric));
-        }
-
-        print("</tr>\n");
-    }
-
-    /**
-     * Get the appropriate description for a statistic
-     * (depending upon whether we are in diff report mode
-     * or single run report mode).
-     *
-     * @author Kannan
-     */
-    public function statDescription($stat)
-    {
-        global $descriptions;
-        global $diff_descriptions;
-        global $diff_mode;
-
-        if ($diff_mode) {
-            return $diff_descriptions[$stat];
-        } else {
-            return $descriptions[$stat];
-        }
-    }
-
-    /**
-     * Print symbol summary.
-     *
-     * @param $symbol_info
-     * @param $stat
-     * @param $base
-     * @return void
-     */
-    private function printSymbolSummary($symbol_info, $stat, $base)
-    {
-        $val = $symbol_info[$stat];
-        $desc = str_replace("<br />", " ", $this->statDescription($stat));
-
-        print("$desc: </td>");
-        print(number_format($val));
-        print(" (" . $this->pct($val, $base) . "% of overall)");
-        if (substr($stat, 0, 4) == "excl") {
-            $func_base = $symbol_info[str_replace("excl_", "", $stat)];
-            print(" (" . $this->pct($val, $func_base) . "% of this function)");
-        }
-        print("<br />");
-    }
-
-    /**
      * Prints a <td> element with a numeric value.
      */
     public function printTdNum($num, $fmt_func, $bold = false, $attributes = null)
@@ -342,12 +268,68 @@ class Xhprof
         print("<td $attributes $class>$num</td>\n");
     }
 
-    public static function sortWT($a, $b)
+    /**
+     * Given a number, returns the td class to use for display.
+     *
+     * For instance, negative numbers in diff reports comparing two runs (run1 & run2)
+     * represent improvement from run1 to run2. We use green to display those deltas,
+     * and red for regression deltas.
+     */
+    public function getPrintClass($num, $bold)
     {
-        if ($a['excl_wt'] == $b['excl_wt']) {
-            return 0;
+        global $vbar;
+        global $vbbar;
+        global $vrbar;
+        global $vgbar;
+        global $diff_mode;
+
+        if ($bold) {
+            if ($diff_mode) {
+                if ($num <= 0) {
+                    $class = $vgbar; // green (improvement)
+                } else {
+                    $class = $vrbar; // red (regression)
+                }
+            } else {
+                $class = $vbbar; // blue
+            }
+        } else {
+            $class = $vbar;  // default (black)
         }
-        return ($a['excl_wt'] < $b['excl_wt']) ? 1 : -1;
+
+        return $class;
+    }
+
+    /**
+     * Prints a <td> element with a percentage.
+     */
+    public function printTdPercent($numer, $denom, $bold = false, $attributes = null)
+    {
+        global $vbar;
+        global $vbbar;
+        global $diff_mode;
+
+        $class = $this->getPrintClass($numer, $bold);
+
+        if ($denom == 0) {
+            $pct = "N/A%";
+        } else {
+            $pct = Xhprof::percentFormat($numer / abs($denom));
+        }
+
+        print("<td $attributes $class>$pct</td>\n");
+    }
+
+    /**
+     * Get percent format.
+     *
+     * @param $s
+     * @param $precision
+     * @return string
+     */
+    public static function percentFormat($s, $precision = 1)
+    {
+        return sprintf('%.' . $precision . 'f%%', 100 * $s);
     }
 
     /**
@@ -622,6 +604,13 @@ class Xhprof
 
     }
 
+    /**
+     * Return attribute names and values to be used by javascript tooltip.
+     */
+    function getTooltipAttributes($type, $metric)
+    {
+        return "type='$type' metric='$metric'";
+    }
 
     /**
      * Print PC array
@@ -712,52 +701,6 @@ class Xhprof
     }
 
     /**
-     * Given a number, returns the td class to use for display.
-     *
-     * For instance, negative numbers in diff reports comparing two runs (run1 & run2)
-     * represent improvement from run1 to run2. We use green to display those deltas,
-     * and red for regression deltas.
-     */
-    public function getPrintClass($num, $bold)
-    {
-        global $vbar;
-        global $vbbar;
-        global $vrbar;
-        global $vgbar;
-        global $diff_mode;
-
-        if ($bold) {
-            if ($diff_mode) {
-                if ($num <= 0) {
-                    $class = $vgbar; // green (improvement)
-                } else {
-                    $class = $vrbar; // red (regression)
-                }
-            } else {
-                $class = $vbbar; // blue
-            }
-        } else {
-            $class = $vbar;  // default (black)
-        }
-
-        return $class;
-    }
-
-    /**
-     * Computes percentage for a pair of values, and returns it
-     * in string format.
-     */
-    public function pct($a, $b)
-    {
-        if ($b == 0) {
-            return "N/A";
-        } else {
-            $res = (round(($a * 1000 / $b)) / 10);
-            return $res;
-        }
-    }
-
-    /**
      * Implodes the text for a bunch of actions (such as links, forms,
      * into a HTML list and returns the text.
      */
@@ -774,5 +717,62 @@ class Xhprof
         }
         $out[] = "</div>\n";
         return implode('', $out);
+    }
+
+    /**
+     * Print symbol summary.
+     *
+     * @param $symbol_info
+     * @param $stat
+     * @param $base
+     * @return void
+     */
+    private function printSymbolSummary($symbol_info, $stat, $base)
+    {
+        $val = $symbol_info[$stat];
+        $desc = str_replace("<br />", " ", $this->statDescription($stat));
+
+        print("$desc: </td>");
+        print(number_format($val));
+        print(" (" . $this->pct($val, $base) . "% of overall)");
+        if (substr($stat, 0, 4) == "excl") {
+            $func_base = $symbol_info[str_replace("excl_", "", $stat)];
+            print(" (" . $this->pct($val, $func_base) . "% of this function)");
+        }
+        print("<br />");
+    }
+
+    /**
+     * Get the appropriate description for a statistic
+     * (depending upon whether we are in diff report mode
+     * or single run report mode).
+     *
+     * @author Kannan
+     */
+    public function statDescription($stat)
+    {
+        global $descriptions;
+        global $diff_descriptions;
+        global $diff_mode;
+
+        if ($diff_mode) {
+            return $diff_descriptions[$stat];
+        } else {
+            return $descriptions[$stat];
+        }
+    }
+
+    /**
+     * Computes percentage for a pair of values, and returns it
+     * in string format.
+     */
+    public function pct($a, $b)
+    {
+        if ($b == 0) {
+            return "N/A";
+        } else {
+            $res = (round(($a * 1000 / $b)) / 10);
+            return $res;
+        }
     }
 }

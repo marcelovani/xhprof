@@ -8,7 +8,8 @@ namespace Xhprof;
 /**
  * Utils class.
  */
-class Utils {
+class Utils
+{
     /**
      * The goal of this function is to accept the URL for a resource, and return a "simplified" version
      * thereof. Similar URLs should become identical. Consider:
