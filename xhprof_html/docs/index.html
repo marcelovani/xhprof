@@ -304,7 +304,7 @@ to your php.ini file.
 extension=xhprof.so
 ;
 ; directory used by default implementation of the iXHProfRuns
-; interface (namely, the XHProfRuns_Default class) for storing
+; interface (namely, the XhprofRuns class) for storing
 ; XHProf runs.
 ;
 xhprof.output_dir=&lt;directory_for_storing_xhprof_runs&gt;
@@ -554,13 +554,15 @@ your web server is setup to serve PHP scripts.
 
 <p>Clients have flexibility in how they save the XHProf raw data
 obtained from an XHProf run. The XHProf UI layer exposes an interface
+    // @todo update this
 iXHProfRuns (see xhprof_lib/utils/xhprof_runs.php) that clients can
 implement. This allows the clients to tell the UI layer how to fetch
 the data corresponding to a XHProf run.
 
 <p>The XHProf UI libaries come with a default file based
 implementation of the iXHProfRuns interface, namely
-"XHProfRuns_Default" (also in xhprof_lib/utils/xhprof_runs.php).
+    // @todo update this
+"XhprofRuns" (also in xhprof_lib/utils/xhprof_runs.php).
 This default implementation stores runs in the directory specified by
 <a href="#ini_file"><b>xhprof.output_dir</b></a> INI parameter.
 
@@ -572,7 +574,7 @@ id.
 <p><b>a) Saving XHProf data persistently</b>:
 
 <p>Assuming you are using the default implementation
-<code><b>XHProfRuns_Default</b></code> of the
+<code><b>XhprofRuns</b></code> of the
 <code><b>iXHProfRuns</b></code> interface, a typical XHProf run
 followed by the save step might look something like:
 
@@ -586,15 +588,15 @@ xhprof_enable();
 
 // stop profiler
 $xhprof_data = xhprof_disable();
-
 //
 // Saving the XHProf run
 // using the default implementation of iXHProfRuns.
 //
+// @todo update this
 include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
 include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
 
-$xhprof_runs = new <b>XHProfRuns_Default()</b>;
+$xhprof_runs = new <b>XhprofRuns()</b>;
 
 // Save the run under a namespace "xhprof_foo".
 //
@@ -632,11 +634,12 @@ iXHProfRuns() interface.
 
 <p> You'll also need to modify the 3 main PHP entry pages (index.php,
 callgraph.php, typeahead.php) in the "xhprof_html/" directory to use
-the new class instead of the default class <code>XHProfRuns_Default</code>.
+the new class instead of the default class <code>XhprofRuns</code>.
 Change this line in the 3 files.
 
 <pre>
-$xhprof_runs_impl = new XHProfRuns_Default();
+        // @todo mention `use`
+$xhprof_runs_impl = new XhprofRuns();
 </pre>
 
 <p>You'll also need to "include" the file that implements your class in

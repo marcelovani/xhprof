@@ -1,6 +1,7 @@
 {
     "name": "marcelovani/xhprof_gui",
     "description": "Xhprof GUI",
+    "minimum-stability": "dev",
     "keywords": [
         "PHP",
         "xhprof",
@@ -11,6 +12,11 @@
         "php": "^8.0",
         "symfony/dotenv": "^6.4"
     },
+    "require-dev": {
+        "behat/behat": "^3.0.13",
+        "behat/mink-selenium2-driver": "^1.6",
+        "friends-of-behat/mink-extension": "^2.3.1"
+    },
     "autoload": {
         "files": [
             "src/App.php"
@@ -18,5 +24,8 @@
         "psr-4": {
             "Xhprof\\": "src"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }

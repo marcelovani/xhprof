@@ -38,3 +38,10 @@ db-dummy-data:
 
 sqlc:
 	docker-compose exec php sh -c "$(DB_CONN)"
+
+test:
+	docker-compose exec php sh -c "cd tests && ../vendor/bin/behat"
+test-tag:
+	docker-compose exec php sh -c "cd tests && ../vendor/bin/behat --tags=$(tags)"
+dry-run:
+	docker-compose exec php sh -c "cd tests && ../vendor/bin/behat --dry-run"

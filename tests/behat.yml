@@ -1,0 +1,58 @@
+default:
+  suites:
+    default:
+      mink_javascript_session: javascript
+      contexts:
+        - FeatureContext
+        - Behat\MinkExtension\Context\MinkContext
+
+  extensions:
+    Behat\MinkExtension:
+      base_url: http://nginx
+      browser_name: chrome
+      sessions:
+        default:
+          selenium2: ~
+        javascript:
+          selenium2:
+            wd_host: http://selenium:4444/wd/hub
+            browser: 'chrome'
+            capabilities:
+              browserName: 'chrome'
+              browser: 'chrome'
+              acceptSslCerts: true
+              chrome:
+                # To test on the browser, remove --headless switch and also change the variable START_NO_VNC in docker-compose.yml
+                switches:
+#                  - "--headless"
+                  - "--disable-gpu"
+                  - "--no-sandbox"
+                  - "--ignore-certificate-errors"
+                  - "--window-size=1000,1100"
+              extra_capabilities:
+                alwaysMatch:
+                  browserName: chrome
+                acceptInsecureCerts: true
+                # https://www.lambdatest.com/blog/selenium-page-load-strategy
+                # https://www.selenium.dev/documentation/webdriver/drivers/options/
+                pageLoadStrategy: eager
+                takesHeapSnapshot: false
+                hasTouchScreen: false
+                browserConnectionEnabled: true
+                acceptSslCerts: true
+                databaseEnabled: false
+                handlesAlerts: true
+                nativeEvents: true
+                locationContextEnabled: false
+                webStorageEnabled: true
+                takesScreenshot: true
+                'goog:chromeOptions':
+                  w3c: false
+                # https://developer.mozilla.org/en-US/docs/Web/WebDriver/Capabilities/firefoxOptions
+                # https://developer.mozilla.org/en-US/docs/Web/WebDriver/Capabilities
+                'moz:firefoxOptions':
+                  args:
+                    - "--ignore-certificate-errors"
+                    - "-headless"
+                    - "-width=1200"
+                    - "-height=1200"
