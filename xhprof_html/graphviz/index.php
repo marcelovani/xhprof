@@ -1,14 +1,21 @@
 <?php
 require_once getcwd() . '/../../src/App.php';
-//require_once XHPROF_LIB_ROOT . '/params.php';
 
 use \Xhprof\Request\Params;
+use Xhprof\Utils;
+use Xhprof\View\XhprofView;
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
     die("You do not have permission to view this page.");
 }
 
 include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
+$params = new Params();
+$run = $params->get('run');
+
+$utils = new Utils();
+$report_url = $utils->getReportUrl();
+$view = new XhprofView();
 ?>
 
 <!DOCTYPE html>

@@ -6,14 +6,14 @@ use Xhprof\Controller\Report;
 use Xhprof\View\XhprofView;
 use Xhprof\Controller\XhprofRuns;
 use Xhprof\Request\Params;
+use Xhprof\Utils;
 
 $view = new XhprofView();
+$utils = new Utils();
 
 require XHPROF_CONFIG;
 
 require_once XHPROF_LIB_ROOT . '/display/xhprof.php';
-require_once XHPROF_LIB_ROOT . "/utils/common.php";
-//require_once XHPROF_LIB_ROOT . '/params.php';
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
     die("You do not have permission to view this page.");
@@ -67,8 +67,8 @@ $vgbar = ' class="vgbar"';
 
 $xhprof_runs_impl = new XhprofRuns();
 
-$domainFilter = getFilter('domain_filter');
-$serverFilter = getFilter('server_filter');
+$domainFilter = $utils->getFilter('domain_filter');
+$serverFilter = $utils->getFilter('server_filter');
 
 $domainsRS = $xhprof_runs_impl->getDistinct(array('column' => 'server name'));
 $domainFilterOptions = array("None");
@@ -112,7 +112,7 @@ if (isset($_GET['run1']) || isset($_GET['run'])) {
     $criteria['limit'] = $last;
     $criteria['order by'] = 'timestamp';
     $rs = $xhprof_runs_impl->getUrlStats($criteria);
-    list($header, $body) = showChart($rs, true);
+    list($header, $body) = $view->showChart($rs, true);
     $_xh_header .= $header;
 
     include(XHPROF_LIB_ROOT . "/templates/header.phtml");
@@ -129,7 +129,7 @@ if (isset($_GET['run1']) || isset($_GET['run'])) {
     $criteria['order by'] = 'timestamp';
 
     $rs = $xhprof_runs_impl->getUrlStats($criteria);
-    list($header, $body) = showChart($rs, true);
+    list($header, $body) = $view->showChart($rs, true);
     $_xh_header .= $header;
     include(XHPROF_LIB_ROOT . "/templates/header.phtml");
 

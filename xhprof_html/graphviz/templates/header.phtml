@@ -1,9 +1,17 @@
-<?php require_once getcwd() . '/../../xhprof_lib/utils/common.php'; ?>
+<?php
+
+use Xhprof\Utils;
+
+//$view = new XhprofView();
+$utils = new Utils();
+$report_url = $utils->getReportUrl();
+
+?>
 
 <div class="container">
     <div class="dash-header">
         <div class="xh-title-wrap">
-            <a class="xh-title" href="<?php print xhprof_get_report_url(); ?>">XH GUI</a>
+            <a class="xh-title" href="<?php print $report_url; ?>">XH GUI</a>
         </div>
 
         <div id="options">

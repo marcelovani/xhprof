@@ -1,8 +1,8 @@
 <?php
 require_once getcwd() . '/../../../src/App.php';
 
-//require_once XHPROF_LIB_ROOT . '/params.php';
 use Xhprof\Request\Params;
+use Xhprof\Controller\Callgraph;
 
 if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
     die("You do not have permission to view this page.");
@@ -32,7 +32,8 @@ if (!empty($run)) {
     $right = null;
     $left = null;
 
-    $digraph = xhprof_generate_dot_script($raw_data, $threshold, $source, $page, $func, $critical_path, $right, $left, $show_internal, $links);
+    $callGraph = new Callgraph();
+    $digraph = $callGraph->generateDotScript($raw_data, $threshold, $source, $page, $func, $critical_path, $right, $left, $show_internal, $links);
     $raw_data = null;
 
     print_r($digraph);

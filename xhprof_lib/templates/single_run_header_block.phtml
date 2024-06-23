@@ -66,23 +66,23 @@ global $comparative;
                     </tr>
                     <tr>
                         <td>Min Wall Time</td>
-                        <td><?php echo printSeconds($comparative['url']['min(`wt`)']); ?></td>
-                        <td><?php echo printSeconds($comparative['c_url']['min(`wt`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['url']['min(`wt`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['c_url']['min(`wt`)']); ?></td>
                     </tr>
                     <tr>
                         <td>Max Wall Time</td>
-                        <td><?php echo printSeconds($comparative['url']['max(`wt`)']); ?></td>
-                        <td><?php echo printSeconds($comparative['c_url']['max(`wt`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['url']['max(`wt`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['c_url']['max(`wt`)']); ?></td>
                     </tr>
                     <tr>
                         <td>Avg Wall Time</td>
-                        <td><?php echo printSeconds($comparative['url']['avg(`wt`)']); ?></td>
-                        <td><?php echo printSeconds($comparative['c_url']['avg(`wt`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['url']['avg(`wt`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['c_url']['avg(`wt`)']); ?></td>
                     </tr>
                     <tr>
                         <td>95% Wall Time</td>
-                        <td><?php echo printSeconds($comparative['url']['95(`wt`)']); ?></td>
-                        <td><?php echo printSeconds($comparative['c_url']['95(`wt`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['url']['95(`wt`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['c_url']['95(`wt`)']); ?></td>
                     </tr>
                     <?php if (isset($arrayOfTotal[0])): ?>
                         <tr>
@@ -93,23 +93,23 @@ global $comparative;
                     <?php endif; ?>
                     <tr>
                         <td>Min CPU Ticks</td>
-                        <td><?php echo printSeconds($comparative['url']['min(`cpu`)']); ?></td>
-                        <td><?php echo printSeconds($comparative['c_url']['min(`cpu`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['url']['min(`cpu`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['c_url']['min(`cpu`)']); ?></td>
                     </tr>
                     <tr>
                         <td>Max CPU Ticks</td>
-                        <td><?php echo printSeconds($comparative['url']['max(`cpu`)']); ?></td>
-                        <td><?php echo printSeconds($comparative['c_url']['max(`cpu`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['url']['max(`cpu`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['c_url']['max(`cpu`)']); ?></td>
                     </tr>
                     <tr>
                         <td>Avg CPU Ticks</td>
-                        <td><?php echo printSeconds($comparative['url']['avg(`cpu`)']); ?></td>
-                        <td><?php echo printSeconds($comparative['c_url']['avg(`cpu`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['url']['avg(`cpu`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['c_url']['avg(`cpu`)']); ?></td>
                     </tr>
                     <tr>
                         <td>95% CPU Ticks</td>
-                        <td><?php echo printSeconds($comparative['url']['95(`cpu`)']); ?></td>
-                        <td><?php echo printSeconds($comparative['c_url']['95(`cpu`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['url']['95(`cpu`)']); ?></td>
+                        <td><?php echo $this->getView()->printSeconds($comparative['c_url']['95(`cpu`)']); ?></td>
                     </tr>
                     <?php if (isset($arrayOfTotal[1])): ?>
                         <tr>

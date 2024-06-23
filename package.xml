@@ -66,7 +66,6 @@ XHProf is a function-level hierarchical profiler for PHP and has a simple HTML b
       <file role="src" name="php_xhprof.h"/>
       <file role="src" name="xhprof.c"/>
       <dir name="tests">
-        <file role="test" name="common.php" />
         <file role="test" name="xhprof_001.phpt" />
         <file role="test" name="xhprof_002.phpt" />
         <file role="test" name="xhprof_003.phpt" />
@@ -112,7 +111,6 @@ XHProf is a function-level hierarchical profiler for PHP and has a simple HTML b
         <file role="php" name="xhprof.php"/>
       </dir>
       <dir name="utils">
-        <file role="php" name="callgraph_utils.php"/>
         <file role="php" name="xhprof_lib.php"/>
         <file role="php" name="xhprof_runs.php"/>
       </dir>

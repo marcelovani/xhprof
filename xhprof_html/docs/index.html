@@ -193,22 +193,6 @@ and <code><b>run_init::&lt;filename&gt;</b></code>:
 <p>XHProf tracks PHP <code>include/require</code> operations as
 function calls.
 
-<p>For example, an <b>include "lib/common.php";</b> operation will
-result in two XHProf function entries:
-
-<ul>
-
-<li> <code><b>load::lib/common.php</b></code> - This represents the work done by the
-interpreter to compile/load the file. [Note: If you are using a PHP
-opcode cache like APC, then the compile only happens on a cache miss
-in APC.]
-
-<li> <code><b>run_init::lib/common.php</b></code> - This represents
-initialization code executed at the file scope as a result of the
-include operation.
-
-</ul>
-
 <p><li><code><b>foo@&lt;n&gt;</b></code>: Implies that this is a
 recursive invocation of <code>foo()</code>, where <code>&lt;n&gt;</code> represents
 the recursion depth. The recursion may be direct (such as due to

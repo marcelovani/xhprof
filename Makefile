@@ -40,7 +40,7 @@ sqlc:
 	docker-compose exec php sh -c "$(DB_CONN)"
 
 test:
-	docker-compose exec php sh -c "cd tests && ../vendor/bin/behat"
+	docker-compose exec php sh -c "cd tests && ../vendor/bin/behat --rerun"
 test-tag:
 	docker-compose exec php sh -c "cd tests && ../vendor/bin/behat --tags=$(tags)"
 dry-run:

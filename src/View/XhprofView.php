@@ -6,6 +6,8 @@
 namespace Xhprof\View;
 
 use Xhprof\Controller\XhprofRuns;
+use Xhprof\Utils;
+use Xhprof\Controller\Chart;
 
 /**
  * View class.
@@ -60,6 +62,17 @@ class XhprofView
                 return 0;
             return ($left > $right) ? -1 : 1;
         }
+    }
+
+    /**
+     * Wrapper for showChart class.
+     *
+     * @return string
+     *   The chart markup.
+     */
+    public function showChart($rs, $flip) {
+        $chart = new Chart();
+        return $chart->showChart($rs, $flip);
     }
 
     /*
@@ -332,6 +345,75 @@ class XhprofView
     public static function percentFormat($s, $precision = 1)
     {
         return sprintf('%.' . $precision . 'f%%', 100 * $s);
+    }
+
+    /**
+     * Helper to return markup for the threshold button
+     *
+     * @param $title
+     * @param $increment
+     * @param float $default
+     * @return string
+     */
+    public function getThresholdButton($title, $increment, $default = 0.01)
+    {
+        $utils = new Utils();
+        $api_uri = $utils->ParseEndpointUri();
+        if (isset($api_uri['threshold'])) {
+            $current = (float) $api_uri['threshold'];
+        } else {
+            $current = $default;
+        }
+
+        $current = $current + $increment;
+        if ($current <= 0) {
+            $current = 0.01;
+        }
+        if ($current > 1) {
+            $current = 1;
+        }
+        $api_uri['threshold'] = $current;
+
+        $utils = new Utils();
+        $url = $utils->buildUrl($api_uri);
+//    $url = xhprof_build_endpoint_url($api_uri);
+//    var_dump($base_uri, $api_uri, $url);
+//exit;
+        return "<span class=\"button form-button\"><a href=\"$url\">$current</a></span>";
+//var_dump($button);exit;
+        return $markup;
+    }
+
+    /**
+     * Prints seconds.
+     *
+     * @param $time
+     * @return string
+     */
+    public function printSeconds($time)
+    {
+        $suffix = "microsecond";
+
+        if ($time > 1000)
+        {
+            $time = $time / 1000;
+            $suffix = "ms";
+
+        }
+
+        if ($time > 1000)
+        {
+            $time = $time / 1000;
+            $suffix = "s";
+        }
+
+        if ($time > 60 && $suffix == "s")
+        {
+            $time = $time / 60;
+            $suffix = "minutes!";
+        }
+        return sprintf("%.4f {$suffix}", $time);
+
     }
 
     /**

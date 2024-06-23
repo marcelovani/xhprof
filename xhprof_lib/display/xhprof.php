@@ -38,8 +38,6 @@ if (!defined('XHPROF_LIB_ROOT')) {
 }
 
 include_once XHPROF_LIB_ROOT . '/utils/xhprof_lib.php';
-include_once XHPROF_LIB_ROOT . '/utils/callgraph_utils.php';
-//include_once XHPROF_LIB_ROOT . '/utils/xhprof_runs.php';
 
 /**
  * Our coding convention disallows relative paths in hrefs.
