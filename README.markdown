@@ -14,6 +14,7 @@ This is a fork of [https://github.com/preinheimer/xhprof](https://github.com/pre
 - Using Docker to run the GUI, reducing dependencies and making setup easier.
 - Some code refactoring and UI improvements.
 - Added Behat tests
+- Added Xdebug
 
 Xhprof GUI
 ![](https://raw.githubusercontent.com/marcelovani/xhprof/graphviz/docs/Gui.png)
@@ -52,6 +53,10 @@ There are 4 ways of populating and viewing traces:
 Testing
 -------
 Run `make test`
+
+Xdebug
+------
+To enable tracing, uncomment XDEBUG_TRIGGER in docker-compose.yml
 
 Todo
 ----

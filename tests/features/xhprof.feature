@@ -55,7 +55,11 @@ Feature: List
     And the response should contain "fontstyle=\"bold"
     And the response should contain "fontname=\"Arial"
     And the response should contain "node [shape=\"box"
+
+  @apis @db @func
+  Scenario: Check the func filter
     Given I am on "/api/db/?run=5824ff778a7c8&links=1&show_internal=0&func=main"
+    Then I wait "1" second
     And the query string "func" should match "main"
 
   @apis @file

@@ -8,6 +8,8 @@ services:
     container_name: "${COMPOSE_PROJECT_NAME}_php"
     environment:
       SITE_URL: "http://${PROJECT_BASE_URL}:${PROJECT_PORT}"
+      PHP_IDE_CONFIG: "serverName=localhost"
+      # XDEBUG_TRIGGER: TRIGGER_DEBUG
     networks:
       - local
     volumes:
@@ -28,6 +30,17 @@ services:
       - ../:/var/www/xhprof
     networks:
       - local
+
+  selenium:
+    image: selenium/standalone-chrome:108.0
+    container_name: "${COMPOSE_PROJECT_NAME}_selenium"
+    environment:
+      VNC_NO_PASSWORD: 1
+    networks:
+      - local
+    ports:
+      - '4444:4444'
+      - '7900:7900'
 
   mariadb:
     image: wodby/mariadb:latest
