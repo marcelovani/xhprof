@@ -28,6 +28,8 @@ class ConfigLoader
         $this->setSerializer();
         $this->config['display'] = false;
         $this->config['doprofile'] = false;
+
+        return $this;
     }
 
     /**

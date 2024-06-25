@@ -828,7 +828,8 @@ class XhprofView
         echo "<h1 class=\"runTitle\">$title</h1>\n";
         echo "<table id=\"box-table-a\" class=\"tablesorter\" summary=\"Stats\"><thead><tr><th>Timestamp</th><th>Cpu</th><th>Wall Time</th><th>Peak Memory Usage</th><th>URL</th><th>Simplified URL</th></tr></thead>";
         echo "<tbody>\n";
-        while ($row = XhprofRuns::getNextAssoc($resultSet)) {
+        $runs = new XhprofRuns();
+        while ($row = $runs->getNextAssoc($resultSet)) {
             $c_url = urlencode($row['c_url']);
             $url = urlencode($row['url']);
             $html['url'] = htmlentities($row['url'], ENT_QUOTES, 'UTF-8');

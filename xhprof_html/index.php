@@ -72,13 +72,13 @@ $serverFilter = $utils->getFilter('server_filter');
 
 $domainsRS = $xhprof_runs_impl->getDistinct(array('column' => 'server name'));
 $domainFilterOptions = array("None");
-while ($row = XhprofRuns::getNextAssoc($domainsRS)) {
+while ($row = $xhprof_runs_impl->getNextAssoc($domainsRS)) {
     $domainFilterOptions[] = $row['server name'];
 }
 
 $serverRS = $xhprof_runs_impl->getDistinct(array('column' => 'server_id'));
 $serverFilterOptions = array("None");
-while ($row = XhprofRuns::getNextAssoc($serverRS)) {
+while ($row = $xhprof_runs_impl->getNextAssoc($serverRS)) {
     $serverFilterOptions[] = $row['server_id'];
 }
 
@@ -178,7 +178,7 @@ if (isset($_GET['run1']) || isset($_GET['run'])) {
     echo "<h1 class=\"runTitle\">Hardest Hit</h1>\n";
     echo "<table id=\"box-table-a\" class=\"tablesorter\" summary=\"Stats\"><thead><tr><th>URL</th><th>Hits</th><th class=\"{sorter: 'numeric'}\">Total Wall Time</th><th>Avg Wall Time</th></tr></thead>";
     echo "<tbody>\n";
-    while ($row = XhprofRuns::getNextAssoc($resultSet)) {
+    while ($row = $xhprof_runs_impl->getNextAssoc($resultSet)) {
         $url = urlencode($row['url']);
         $html['url'] = htmlentities($row['url'], ENT_QUOTES, 'UTF-8');
         echo "\t<tr><td><a href=\"?geturl={$url}\">{$html['url']}</a></td><td>{$row['count']}</td><td>" . number_format($row['total_wall']) . " ms</td><td>" . number_format($row['avg_wall']) . " ms</td></tr>\n";

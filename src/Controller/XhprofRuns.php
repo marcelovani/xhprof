@@ -23,6 +23,8 @@
 namespace Xhprof\Controller;
 
 use Xhprof\Utils;
+use Xhprof\Database\DbAbstract;
+use Xhprof\Config\ConfigLoader;
 
 if (!defined('XHPROF_LIB_ROOT')) {
     define('XHPROF_LIB_ROOT', dirname(dirname(__FILE__)));
@@ -82,34 +84,34 @@ class XhprofRuns implements iXHProfRuns
     public $prefix = 't11_';
     public $run_details = null;
 
+    private $config;
+
     /**
      *
-     * @var Db_Abstract
+     * @var DbAbstract
      */
     protected $db;
     private $dir = '';
 
     public function __construct($dir = null)
     {
-        $this->db();
+        $config_loader = new ConfigLoader();
+        $this->config = $config_loader->get();
+        $this->setDb();
     }
 
-    protected function db()
+    protected function setDb()
     {
-        global $_xhprof;
-        require_once XHPROF_LIB_ROOT . '/utils/Db/' . $_xhprof['dbadapter'] . '.php';
-
-        $class = self::getDbClass();
-        $this->db = new $class($_xhprof);
+        $className = $this->getDbClass();
+        $this->db = new $className($this->config);
         $this->db->connect();
     }
 
-    public static function getDbClass()
+    public function getDbClass()
     {
-        global $_xhprof;
+        $className = $this->config['dbadapter'];
 
-        $class = 'Db_' . $_xhprof['dbadapter'];
-        return $class;
+        return "Xhprof\\Database\\$className";
     }
 
     /*
@@ -284,10 +286,11 @@ class XhprofRuns implements iXHProfRuns
         return array($contents, $data);
     }
 
-    public static function getNextAssoc($resultSet)
+    public function getNextAssoc($resultSet)
     {
-        $class = self::getDbClass();
-        return $class::getNextAssoc($resultSet);
+        $db = $this->db;
+
+        return $db->getNextAssoc($resultSet);
     }
 
     /**
@@ -365,8 +368,6 @@ class XhprofRuns implements iXHProfRuns
      */
     public function save_run($xhprof_data, $type, $run_id = null, $xhprof_details = null)
     {
-        global $_xhprof;
-
         $sql = array();
         if ($run_id === null) {
             $run_id = $this->gen_run_id($type);
@@ -389,7 +390,7 @@ class XhprofRuns implements iXHProfRuns
         if(isset($_COOKIE['phpsessid']))
         {
           session_start();
-          $_xhprof['session_data'] = $_SESSION;
+          $this->config['session_data'] = $_SESSION;
         }
         but starting session support really feels like an application level decision, not one that
         a supposedly unobtrusive profiler makes for you.
@@ -401,7 +402,7 @@ class XhprofRuns implements iXHProfRuns
             $sql['cookie'] = $this->db->escape(serialize($_COOKIE));
 
             //This code has not been tested
-            if (isset($_xhprof['savepost']) && $_xhprof['savepost']) {
+            if (isset($this->config['savepost']) && $this->config['savepost']) {
                 $sql['post'] = $this->db->escape(serialize($_POST));
             } else {
                 $sql['post'] = $this->db->escape(serialize(array("Skipped" => "Post data omitted by rule")));
@@ -411,7 +412,7 @@ class XhprofRuns implements iXHProfRuns
             $sql['cookie'] = $this->db->escape(json_encode($_COOKIE));
 
             //This code has not been tested
-            if (isset($_xhprof['savepost']) && $_xhprof['savepost']) {
+            if (isset($this->config['savepost']) && $this->config['savepost']) {
                 $sql['post'] = $this->db->escape(json_encode($_POST));
             } else {
                 $sql['post'] = $this->db->escape(json_encode(array("Skipped" => "Post data omitted by rule")));
@@ -442,7 +443,7 @@ class XhprofRuns implements iXHProfRuns
         $sql['servername'] = $this->db->escape($sname);
         $sql['type'] = (int)(isset($xhprof_details['type']) ? $xhprof_details['type'] : 0);
         $sql['timestamp'] = $this->db->escape($_SERVER['REQUEST_TIME']);
-        $sql['server_id'] = $this->db->escape($_xhprof['servername']);
+        $sql['server_id'] = $this->db->escape($this->config['servername']);
         $sql['aggregateCalls_include'] = getenv('xhprof_aggregateCalls_include') ? getenv('xhprof_aggregateCalls_include') : '';
 
         $query = "INSERT INTO `details` (`id`, `url`, `c_url`, `timestamp`, `server name`, `perfdata`, `type`, `cookie`, `post`, `get`, `pmu`, `wt`, `cpu`, `server_id`, `aggregateCalls_include`) VALUES('$run_id', '{$sql['url']}', '{$sql['c_url']}', FROM_UNIXTIME('{$sql['timestamp']}'), '{$sql['servername']}', '{$sql['data']}', '{$sql['type']}', '{$sql['cookie']}', '{$sql['post']}', '{$sql['get']}', '{$sql['pmu']}', '{$sql['wt']}', '{$sql['cpu']}', '{$sql['server_id']}', '{$sql['aggregateCalls_include']}')";
@@ -451,8 +452,7 @@ class XhprofRuns implements iXHProfRuns
         if ($this->db->affectedRows($this->db->linkID) == 1) {
             return $run_id;
         } else {
-            global $_xhprof;
-            if ($_xhprof['display'] === true) {
+            if ($this->config['display'] === true) {
                 echo "Failed to insert: $query <br>\n";
             }
             return -1;

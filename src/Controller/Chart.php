@@ -2,7 +2,7 @@
 
 namespace Xhprof\Controller;
 
-use Xhprof\Controller\iXHProfRuns;
+use Xhprof\Controller\XhprofRuns;
 
 class Chart
 {
@@ -22,8 +22,9 @@ class Chart
         $arPEAK = array();
         $arIDS = array();
         $arDateIDs = array();
+        $runs = new XhprofRuns();
 
-        while($row = XhprofRuns::getNextAssoc($rs))
+        while($row = $runs->getNextAssoc($rs))
         {
             $date[] = "'" . date("Y-m-d", $row['timestamp']) . "'" ;
 

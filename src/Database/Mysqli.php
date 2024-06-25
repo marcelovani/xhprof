@@ -31,13 +31,14 @@
 
  */
 
-require_once XHPROF_LIB_ROOT.'/utils/Db/Abstract.php';
-class Db_Mysql extends Db_Abstract
+namespace Xhprof\Database;
+
+class Mysqli extends DbAbstract
 {
     
     public function connect()
     {
-        $this->linkID = mysql_connect($this->config['dbhost'], $this->config['dbuser'], $this->config['dbpass']);
+        $this->linkID = mysqli_connect($this->config['dbhost'], $this->config['dbuser'], $this->config['dbpass'], $this->config['dbname']);
         if ($this->linkID === FALSE)
         {
             xhprof_error("Could not connect to db");
@@ -45,36 +46,35 @@ class Db_Mysql extends Db_Abstract
             return false;
         }
         $this->query("SET NAMES utf8");
-        mysql_select_db($this->config['dbname'], $this->linkID);
     }
     
     public function query($sql)
     {
-        return mysql_query($sql, $this->linkID);
+        return mysqli_query($this->linkID, $sql);
     }
     
-    public static function getNextAssoc($resultSet)
+    public function getNextAssoc($resultSet)
     {
-        return mysql_fetch_assoc($resultSet);
+        return mysqli_fetch_assoc($resultSet);
     }
     
     public function escape($str)
     {
-        return mysql_real_escape_string($str, $this->linkID);
+        return mysqli_real_escape_string($this->linkID, $str);
     }
     
     public function affectedRows()
     {
-        return mysql_affected_rows($this->linkID);
+        return mysqli_affected_rows($this->linkID);
     }
-    
+
     public static function unixTimestamp($field)
     {
-        return 'UNIX_TIMESTAMP('.$field.')';
+        return 'UNIX_TIMESTAMP(' . $field . ')';
     }
-    
+
     public static function dateSub($days)
     {
-        return 'DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY)';
+        return 'DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)';
     }
 }

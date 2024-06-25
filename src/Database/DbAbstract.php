@@ -1,5 +1,8 @@
 <?php
-abstract class Db_Abstract
+
+namespace Xhprof\Database;
+
+abstract class DbAbstract
 {
     protected $config;
     public $linkID;
@@ -24,7 +27,7 @@ abstract class Db_Abstract
         throw new RuntimeException("Method '".get_called_class()."::".__FUNCTION__."' not implemented");
     }
 
-    public static function getNextAssoc($resultSet)
+    public function getNextAssoc($resultSet)
     {
         throw new RuntimeException("Method '".get_called_class()."::".__FUNCTION__."' not implemented");
     }

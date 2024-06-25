@@ -31,49 +31,64 @@
 
  */
 
-require_once XHPROF_LIB_ROOT.'/utils/Db/Abstract.php';
-class Db_Mysqli extends Db_Abstract
+namespace Xhprof\Database;
+
+class Pdo extends DbAbstract
 {
+    protected $curStmt;
     
     public function connect()
     {
-        $this->linkID = mysqli_connect($this->config['dbhost'], $this->config['dbuser'], $this->config['dbpass'], $this->config['dbname']);
-        if ($this->linkID === FALSE)
+        $connectionString = $this->config['dbtype'] . ':host=' . $this->config['dbhost'] . ';dbname=' . $this->config['dbname'];
+        $db = new PDO($connectionString, $this->config['dbuser'], $this->config['dbpass']);
+        if ($db === FALSE)
         {
             xhprof_error("Could not connect to db");
+            $run_desc = "could not connect to db";
             throw new Exception("Unable to connect to database");
             return false;
         }
-        $this->query("SET NAMES utf8");
+        $this->db = $db;
+        $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     }
     
     public function query($sql)
     {
-        return mysqli_query($this->linkID, $sql);
+        $this->curStmt = $this->db->query($sql);
+        return $this->curStmt;
     }
     
-    public static function getNextAssoc($resultSet)
+    public function getNextAssoc($resultSet)
     {
-        return mysqli_fetch_assoc($resultSet);
+        return $resultSet->fetch();
     }
     
     public function escape($str)
     {
-        return mysqli_real_escape_string($this->linkID, $str);
+        $str = $this->db->quote($str);
+        // @todo update this
+        //Dirty trick, PDO::quote add quote around values (you're beautiful => 'you\'re beautiful')
+        // which are already added in xhprof_runs.php
+        $str = substr($str, 0, -1);
+        $str = substr($str, 1);
+        return $str;
     }
     
     public function affectedRows()
     {
-        return mysqli_affected_rows($this->linkID);
+        if ($this->curStmt === false) {
+            return 0;
+        }
+        return $this->curStmt->rowCount();
     }
-
+    
     public static function unixTimestamp($field)
     {
-        return 'UNIX_TIMESTAMP(' . $field . ')';
+        return 'UNIX_TIMESTAMP('.$field.')';
     }
-
+    
     public static function dateSub($days)
     {
-        return 'DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)';
+        return 'DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY)';
     }
 }

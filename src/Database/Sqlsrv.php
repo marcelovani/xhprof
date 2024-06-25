@@ -44,8 +44,9 @@ CREATE NONCLUSTERED INDEX dbo.timestamp
   
 */
 
-require_once XHPROF_LIB_ROOT.'/utils/Db/Abstract.php';
-class Db_Sqlsrv extends Db_Abstract
+namespace Xhprof\Database;
+
+class Sqlsrv extends DbAbstract
 {
     protected $curStmt;
     
@@ -68,7 +69,7 @@ class Db_Sqlsrv extends Db_Abstract
         return sqlsrv_execute($this->curStmt);
     }
     
-    public static function getNextAssoc($resultSet)
+    public function getNextAssoc($resultSet)
     {
         return sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
     }

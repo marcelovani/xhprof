@@ -31,54 +31,42 @@
 
  */
 
-require_once XHPROF_LIB_ROOT.'/utils/Db/Abstract.php';
-class Db_Pdo extends Db_Abstract
+namespace Xhprof\Database;
+
+class Mysql extends DbAbstract
 {
-    protected $curStmt;
     
     public function connect()
     {
-        $connectionString = $this->config['dbtype'] . ':host=' . $this->config['dbhost'] . ';dbname=' . $this->config['dbname'];
-        $db = new PDO($connectionString, $this->config['dbuser'], $this->config['dbpass']);
-        if ($db === FALSE)
+        $this->linkID = mysql_connect($this->config['dbhost'], $this->config['dbuser'], $this->config['dbpass']);
+        if ($this->linkID === FALSE)
         {
             xhprof_error("Could not connect to db");
-            $run_desc = "could not connect to db";
             throw new Exception("Unable to connect to database");
             return false;
         }
-        $this->db = $db;
-        $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        $this->query("SET NAMES utf8");
+        mysql_select_db($this->config['dbname'], $this->linkID);
     }
     
     public function query($sql)
     {
-        $this->curStmt = $this->db->query($sql);
-        return $this->curStmt;
+        return mysql_query($sql, $this->linkID);
     }
     
-    public static function getNextAssoc($resultSet)
+    public function getNextAssoc($resultSet)
     {
-        return $resultSet->fetch();
+        return mysql_fetch_assoc($resultSet);
     }
     
     public function escape($str)
     {
-        $str = $this->db->quote($str);
-        // @todo update this
-        //Dirty trick, PDO::quote add quote around values (you're beautiful => 'you\'re beautiful')
-        // which are already added in xhprof_runs.php
-        $str = substr($str, 0, -1);
-        $str = substr($str, 1);
-        return $str;
+        return mysql_real_escape_string($str, $this->linkID);
     }
     
     public function affectedRows()
     {
-        if ($this->curStmt === false) {
-            return 0;
-        }
-        return $this->curStmt->rowCount();
+        return mysql_affected_rows($this->linkID);
     }
     
     public static function unixTimestamp($field)

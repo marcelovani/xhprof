@@ -149,7 +149,6 @@ unset($flagsCpu);
 unset($flagsMemory);
 function xhprof_shutdown_function()
 {
-    global $_xhprof;
     require dirname(__FILE__) . '/footer.php';
 }
 

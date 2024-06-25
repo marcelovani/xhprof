@@ -5,11 +5,15 @@
 
 namespace Xhprof\Controller;
 
+use Xhprof\Config\ConfigLoader;
+
 /**
  * @class Callgraph.
  */
 class Callgraph
 {
+
+    private $config;
 
     // Supported ouput format
     private $xhprof_legal_image_types = array(
@@ -624,12 +628,12 @@ class Callgraph
      * @author cjiang
      */
     public function generateDotImage($dot_script, $type) {
-        // get config => yep really dirty - but unobstrusive
-        global $_xhprof;
+        $config_loader = new ConfigLoader();
+        $this->config = $config_loader->get();
 
-        $errorFile    = $_xhprof['dot_errfile'];
-        $tmpDirectory = $_xhprof['dot_tempdir'];
-        $dotBinary    = $_xhprof['dot_binary'];
+        $errorFile    = $this->config['dot_errfile'];
+        $tmpDirectory = $this->config['dot_tempdir'];
+        $dotBinary    = $this->config['dot_binary'];
 
         // detect windows
         if (stristr(PHP_OS, 'WIN') && !stristr(PHP_OS, 'Darwin')) {
