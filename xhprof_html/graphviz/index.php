@@ -5,7 +5,7 @@ use \Xhprof\Request\Params;
 use Xhprof\Utils;
 use Xhprof\View\XhprofView;
 
-if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
+if (false !== $config->get('control_ips') && !in_array($_SERVER['REMOTE_ADDR'], $config->get('control_ips'))) {
     die("You do not have permission to view this page.");
 }
 

@@ -52,7 +52,7 @@ class visibilitator
 }
 
 // Only users from authorized IP addresses may control Profiling
-if ($controlIPs === false || in_array($_SERVER['REMOTE_ADDR'], $controlIPs) || PHP_SAPI == 'cli') {
+if ($config->get('control_ips') === false || in_array($_SERVER['REMOTE_ADDR'], $config->get('control_ips')) || PHP_SAPI == 'cli') {
     /* Backwards Compatibility getparam check*/
     if (!isset($config->get('getparam'))) {
         $config->get('getparam') = '_profile';

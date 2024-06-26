@@ -15,11 +15,9 @@ require XHPROF_CONFIG;
 
 require_once XHPROF_LIB_ROOT . '/display/xhprof.php';
 
-if (false !== $controlIPs && !in_array($_SERVER['REMOTE_ADDR'], $controlIPs)) {
+if (false !== $config->get('control_ips') && !in_array($_SERVER['REMOTE_ADDR'], $config->get('control_ips'))) {
     die("You do not have permission to view this page.");
 }
-
-unset($controlIPs);
 
 // param name, its type, and default value
 $valid_params = array('run' => array(XHPROF_STRING_PARAM, ''),

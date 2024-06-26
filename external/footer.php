@@ -11,7 +11,7 @@ if ($config->get('ext_name') && $config->get('doprofile') === true) {
     $profiler_namespace = $config->get('namespace');  // namespace for your application
     $xhprof_data = call_user_func($config->get('ext_name') . '_disable');
     $xhprof_runs = new XhprofRuns();
-    $run_id = $xhprof_runs->save_run($xhprof_data, $profiler_namespace, null, $_xhprof);
+    $run_id = $xhprof_runs->save_run($xhprof_data, $profiler_namespace, null, $config->get());
     if ($config->get('display') === true && PHP_SAPI != 'cli' && !isset($isAjax))
     {
         // url to the XHProf UI libraries (change the host name and path)

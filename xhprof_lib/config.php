@@ -9,24 +9,12 @@ use Xhprof\Config\ConfigManager;
 
 $config = new ConfigManager();
 
-// @todo delete this variable and use from class only.
-$_xhprof = $config->get();
-
 // @todo find out what is this
 $ignoreURLs = array();
 $ignoreDomains = array();
 $exceptionURLs = array();
 $exceptionPostURLs = array();
 $exceptionPostURLs[] = "login";
-
-//@todo move this
-//Control IPs allow you to specify which IPs will be permitted to control when profiling is on or off within your application, and view the results via the UI.
-//$controlIPs = array();
-//$controlIPs[] = "127.0.0.1";   // localhost, you'll want to add your own ip here
-//$controlIPs[] = "::1";         // localhost IP v6
-$controlIPs = false; //Disables access controls completely.
-
-//$otherURLS = array();
 
 //@todo check this
 // ignore builtin functions and call_user_func* during profiling
@@ -37,5 +25,5 @@ $config->set('weight', 100);
 
 if ($domain_weight = getenv('xhprof_weight')) {
     $config->set('weight', $domain_weight);
+    unset($domain_weight);
 }
-unset($domain_weight);

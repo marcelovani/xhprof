@@ -26,6 +26,7 @@ class ConfigManager
         $this->setEnv();
         $this->setDbConfig();
         $this->setSerializer();
+        $this->setControlIps();
         $this->config['display'] = false;
         $this->config['doprofile'] = false;
 
@@ -72,6 +73,15 @@ class ConfigManager
     private function setSerializer()
     {
         $this->config['serializer'] = 'php';
+    }
+
+    private function setControlIps()
+    {
+        if (!isset($_ENV['CONTROL_IPS']) || $_ENV['CONTROL_IPS'] == 'false') {
+            $this->config['control_ips'] = false;
+        } else {
+            $this->config['control_ips'] = explode(',', $_ENV['CONTROL_IPS']);
+        }
     }
 
     /**
