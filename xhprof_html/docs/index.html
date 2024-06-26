@@ -730,7 +730,7 @@ then do something like:
 
 <p> You can then rollup/aggregate these individual profiles by time
 (e.g., 5 minutely/hourly/daily basis), page/request type,or other
-dimensions using <a href="#xhprof_aggregate_runs"><code><b>xhprof_aggregate_runs()</b></code></a>.
+dimensions using <a href="#aggregateRuns"><code><b>aggregateRuns()</b></code></a>.
 
 </ul>
 
@@ -761,18 +761,18 @@ aggregating XHProf runs.
 
 <ul>
 
-<a name="xhprof_aggregate_runs"></a>
-<p><li><code><b>xhprof_aggregate_runs()</b></code>:
+<a name="aggregateRuns"></a>
+<p><li><code><b>aggregateRuns()</b></code>:
 can be used to aggregate multiple XHProf runs into a single run. This
 can be helpful for building a system-wide "function-level" performance
 monitoring tool using XHProf. [For example, you might to roll up
 XHProf runs sampled from production periodically to generate hourly,
 daily, reports.]
 
-<p><li><code><b>xhprof_prune_run()</b></code>: Aggregating large number of
+<p><li><code><b>pruneRun()</b></code>: Aggregating large number of
 XHProf runs (especially if they correspond to different types of
 programs) can result in the callgraph size becoming too large. You can
-use <code>xhprof_prune_run</code> function to prune the callgraph data
+use <code>pruneRun</code> function to prune the callgraph data
 by editing out subtrees that account for a very small portion of the
 total time.
 

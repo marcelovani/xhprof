@@ -1,10 +1,10 @@
 <?php
-    $base_url_params = xhprof_array_unset(xhprof_array_unset($url_params, 'run1'), 'run2');
+    $base_url_params = $this->xhprof_lib->arrayUnset($this->xhprof_lib->arrayUnset($url_params, 'run1'), 'run2');
     $href1 = "$base_path/?" .
-      http_build_query(xhprof_array_set($base_url_params,
+      http_build_query($this->xhprof_lib->arraySet($base_url_params,
                                         'run', $run1));
     $href2 = "$base_path/?" .
-      http_build_query(xhprof_array_set($base_url_params,
+      http_build_query($this->xhprof_lib->arraySet($base_url_params,
                                         'run', $run2));
 
 print('<div id="view-diff-tables">');

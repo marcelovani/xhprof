@@ -6,6 +6,7 @@
 namespace Xhprof\Controller;
 
 use Xhprof\View\XhprofView;
+use Xhprof\XhprofLib;
 
 /**
  * Report class.
@@ -18,9 +19,15 @@ class Report
      */
     private $view;
 
+    /**
+     * @var XhprofLib;
+     */
+    private $xhprof_lib;
+
     public function __construct()
     {
         $this->view = new XhprofView();
+        $this->xhprof_lib = new XhprofLib();
     }
 
     /**
@@ -81,7 +88,7 @@ class Report
                 } else {
                     $wts_array = null;
                 }
-                $data = xhprof_aggregate_runs($xhprof_runs_impl,
+                $data = $this->xhprof_lib->aggregateRuns($xhprof_runs_impl,
                     $runs_array, $wts_array, $source, false);
                 $xhprof_data = $data['raw'];
                 $description = $data['description'];
@@ -198,7 +205,7 @@ class Report
 
         $pc_stats = $stats;
 
-        $possible_metrics = xhprof_get_possible_metrics($xhprof_data);
+        $possible_metrics = $this->xhprof_lib->getPossibleMetrics($xhprof_data);
         foreach ($possible_metrics as $metric => $desc) {
             if (isset($xhprof_data["main()"][$metric])) {
                 $metrics[] = $metric;
@@ -243,27 +250,27 @@ class Report
 
         // if we are reporting on a specific function, we can trim down
         // the report(s) to just stuff that is relevant to this function.
-        // That way compute_flat_info()/compute_diff() etc. do not have
+        // That way computeFlatInfo()/compute_diff() etc. do not have
         // to needlessly work hard on churning irrelevant data.
         if (!empty($rep_symbol)) {
-            $run1_data = xhprof_trim_run($run1_data, array($rep_symbol));
+            $run1_data = $this->xhprof_lib->trimRun($run1_data, array($rep_symbol));
             if ($diff_mode) {
-                $run2_data = xhprof_trim_run($run2_data, array($rep_symbol));
+                $run2_data = $this->xhprof_lib->trimRun($run2_data, array($rep_symbol));
             }
         }
 
         if ($diff_mode) {
-            $run_delta = xhprof_compute_diff($run1_data, $run2_data);
-            $symbol_tab = xhprof_compute_flat_info($run_delta, $totals);
-            $symbol_tab1 = xhprof_compute_flat_info($run1_data, $totals_1);
-            $symbol_tab2 = xhprof_compute_flat_info($run2_data, $totals_2);
+            $run_delta = $this->xhprof_lib->computeDiff($run1_data, $run2_data);
+            $symbol_tab = $this->xhprof_lib->computeFlatInfo($run_delta, $totals);
+            $symbol_tab1 = $this->xhprof_lib->computeFlatInfo($run1_data, $totals_1);
+            $symbol_tab2 = $this->xhprof_lib->computeFlatInfo($run2_data, $totals_2);
         } else {
-            $symbol_tab = xhprof_compute_flat_info($run1_data, $totals);
+            $symbol_tab = $this->xhprof_lib->computeFlatInfo($run1_data, $totals);
         }
 
         $run1_txt = sprintf("<b>Run #%s:</b> %s", $run1, $run1_desc);
 
-        $base_url_params = xhprof_array_unset(xhprof_array_unset($url_params,
+        $base_url_params = $this->xhprof_lib->arrayUnset($this->xhprof_lib->arrayUnset($url_params,
             'func'),
             'all');
 
@@ -271,11 +278,11 @@ class Report
 
         if ($diff_mode) {
             $diff_text = "Diff";
-            $base_url_params = xhprof_array_unset($base_url_params, 'run1');
-            $base_url_params = xhprof_array_unset($base_url_params, 'run2');
+            $base_url_params = $this->xhprof_lib->arrayUnset($base_url_params, 'run1');
+            $base_url_params = $this->xhprof_lib->arrayUnset($base_url_params, 'run2');
             $run1_link = $this->getView()->renderLink('View Run #' . $run1,
                 "$base_path/?" .
-                http_build_query(xhprof_array_set($base_url_params,
+                http_build_query($this->xhprof_lib->arraySet($base_url_params,
                     'run',
                     $run1)));
             $run2_txt = sprintf("<b>Run #%s:</b> %s",
@@ -283,7 +290,7 @@ class Report
 
             $run2_link = $this->getView()->renderLink('View Run #' . $run2,
                 "$base_path/?" .
-                http_build_query(xhprof_array_set($base_url_params,
+                http_build_query($this->xhprof_lib->arraySet($base_url_params,
                     'run',
                     $run2)));
         } else {
@@ -381,7 +388,7 @@ class Report
         global $display_calls;
         global $base_path;
 
-        $possible_metrics = xhprof_get_possible_metrics();
+        $possible_metrics = $this->xhprof_lib->getPossibleMetrics();
         $view = $this->getView();
 
         if ($diff_mode) {
@@ -455,7 +462,7 @@ class Report
         } else {
             $display_link = $this->view->renderLink(" [ <b class=bubble>display all </b>]",
                 "$base_path/?" .
-                http_build_query(xhprof_array_set($url_params,
+                http_build_query($this->xhprof_lib->arraySet($url_params,
                     'all', 1)));
         }
 

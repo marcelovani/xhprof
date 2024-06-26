@@ -6,6 +6,7 @@
 namespace Xhprof\Controller;
 
 use Xhprof\Config\ConfigLoader;
+use Xhprof\XhprofLib;
 
 /**
  * @class Callgraph.
@@ -15,7 +16,17 @@ class Callgraph
 
     private $config;
 
-    // Supported ouput format
+    /**
+     * @var XhprofLib;
+     */
+    private $xhprof_lib;
+
+    public function __construct()
+    {
+        $this->xhprof_lib = new XhprofLib();
+    }
+
+    // Supported output format
     private $xhprof_legal_image_types = array(
         "jpg" => 1,
         "gif" => 1,
@@ -28,7 +39,6 @@ class Callgraph
     {
         return $this->xhprof_legal_image_types;
     }
-
 
     /**
      * Send an HTTP header with the response. You MUST use this function instead
@@ -88,7 +98,7 @@ class Callgraph
     public function getChildrenTable($raw_data) {
         $children_table = array();
         foreach ($raw_data as $parent_child => $info) {
-            list($parent, $child) = xhprof_parse_parent_child($parent_child);
+            list($parent, $child) = $this->xhprof_lib->parseParentChild($parent_child);
             if (!isset($children_table[$parent])) {
                 $children_table[$parent] = array($child);
             } else {
@@ -143,7 +153,7 @@ class Callgraph
             $func='';
         }
 
-        $sym_table = xhprof_compute_flat_info($raw_data, $totals);
+        $sym_table = $this->xhprof_lib->computeFlatInfo($raw_data, $totals);
 
         // Show internal php functions if the button is selected (default 1).
         if (!$show_internal) {
@@ -206,14 +216,14 @@ class Callgraph
                             continue;
                         }
                         if ($max_child === null ||
-                            abs($raw_data[xhprof_build_parent_child_key($node, $child)]["wt"]) >
-                            abs($raw_data[xhprof_build_parent_child_key($node, $max_child)]["wt"])) {
+                            abs($raw_data[$this->xhprof_lib->buildParentChildKey($node, $child)]["wt"]) >
+                            abs($raw_data[$this->xhprof_lib->buildParentChildKey($node, $max_child)]["wt"])) {
                             $max_child = $child;
                         }
                     }
                     if ($max_child !== null) {
                         $path[$max_child] = true;
-                        $path_edges[xhprof_build_parent_child_key($node, $max_child)] = true;
+                        $path_edges[$this->xhprof_lib->buildParentChildKey($node, $max_child)] = true;
                     }
                     $node = $max_child;
                 } else {
@@ -321,7 +331,7 @@ class Callgraph
         }
 
         foreach ($raw_data as $parent_child => $info) {
-            list($parent, $child) = xhprof_parse_parent_child($parent_child);
+            list($parent, $child) = $this->xhprof_lib->parseParentChild($parent_child);
 
             if (isset($sym_table[$parent]) && isset($sym_table[$child]) &&
                 (empty($func) ||
@@ -345,7 +355,7 @@ class Callgraph
                 $arrow_size = 1;
 
                 if ($critical_path &&
-                    isset($path_edges[xhprof_build_parent_child_key($parent, $child)])) {
+                    isset($path_edges[$this->xhprof_lib->buildParentChildKey($parent, $child)])) {
                     $linewidth = 10; $arrow_size=2;
                 }
 
@@ -371,15 +381,16 @@ class Callgraph
         $total1 = 0;
         $total2 = 0;
 
+        $desc_unused = '';
         list($raw_data1, $a) = $xhprof_runs_impl->get_run($run1, $source, $desc_unused);
         list($raw_data2, $b) = $xhprof_runs_impl->get_run($run2, $source, $desc_unused);
 
         // init_metrics($raw_data1, null, null);
         $children_table1 = xhprof_get_children_table($raw_data1);
         $children_table2 = xhprof_get_children_table($raw_data2);
-        $symbol_tab1 = xhprof_compute_flat_info($raw_data1, $total1);
-        $symbol_tab2 = xhprof_compute_flat_info($raw_data2, $total2);
-        $run_delta = xhprof_compute_diff($raw_data1, $raw_data2);
+        $symbol_tab1 = $this->xhprof_lib->computeFlatInfo($raw_data1, $total1);
+        $symbol_tab2 = $this->xhprof_lib->computeFlatInfo($raw_data2, $total2);
+        $run_delta = $this->xhprof_lib->computeDiff($raw_data1, $raw_data2);
         $digraph = $this->generateDotScript($run_delta, $threshold, $source,
             null, null, true,
             $symbol_tab1, $symbol_tab2);
@@ -438,7 +449,7 @@ class Callgraph
 
         // Create a map of each parent to its direct children
         foreach ($data as $key => $item) {
-            list($parent, $child) = xhprof_parse_parent_child($item);
+            list($parent, $child) = $this->xhprof_lib->parseParentChild($item);
 
             if (!isset($childrenMap[$item])) {
                 $childrenMap[$item] = [];
@@ -498,6 +509,7 @@ class Callgraph
         if (!$run_id)
             return;
 
+        $description = '';
         list($raw_data, $a) = $xhprof_runs_impl->get_run($run_id, $source, $description);
 
         if (!$raw_data) {
@@ -535,6 +547,7 @@ class Callgraph
         if (!$run_id)
             return "";
 
+        $description = '';
         list($raw_data, $a) = $xhprof_runs_impl->get_run($run_id, $source, $description);
         if (!$raw_data) {
             xhprof_error("Raw data is empty");

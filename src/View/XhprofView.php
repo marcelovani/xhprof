@@ -8,12 +8,29 @@ namespace Xhprof\View;
 use Xhprof\Controller\XhprofRuns;
 use Xhprof\Utils;
 use Xhprof\Controller\Chart;
+use Xhprof\XhprofLib;
 
 /**
  * View class.
  */
 class XhprofView
 {
+
+    /**
+     * @var XhprofView
+     */
+    private $view;
+
+    /**
+     * @var XhprofLib
+     */
+    private $xhprof_lib;
+
+    public function __construct()
+    {
+        $this->xhprof_lib = new XhprofLib();
+    }
+
     public static function countFormat($num)
     {
         $num = round($num, 3);
@@ -161,32 +178,32 @@ class XhprofView
         }
 
         $href = "$base_path/?" .
-            http_build_query(xhprof_array_set($url_params,
+            http_build_query($this->xhprof_lib->arraySet($url_params,
                 'func', $info["fn"]));
 
         print('<td>');
-        print($view->renderLink($info["fn"], $href));
+        print($this->renderLink($info["fn"], $href));
         print("</td>\n");
 
         if ($display_calls) {
             // Call Count..
-            $view->printTdNum($info["ct"], $format_cbk["ct"], ($sort_col == "ct"));
-            $view->printTdPercent($info["ct"], $totals["ct"], ($sort_col == "ct"));
+            $this->printTdNum($info["ct"], $format_cbk["ct"], ($sort_col == "ct"));
+            $this->printTdPercent($info["ct"], $totals["ct"], ($sort_col == "ct"));
         }
 
         // Other metrics..
         foreach ($metrics as $metric) {
             // Inclusive metric
-            $view->printTdNum($info[$metric], $format_cbk[$metric],
+            $this->printTdNum($info[$metric], $format_cbk[$metric],
                 ($sort_col == $metric));
-            $view->printTdPercent($info[$metric], $totals[$metric],
+            $this->printTdPercent($info[$metric], $totals[$metric],
                 ($sort_col == $metric));
 
             // Exclusive Metric
-            $view->printTdNum($info["excl_" . $metric],
+            $this->printTdNum($info["excl_" . $metric],
                 $format_cbk["excl_" . $metric],
                 ($sort_col == "excl_" . $metric));
-            $view->printTdPercent($info["excl_" . $metric],
+            $this->printTdPercent($info["excl_" . $metric],
                 $totals[$metric],
                 ($sort_col == "excl_" . $metric));
         }
@@ -428,8 +445,6 @@ class XhprofView
                                  $run2 = 0,
                                  $symbol_info2 = null)
     {
-        $view = new XhprofView();
-
         // @todo delete all globals.
         global $vwbar;
         global $vbar;
@@ -444,7 +459,7 @@ class XhprofView
         global $display_calls;
         global $base_path;
 
-        $possible_metrics = xhprof_get_possible_metrics();
+        $possible_metrics = $this->xhprof_lib->getPossibleMetrics();
 
         if ($diff_mode) {
             $diff_text = "<b>Diff</b>";
@@ -456,13 +471,13 @@ class XhprofView
 
         if ($diff_mode) {
 
-            $base_url_params = xhprof_array_unset(xhprof_array_unset($url_params,
+            $base_url_params = $this->xhprof_lib->arrayUnset($this->xhprof_lib->arrayUnset($url_params,
                 'run1'),
                 'run2');
             $href1 = "$base_path?"
-                . http_build_query(xhprof_array_set($base_url_params, 'run', $run1));
+                . http_build_query($this->xhprof_lib->arraySet($base_url_params, 'run', $run1));
             $href2 = "$base_path?"
-                . http_build_query(xhprof_array_set($base_url_params, 'run', $run2));
+                . http_build_query($this->xhprof_lib->arraySet($base_url_params, 'run', $run2));
 
             print("<h3 align=center>$regr_impr summary for $rep_symbol<br /><br /></h3>");
             print('<table cellpadding=2 cellspacing=1 width="30%" '
@@ -478,11 +493,11 @@ class XhprofView
 
             if ($display_calls) {
                 print("<td>Number of Function Calls</td>");
-                $view->printTdNum($symbol_info1["ct"], $format_cbk["ct"]);
-                $view->printTdNum($symbol_info2["ct"], $format_cbk["ct"]);
-                $view->printTdNum($symbol_info2["ct"] - $symbol_info1["ct"],
+                $this->printTdNum($symbol_info1["ct"], $format_cbk["ct"]);
+                $this->printTdNum($symbol_info2["ct"], $format_cbk["ct"]);
+                $this->printTdNum($symbol_info2["ct"] - $symbol_info1["ct"],
                     $format_cbk["ct"], true);
-                $view->printTdPercent($symbol_info2["ct"] - $symbol_info1["ct"],
+                $this->printTdPercent($symbol_info2["ct"] - $symbol_info1["ct"],
                     $symbol_info1["ct"], true);
                 print('</tr>');
             }
@@ -493,10 +508,10 @@ class XhprofView
                 // Inclusive stat for metric
                 print('<tr>');
                 print("<td>" . str_replace("<br />", " ", $descriptions[$m]) . "</td>");
-                $view->printTdNum($symbol_info1[$m], $format_cbk[$m]);
-                $view->printTdNum($symbol_info2[$m], $format_cbk[$m]);
-                $view->printTdNum($symbol_info2[$m] - $symbol_info1[$m], $format_cbk[$m], true);
-                $view->printTdPercent($symbol_info2[$m] - $symbol_info1[$m], $symbol_info1[$m], true);
+                $this->printTdNum($symbol_info1[$m], $format_cbk[$m]);
+                $this->printTdNum($symbol_info2[$m], $format_cbk[$m]);
+                $this->printTdNum($symbol_info2[$m] - $symbol_info1[$m], $format_cbk[$m], true);
+                $this->printTdPercent($symbol_info2[$m] - $symbol_info1[$m], $symbol_info1[$m], true);
                 print('</tr>');
 
                 // AVG (per call) Inclusive stat for metric
@@ -510,20 +525,20 @@ class XhprofView
                 if ($symbol_info2['ct'] > 0) {
                     $avg_info2 = ($symbol_info2[$m] / $symbol_info2['ct']);
                 }
-                $view->printTdNum($avg_info1, $format_cbk[$m]);
-                $view->printTdNum($avg_info2, $format_cbk[$m]);
-                $view->printTdNum($avg_info2 - $avg_info1, $format_cbk[$m], true);
-                $view->printTdPercent($avg_info2 - $avg_info1, $avg_info1, true);
+                $this->printTdNum($avg_info1, $format_cbk[$m]);
+                $this->printTdNum($avg_info2, $format_cbk[$m]);
+                $this->printTdNum($avg_info2 - $avg_info1, $format_cbk[$m], true);
+                $this->printTdPercent($avg_info2 - $avg_info1, $avg_info1, true);
                 print('</tr>');
 
                 // Exclusive stat for metric
                 $m = "excl_" . $metric;
                 print('<tr>');
                 print("<td>" . str_replace("<br />", " ", $descriptions[$m]) . "</td>");
-                $view->printTdNum($symbol_info1[$m], $format_cbk[$m]);
-                $view->printTdNum($symbol_info2[$m], $format_cbk[$m]);
-                $view->printTdNum($symbol_info2[$m] - $symbol_info1[$m], $format_cbk[$m], true);
-                $view->printTdPercent($symbol_info2[$m] - $symbol_info1[$m], $symbol_info1[$m], true);
+                $this->printTdNum($symbol_info1[$m], $format_cbk[$m]);
+                $this->printTdNum($symbol_info2[$m], $format_cbk[$m]);
+                $this->printTdNum($symbol_info2[$m] - $symbol_info1[$m], $format_cbk[$m], true);
+                $this->printTdPercent($symbol_info2[$m] - $symbol_info1[$m], $symbol_info1[$m], true);
                 print('</tr>');
             }
 
@@ -534,7 +549,7 @@ class XhprofView
         print("Parent/Child $regr_impr report for <b>$rep_symbol</b></h1>");
 
 //  $callgraph_href = "$base_path/graphviz/?"
-//    . http_build_query(xhprof_array_set($url_params, 'func', $rep_symbol));
+//    . http_build_query($this->xhprof_lib->arraySet($url_params, 'func', $rep_symbol));
 //  print(" <a class='callgraph' href='$callgraph_href'>View Callgraph $diff_text</a><br />");
 
         $id = @$_GET['run'];
@@ -553,9 +568,9 @@ class XhprofView
             if (array_key_exists($stat, $sortable_columns)) {
 
                 $href = "$base_path/?" .
-                    http_build_query(xhprof_array_set($url_params,
+                    http_build_query($this->xhprof_lib->arraySet($url_params,
                         'sort', $stat));
-                $header = $view->renderLink($desc, $href);
+                $header = $this->renderLink($desc, $href);
             } else {
                 $header = $desc;
             }
@@ -577,14 +592,14 @@ class XhprofView
 
         if ($display_calls) {
             // Call Count
-            $view->printTdNum($symbol_info["ct"], $format_cbk["ct"]);
-            $view->printTdPercent($symbol_info["ct"], $totals["ct"]);
+            $this->printTdNum($symbol_info["ct"], $format_cbk["ct"]);
+            $this->printTdPercent($symbol_info["ct"], $totals["ct"]);
         }
 
         // Inclusive Metrics for current function
         foreach ($metrics as $metric) {
-            $view->printTdNum($symbol_info[$metric], $format_cbk[$metric], ($sort_col == $metric));
-            $view->printTdPercent($symbol_info[$metric], $totals[$metric], ($sort_col == $metric));
+            $this->printTdNum($symbol_info[$metric], $format_cbk[$metric], ($sort_col == $metric));
+            $this->printTdPercent($symbol_info[$metric], $totals[$metric], ($sort_col == $metric));
         }
         print("</tr>");
 
@@ -600,10 +615,10 @@ class XhprofView
 
         // Exclusive Metrics for current function
         foreach ($metrics as $metric) {
-            $view->printTdNum($symbol_info["excl_" . $metric], $format_cbk["excl_" . $metric],
+            $this->printTdNum($symbol_info["excl_" . $metric], $format_cbk["excl_" . $metric],
                 ($sort_col == $metric),
                 $this->getTooltipAttributes("Child", $metric));
-            $view->printTdPercent($symbol_info["excl_" . $metric], $symbol_info[$metric],
+            $this->printTdPercent($symbol_info["excl_" . $metric], $symbol_info[$metric],
                 ($sort_col == $metric),
                 $this->getTooltipAttributes("Child", $metric));
         }
@@ -620,7 +635,7 @@ class XhprofView
             $base_info[$metric] = $symbol_info[$metric];
         }
         foreach ($run_data as $parent_child => $info) {
-            list($parent, $child) = xhprof_parse_parent_child($parent_child);
+            list($parent, $child) = $this->xhprof_lib->parseParentChild($parent_child);
             if (($child == $rep_symbol) && ($parent)) {
                 $info_tmp = $info;
                 $info_tmp["fn"] = $parent;
@@ -638,7 +653,7 @@ class XhprofView
         $results = array();
         $base_ct = 0;
         foreach ($run_data as $parent_child => $info) {
-            list($parent, $child) = xhprof_parse_parent_child($parent_child);
+            list($parent, $child) = $this->xhprof_lib->parseParentChild($parent_child);
             if ($parent == $rep_symbol) {
                 $info_tmp = $info;
                 $info_tmp["fn"] = $child;
@@ -731,7 +746,6 @@ class XhprofView
      */
     private function printPcArray($url_params, $results, $base_ct, $base_info, $parent, $run1, $run2)
     {
-        $view = new XhprofView();
         global $base_path;
 
         // Construct section title
@@ -751,7 +765,7 @@ class XhprofView
         $odd_even = 0;
         foreach ($results as $info) {
             $href = "$base_path/?" .
-                http_build_query(xhprof_array_set($url_params,
+                http_build_query($this->xhprof_lib->arraySet($url_params,
                     'func', $info["fn"]));
             $odd_even = 1 - $odd_even;
 
@@ -761,7 +775,7 @@ class XhprofView
                 print('<tr>');
             }
 
-            print("<td>" . $view->renderLink($info["fn"], $href) . "</td>");
+            print("<td>" . $this->renderLink($info["fn"], $href) . "</td>");
             $this->pcInfo($info, $base_ct, $base_info, $parent);
             print("</tr>");
         }
@@ -775,8 +789,6 @@ class XhprofView
      */
     private function pcInfo($info, $base_ct, $base_info, $parent)
     {
-        $view = new XhprofView();
-
         global $sort_col;
         global $metrics;
         global $format_cbk;
@@ -790,16 +802,16 @@ class XhprofView
         if ($display_calls) {
             $mouseoverct = $this->getTooltipAttributes($type, "ct");
             /* call count */
-            $view->printTdNum($info["ct"], $format_cbk["ct"], ($sort_col == "ct"), $mouseoverct);
-            $view->printTdPercent($info["ct"], $base_ct, ($sort_col == "ct"), $mouseoverct);
+            $this->printTdNum($info["ct"], $format_cbk["ct"], ($sort_col == "ct"), $mouseoverct);
+            $this->printTdPercent($info["ct"], $base_ct, ($sort_col == "ct"), $mouseoverct);
         }
 
         /* Inclusive metric values  */
         foreach ($metrics as $metric) {
-            $view->printTdNum($info[$metric], $format_cbk[$metric],
+            $this->printTdNum($info[$metric], $format_cbk[$metric],
                 ($sort_col == $metric),
                 $this->getTooltipAttributes($type, $metric));
-            $view->printTdPercent($info[$metric], $base_info[$metric], ($sort_col == $metric),
+            $this->printTdPercent($info[$metric], $base_info[$metric], ($sort_col == $metric),
                 $this->getTooltipAttributes($type, $metric));
         }
     }
