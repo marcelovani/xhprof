@@ -49,28 +49,6 @@ class Params
     ];
 
     /**
-     * Getter for params.
-     *
-     * @param $param
-     * @return int|void
-     */
-    public function get($param) {
-        if (isset($this->params[$param])) {
-            return $this->params[$param];
-        }
-    }
-
-    /**
-     * Getter for all params
-     *
-     * @return array
-     *   The list of params.
-     */
-    public function getAll() {
-        return $this->params;
-    }
-
-    /**
      * Constructor
      *
      * @param array $valid_params
@@ -101,65 +79,6 @@ class Params
         }
 
         return $this;
-    }
-
-    /**
-     * Helper to provide the function to handle the param based on param type.
-     *
-     * @param int $type
-     *   The param type.
-     * @return string
-     *   The function name.
-     */
-    private function getParamFunction($type)
-    {
-        switch ($type) {
-            case XHPROF_STRING_PARAM:
-                $function = 'xhprof_get_string_param';
-                break;
-
-            case XHPROF_UINT_PARAM:
-                $function = 'xhprof_get_uint_param';
-                break;
-
-            case XHPROF_FLOAT_PARAM:
-                $function = 'xhprof_get_float_param';
-                break;
-
-            case XHPROF_BOOL_PARAM:
-                $function = 'xhprof_get_bool_param';
-                break;
-
-            case XHPROF_URL_PARAM:
-                $function = 'xhprof_get_url_param';
-                break;
-
-            default:
-                xhprof_error("Invalid param type passed to getParamFunction(): " . $type);
-                exit();
-        }
-
-        return $function;
-    }
-
-    /**
-     * Internal helper function used by various
-     * xhprof_get_param* flavors for various
-     * types of parameters.
-     *
-     * @param string   name of the URL query string param
-     *
-     * @author Kannan
-     */
-    private function getParamHelper($param)
-    {
-        $val = null;
-        if (isset($_GET[$param]))
-            $val = $_GET[$param];
-        else if (isset($_POST[$param])) {
-            $val = $_POST[$param];
-        }
-        return $val;
     }
 
     /**
@@ -230,5 +149,88 @@ class Params
                 }
             }
         }
+    }
+
+    /**
+     * Internal helper function used by various
+     * xhprof_get_param* flavors for various
+     * types of parameters.
+     *
+     * @param string   name of the URL query string param
+     *
+     * @author Kannan
+     */
+    private function getParamHelper($param)
+    {
+        $val = null;
+        if (isset($_GET[$param]))
+            $val = $_GET[$param];
+        else if (isset($_POST[$param])) {
+            $val = $_POST[$param];
+        }
+        return $val;
+    }
+
+    /**
+     * Helper to provide the function to handle the param based on param type.
+     *
+     * @param int $type
+     *   The param type.
+     * @return string
+     *   The function name.
+     */
+    private function getParamFunction($type)
+    {
+        switch ($type) {
+            case XHPROF_STRING_PARAM:
+                $function = 'xhprof_get_string_param';
+                break;
+
+            case XHPROF_UINT_PARAM:
+                $function = 'xhprof_get_uint_param';
+                break;
+
+            case XHPROF_FLOAT_PARAM:
+                $function = 'xhprof_get_float_param';
+                break;
+
+            case XHPROF_BOOL_PARAM:
+                $function = 'xhprof_get_bool_param';
+                break;
+
+            case XHPROF_URL_PARAM:
+                $function = 'xhprof_get_url_param';
+                break;
+
+            default:
+                xhprof_error("Invalid param type passed to getParamFunction(): " . $type);
+                exit();
+        }
+
+        return $function;
+    }
+
+    /**
+     * Getter for params.
+     *
+     * @param $param
+     * @return int|void
+     */
+    public function get($param)
+    {
+        if (isset($this->params[$param])) {
+            return $this->params[$param];
+        }
+    }
+
+    /**
+     * Getter for all params
+     *
+     * @return array
+     *   The list of params.
+     */
+    public function getAll()
+    {
+        return $this->params;
     }
 }

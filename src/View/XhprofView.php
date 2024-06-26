@@ -5,9 +5,9 @@
 
 namespace Xhprof\View;
 
+use Xhprof\Controller\Chart;
 use Xhprof\Controller\XhprofRuns;
 use Xhprof\Utils;
-use Xhprof\Controller\Chart;
 use Xhprof\XhprofLib;
 
 /**
@@ -81,15 +81,12 @@ class XhprofView
         }
     }
 
-    /**
-     * Wrapper for showChart class.
-     *
-     * @return string
-     *   The chart markup.
-     */
-    public function showChart($rs, $flip) {
-        $chart = new Chart();
-        return $chart->showChart($rs, $flip);
+    public static function sortWT($a, $b)
+    {
+        if ($a['excl_wt'] == $b['excl_wt']) {
+            return 0;
+        }
+        return ($a['excl_wt'] < $b['excl_wt']) ? 1 : -1;
     }
 
     /*
@@ -109,12 +106,16 @@ class XhprofView
  *
  */
 
-    public static function sortWT($a, $b)
+    /**
+     * Wrapper for showChart class.
+     *
+     * @return string
+     *   The chart markup.
+     */
+    public function showChart($rs, $flip)
     {
-        if ($a['excl_wt'] == $b['excl_wt']) {
-            return 0;
-        }
-        return ($a['excl_wt'] < $b['excl_wt']) ? 1 : -1;
+        $chart = new Chart();
+        return $chart->showChart($rs, $flip);
     }
 
     public function aggregateCalls($calls, $rules = null)
@@ -377,7 +378,7 @@ class XhprofView
         $utils = new Utils();
         $api_uri = $utils->ParseEndpointUri();
         if (isset($api_uri['threshold'])) {
-            $current = (float) $api_uri['threshold'];
+            $current = (float)$api_uri['threshold'];
         } else {
             $current = $default;
         }
@@ -411,21 +412,18 @@ class XhprofView
     {
         $suffix = "microsecond";
 
-        if ($time > 1000)
-        {
+        if ($time > 1000) {
             $time = $time / 1000;
             $suffix = "ms";
 
         }
 
-        if ($time > 1000)
-        {
+        if ($time > 1000) {
             $time = $time / 1000;
             $suffix = "s";
         }
 
-        if ($time > 60 && $suffix == "s")
-        {
+        if ($time > 60 && $suffix == "s") {
             $time = $time / 60;
             $suffix = "minutes!";
         }

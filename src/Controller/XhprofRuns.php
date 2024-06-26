@@ -22,9 +22,9 @@
 
 namespace Xhprof\Controller;
 
-use Xhprof\Utils;
-use Xhprof\Database\DbAbstract;
 use Xhprof\Config\ConfigLoader;
+use Xhprof\Database\DbAbstract;
+use Xhprof\Utils;
 
 if (!defined('XHPROF_LIB_ROOT')) {
     define('XHPROF_LIB_ROOT', dirname(dirname(__FILE__)));
@@ -83,14 +83,12 @@ class XhprofRuns implements iXHProfRuns
 
     public $prefix = 't11_';
     public $run_details = null;
-
-    private $config;
-
     /**
      *
      * @var DbAbstract
      */
     protected $db;
+    private $config;
     private $dir = '';
 
     public function __construct($dir = null)

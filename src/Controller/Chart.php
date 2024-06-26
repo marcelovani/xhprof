@@ -2,8 +2,6 @@
 
 namespace Xhprof\Controller;
 
-use Xhprof\Controller\XhprofRuns;
-
 class Chart
 {
     /**
@@ -24,16 +22,15 @@ class Chart
         $arDateIDs = array();
         $runs = new XhprofRuns();
 
-        while($row = $runs->getNextAssoc($rs))
-        {
-            $date[] = "'" . date("Y-m-d", $row['timestamp']) . "'" ;
+        while ($row = $runs->getNextAssoc($rs)) {
+            $date[] = "'" . date("Y-m-d", $row['timestamp']) . "'";
 
             $arCPU[] = $row['cpu'];
             $arWT[] = $row['wt'];
             $arPEAK[] = $row['pmu'];
             $arIDS[] = $row['id'];
 
-            $arDateIDs[] =  "'" . date("Y-m-d", $row['timestamp']) . " <br/> " . $row['id'] . "'";
+            $arDateIDs[] = "'" . date("Y-m-d", $row['timestamp']) . " <br/> " . $row['id'] . "'";
         }
 
         $date = $flip ? array_reverse($date) : $date;
@@ -52,7 +49,7 @@ class Chart
 
 
         ob_start();
-        require (XHPROF_LIB_ROOT."/templates/chart.phtml");
+        require(XHPROF_LIB_ROOT . "/templates/chart.phtml");
         $stuff = ob_get_contents();
         ob_end_clean();
         return array($stuff, "<div id=\"container\" style=\"width: 1000px; height: 500px; margin: 0 auto\"></div>");

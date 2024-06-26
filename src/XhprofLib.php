@@ -16,42 +16,6 @@ class XhprofLib
      *
      * @author Kannan
      */
-    public function getPossibleMetrics()
-    {
-        static $possible_metrics =
-            array("wt" => array("Wall", "microsecs", "walltime"),
-                "ut" => array("User", "microsecs", "user cpu time"),
-                "st" => array("Sys", "microsecs", "system cpu time"),
-                "cpu" => array("Cpu", "microsecs", "cpu time"),
-                "mu" => array("MUse", "bytes", "memory usage"),
-                "pmu" => array("PMUse", "bytes", "peak memory usage"),
-                "samples" => array("Samples", "samples", "cpu time"));
-        return $possible_metrics;
-    }
-
-    /*
- * Get the list of metrics present in $xhprof_data as an array.
- *
- * @author Kannan
- */
-    public function getMetrics($xhprof_data)
-    {
-
-        // get list of valid metrics
-        $possible_metrics = $this->getPossibleMetrics();
-
-        // return those that are present in the raw data.
-        // We'll just look at the root of the subtree for this.
-        $metrics = array();
-        foreach ($possible_metrics as $metric => $desc) {
-            if (isset($xhprof_data["main()"][$metric])) {
-                $metrics[] = $metric;
-            }
-        }
-
-        return $metrics;
-    }
-
     /**
      * Return a trimmed version of the XHProf raw data. Note that the raw
      * data contains one entry for each unique parent/child function
@@ -91,33 +55,28 @@ class XhprofLib
         return $new_raw_data;
     }
 
+    /*
+ * Get the list of metrics present in $xhprof_data as an array.
+ *
+ * @author Kannan
+ */
+
     /**
-     * Takes raw XHProf data that was aggregated over "$num_runs" number
-     * of runs averages/nomalizes the data. Essentially the various metrics
-     * collected are divided by $num_runs.
+     * Takes a parent/child function name encoded as
+     * "a==>b" and returns array("a", "b").
      *
      * @author Kannan
      */
-    public function normalizeMetrics($raw_data, $num_runs)
+    public function parseParentChild($parent_child)
     {
+        $ret = explode("==>", $parent_child);
 
-        if (empty($raw_data) || ($num_runs == 0)) {
-            return $raw_data;
+        // Return if both parent and child are set
+        if (isset($ret[1])) {
+            return $ret;
         }
 
-        $raw_data_total = array();
-
-        if (isset($raw_data["==>main()"]) && isset($raw_data["main()"])) {
-            xhprof_error("XHProf Error: both ==>main() and main() set in raw data...");
-        }
-
-        foreach ($raw_data as $parent_child => $info) {
-            foreach ($info as $metric => $value) {
-                $raw_data_total[$parent_child][$metric] = ($value / $num_runs);
-            }
-        }
-
-        return $raw_data_total;
+        return array(null, $ret[0]);
     }
 
     /**
@@ -151,8 +110,8 @@ class XhprofLib
      * @author Kannan
      */
     public function aggregateRuns($xhprof_runs_impl, $runs,
-                                   $wts, $source = "phprof",
-                                   $use_script_name = false)
+                                  $wts, $source = "phprof",
+                                  $use_script_name = false)
     {
 
         $raw_data_total = null;
@@ -318,6 +277,50 @@ class XhprofLib
     }
 
     /**
+     * Given parent & child function name, composes the key
+     * in the format present in the raw data.
+     *
+     * @author Kannan
+     */
+    public function buildParentChildKey($parent, $child)
+    {
+        if ($parent) {
+            return $parent . "==>" . $child;
+        } else {
+            return $child;
+        }
+    }
+
+    /**
+     * Takes raw XHProf data that was aggregated over "$num_runs" number
+     * of runs averages/nomalizes the data. Essentially the various metrics
+     * collected are divided by $num_runs.
+     *
+     * @author Kannan
+     */
+    public function normalizeMetrics($raw_data, $num_runs)
+    {
+
+        if (empty($raw_data) || ($num_runs == 0)) {
+            return $raw_data;
+        }
+
+        $raw_data_total = array();
+
+        if (isset($raw_data["==>main()"]) && isset($raw_data["main()"])) {
+            xhprof_error("XHProf Error: both ==>main() and main() set in raw data...");
+        }
+
+        foreach ($raw_data as $parent_child => $info) {
+            foreach ($info as $metric => $value) {
+                $raw_data_total[$parent_child][$metric] = ($value / $num_runs);
+            }
+        }
+
+        return $raw_data_total;
+    }
+
+    /**
      * Hierarchical diff:
      * Compute and return difference of two call graphs: Run2 - Run1.
      *
@@ -359,6 +362,57 @@ class XhprofLib
 
         return $xhprof_delta;
     }
+
+    public function getMetrics($xhprof_data)
+    {
+
+        // get list of valid metrics
+        $possible_metrics = $this->getPossibleMetrics();
+
+        // return those that are present in the raw data.
+        // We'll just look at the root of the subtree for this.
+        $metrics = array();
+        foreach ($possible_metrics as $metric => $desc) {
+            if (isset($xhprof_data["main()"][$metric])) {
+                $metrics[] = $metric;
+            }
+        }
+
+        return $metrics;
+    }
+
+    public function getPossibleMetrics()
+    {
+        static $possible_metrics =
+            array("wt" => array("Wall", "microsecs", "walltime"),
+                "ut" => array("User", "microsecs", "user cpu time"),
+                "st" => array("Sys", "microsecs", "system cpu time"),
+                "cpu" => array("Cpu", "microsecs", "cpu time"),
+                "mu" => array("MUse", "bytes", "memory usage"),
+                "pmu" => array("PMUse", "bytes", "peak memory usage"),
+                "samples" => array("Samples", "samples", "cpu time"));
+        return $possible_metrics;
+    }
+
+    /*
+     * Prunes XHProf raw data:
+     *
+     * Any node whose inclusive walltime accounts for less than $prune_percent
+     * of total walltime is pruned. [It is possible that a child function isn't
+     * pruned, but one or more of its parents get pruned. In such cases, when
+     * viewing the child function's hierarchical information, the cost due to
+     * the pruned parent(s) will be attributed to a special function/symbol
+     * "__pruned__()".]
+     *
+     *  @param   array  $raw_data      XHProf raw data to be pruned & validated.
+     *  @param   double $prune_percent Any edges that account for less than
+     *                                 $prune_percent of time will be pruned
+     *                                 from the raw data.
+     *
+     *  @return  array  Returns the pruned raw data.
+     *
+     *  @author Kannan
+     */
 
     /**
      * Analyze hierarchical raw data, and compute per-function (flat)
@@ -500,25 +554,6 @@ class XhprofLib
         return $symbol_tab;
     }
 
-    /*
-     * Prunes XHProf raw data:
-     *
-     * Any node whose inclusive walltime accounts for less than $prune_percent
-     * of total walltime is pruned. [It is possible that a child function isn't
-     * pruned, but one or more of its parents get pruned. In such cases, when
-     * viewing the child function's hierarchical information, the cost due to
-     * the pruned parent(s) will be attributed to a special function/symbol
-     * "__pruned__()".]
-     *
-     *  @param   array  $raw_data      XHProf raw data to be pruned & validated.
-     *  @param   double $prune_percent Any edges that account for less than
-     *                                 $prune_percent of time will be pruned
-     *                                 from the raw data.
-     *
-     *  @return  array  Returns the pruned raw data.
-     *
-     *  @author Kannan
-     */
     public function pruneRun($raw_data, $prune_percent)
     {
 
@@ -602,42 +637,9 @@ class XhprofLib
      */
     public function arrayUnset($arr, $k)
     {
-    //    var_dump($arr);
+        //    var_dump($arr);
         unset($arr[$k]);
         return $arr;
-    }
-
-    /**
-     * Takes a parent/child function name encoded as
-     * "a==>b" and returns array("a", "b").
-     *
-     * @author Kannan
-     */
-    public function parseParentChild($parent_child)
-    {
-        $ret = explode("==>", $parent_child);
-
-        // Return if both parent and child are set
-        if (isset($ret[1])) {
-            return $ret;
-        }
-
-        return array(null, $ret[0]);
-    }
-
-    /**
-     * Given parent & child function name, composes the key
-     * in the format present in the raw data.
-     *
-     * @author Kannan
-     */
-    public function buildParentChildKey($parent, $child)
-    {
-        if ($parent) {
-            return $parent . "==>" . $child;
-        } else {
-            return $child;
-        }
     }
 
     /**
