@@ -21,11 +21,11 @@ function getExtensionName()
     return false;
 }
 
-$_xhprof['ext_name'] = getExtensionName();
-if ($_xhprof['ext_name']) {
-    $flagsCpu = constant(strtoupper($_xhprof['ext_name']) . '_FLAGS_CPU');
-    $flagsMemory = constant(strtoupper($_xhprof['ext_name']) . '_FLAGS_MEMORY');
-    $envVarName = strtoupper($_xhprof['ext_name']) . '_PROFILE';
+$config->get('ext_name') = getExtensionName();
+if ($config->get('ext_name')) {
+    $flagsCpu = constant(strtoupper($config->get('ext_name')) . '_FLAGS_CPU');
+    $flagsMemory = constant(strtoupper($config->get('ext_name')) . '_FLAGS_MEMORY');
+    $envVarName = strtoupper($config->get('ext_name')) . '_PROFILE';
 }
 
 
@@ -54,14 +54,14 @@ class visibilitator
 // Only users from authorized IP addresses may control Profiling
 if ($controlIPs === false || in_array($_SERVER['REMOTE_ADDR'], $controlIPs) || PHP_SAPI == 'cli') {
     /* Backwards Compatibility getparam check*/
-    if (!isset($_xhprof['getparam'])) {
-        $_xhprof['getparam'] = '_profile';
+    if (!isset($config->get('getparam'))) {
+        $config->get('getparam') = '_profile';
     }
 
-    if (isset($_GET[$_xhprof['getparam']])) {
+    if (isset($_GET[$config->get('getparam')])) {
         //Give them a cookie to hold status, and redirect back to the same page
-        setcookie('_profile', $_GET[$_xhprof['getparam']]);
-        $newURI = str_replace(array($_xhprof['getparam'] . '=1', $_xhprof['getparam'] . '=0'), '', $_SERVER['REQUEST_URI']);
+        setcookie('_profile', $_GET[$config->get('getparam')]);
+        $newURI = str_replace(array($config->get('getparam') . '=1', $config->get('getparam') . '=0'), '', $_SERVER['REQUEST_URI']);
         header("Location: $newURI");
         exit;
     }
@@ -69,9 +69,9 @@ if ($controlIPs === false || in_array($_SERVER['REMOTE_ADDR'], $controlIPs) || P
     if (isset($_COOKIE['_profile']) && $_COOKIE['_profile']
         || PHP_SAPI == 'cli' && ((isset($_SERVER[$envVarName]) && $_SERVER[$envVarName])
             || (isset($_ENV[$envVarName]) && $_ENV[$envVarName]))) {
-        $_xhprof['display'] = true;
-        $_xhprof['doprofile'] = true;
-        $_xhprof['type'] = 1;
+        $config->set('display', true);
+        $config->set('doprofile', true);
+        $config->set('type', 1);
     }
     unset($envVarName);
 }
@@ -80,7 +80,7 @@ if ($controlIPs === false || in_array($_SERVER['REMOTE_ADDR'], $controlIPs) || P
 //Certain URLs should never have a link displayed. Think images, xml, etc. 
 foreach ($exceptionURLs as $url) {
     if (stripos($_SERVER['REQUEST_URI'], $url) !== FALSE) {
-        $_xhprof['display'] = false;
+        $config->set('display', false);
         header('X-XHProf-No-Display: Trueness');
         break;
     }
@@ -88,21 +88,21 @@ foreach ($exceptionURLs as $url) {
 unset($exceptionURLs);
 
 //Certain urls should have their POST data omitted. Think login forms, other privlidged info
-$_xhprof['savepost'] = true;
+$config->set('savepost', true);
 foreach ($exceptionPostURLs as $url) {
     if (stripos($_SERVER['REQUEST_URI'], $url) !== FALSE) {
-        $_xhprof['savepost'] = false;
+        $config->set('savepost', false);
         break;
     }
 }
 unset($exceptionPostURLs);
 
 //Determine wether or not to profile this URL randomly
-if ($_xhprof['doprofile'] === false && $weight) {
+if ($config->get('doprofile') === false && $weight) {
     //Profile weighting, one in one hundred requests will be profiled without being specifically requested
     if (rand(1, $weight) == 1) {
-        $_xhprof['doprofile'] = true;
-        $_xhprof['type'] = 0;
+        $config->set('doprofile', true);
+        $config->set('type', 0);
     }
 }
 unset($weight);
@@ -110,7 +110,7 @@ unset($weight);
 // Certain URLS should never be profiled.
 foreach ($ignoreURLs as $url) {
     if (stripos($_SERVER['REQUEST_URI'], $url) !== FALSE) {
-        $_xhprof['doprofile'] = false;
+        $config->set('doprofile', false);
         break;
     }
 }
@@ -121,7 +121,7 @@ unset($url);
 // Certain domains should never be profiled.
 foreach ($ignoreDomains as $domain) {
     if (stripos($_SERVER['HTTP_HOST'], $domain) !== FALSE) {
-        $_xhprof['doprofile'] = false;
+        $config->set('doprofile', false);
         break;
     }
 }
@@ -129,19 +129,19 @@ unset($ignoreDomains);
 unset($domain);
 
 //Display warning if extension not available
-if ($_xhprof['ext_name'] && $_xhprof['doprofile'] === true) {
+if ($config->get('ext_name') && $config->get('doprofile') === true) {
     include_once dirname(__FILE__) . '/../xhprof_lib/utils/xhprof_lib.php';
     // @todo update this
     include_once dirname(__FILE__) . '/../xhprof_lib/utils/xhprof_runs.php';
     if (isset($ignoredFunctions) && is_array($ignoredFunctions) && !empty($ignoredFunctions)) {
-        call_user_func($_xhprof['ext_name'] . '_enable', $flagsCpu + $flagsMemory, array('ignored_functions' => $ignoredFunctions));
+        call_user_func($config->get('ext_name') . '_enable', $flagsCpu + $flagsMemory, array('ignored_functions' => $ignoredFunctions));
     } else {
-        call_user_func($_xhprof['ext_name'] . '_enable', $flagsCpu + $flagsMemory);
+        call_user_func($config->get('ext_name') . '_enable', $flagsCpu + $flagsMemory);
     }
     unset($flagsCpu);
     unset($flagsMemory);
 
-} elseif (false === $_xhprof['ext_name'] && $_xhprof['display'] === true) {
+} elseif (false === $config->get('ext_name'] && $config->get('display'] === true) {
     $message = 'Warning! Unable to profile run, tideways or xhprof extension not loaded';
     trigger_error($message, E_USER_WARNING);
 }

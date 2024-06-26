@@ -65,6 +65,7 @@ Feature: List
   @apis @file
   Scenario: Check the File API
     Given I am on "/api/file/?run=1234&links=1&show_internal=0"
+    Then I wait "1" second
     Then the query string "show_internal" should match "0"
     And the query string "links" should match "1"
     And the response should contain "digraph call_graph {"

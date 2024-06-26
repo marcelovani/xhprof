@@ -115,7 +115,7 @@ class Utils
         if (isset($_GET[$filterName])) {
             if ($_GET[$filterName] == "None") {
                 $serverFilter = null;
-                setcookie($filterName, null, 0);
+                setcookie($filterName, '', 0);
             } else {
                 setcookie($filterName, $_GET[$filterName], (time() + 60 * 60));
                 $serverFilter = $_GET[$filterName];
