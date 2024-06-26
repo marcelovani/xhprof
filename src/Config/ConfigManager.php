@@ -10,7 +10,7 @@ use Symfony\Component\Dotenv\Dotenv;
 /**
  * Config loader class.
  */
-class ConfigLoader
+class ConfigManager
 {
 
     /**
@@ -91,5 +91,18 @@ class ConfigLoader
                 return $this->config[$name];
             }
         }
+    }
+
+    /**
+     * Setter for config.
+     *
+     * @param $name
+     * @param $value
+     * @return void
+     */
+    public function set($name, $value)
+    {
+        $this->config[$name] = $value;
+
     }
 }

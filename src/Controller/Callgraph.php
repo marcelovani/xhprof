@@ -5,7 +5,7 @@
 
 namespace Xhprof\Controller;
 
-use Xhprof\Config\ConfigLoader;
+use Xhprof\Config\ConfigManager;
 use Xhprof\XhprofLib;
 
 /**
@@ -437,7 +437,7 @@ class Callgraph
      */
     public function generateDotImage($dot_script, $type)
     {
-        $config_loader = new ConfigLoader();
+        $config_loader = new ConfigManager();
         $this->config = $config_loader->get();
 
         $errorFile = $this->config['dot_errfile'];

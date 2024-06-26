@@ -5,9 +5,9 @@
 
 ini_set('max_execution_time', 100);
 
-use Xhprof\Config\ConfigLoader;
+use Xhprof\Config\ConfigManager;
 
-$config = new ConfigLoader();
+$config = new ConfigManager();
 
 // @todo delete this variable and use from class only.
 $_xhprof = $config->get();
@@ -33,9 +33,9 @@ $controlIPs = false; //Disables access controls completely.
 //$ignoredFunctions = array('call_user_func', 'call_user_func_array', 'socket_select');
 
 //Default weight - can be overridden by an Apache environment variable 'xhprof_weight' for domain-specific values
-$weight = 100;
+$config->set('weight', 100);
 
 if ($domain_weight = getenv('xhprof_weight')) {
-    $weight = $domain_weight;
+    $config->set('weight', $domain_weight);
 }
 unset($domain_weight);

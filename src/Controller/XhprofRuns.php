@@ -22,7 +22,7 @@
 
 namespace Xhprof\Controller;
 
-use Xhprof\Config\ConfigLoader;
+use Xhprof\Config\ConfigManager;
 use Xhprof\Database\DbAbstract;
 use Xhprof\Utils;
 
@@ -93,7 +93,7 @@ class XhprofRuns implements iXHProfRuns
 
     public function __construct($dir = null)
     {
-        $config_loader = new ConfigLoader();
+        $config_loader = new ConfigManager();
         $this->config = $config_loader->get();
         $this->setDb();
     }

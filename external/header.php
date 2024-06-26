@@ -98,14 +98,14 @@ foreach ($exceptionPostURLs as $url) {
 unset($exceptionPostURLs);
 
 //Determine wether or not to profile this URL randomly
-if ($config->get('doprofile') === false && $weight) {
+if ($config->get('doprofile') === false && $config->get('weight')) {
     //Profile weighting, one in one hundred requests will be profiled without being specifically requested
-    if (rand(1, $weight) == 1) {
+    if (rand(1, $config->get('weight')) == 1) {
         $config->set('doprofile', true);
         $config->set('type', 0);
     }
 }
-unset($weight);
+$config->set('weight', null);
 
 // Certain URLS should never be profiled.
 foreach ($ignoreURLs as $url) {
